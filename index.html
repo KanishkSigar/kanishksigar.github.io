@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanishk Sigar — Student Developer</title>
+  <meta name="description" content="Portfolio of Kanishk Sigar — Computer Science student and full-stack developer building useful software in Dehradun, India." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar" class="navbar">
+    <div class="nav-left">
+      <a href="#home" class="nav-link">Home</a>
+      <a href="#about" class="nav-link">About</a>
+    </div>
+    <a href="#home" class="nav-logo" aria-label="Home">
+      <div class="logo-mark">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 2 L20.5 15.5 L34 18 L20.5 20.5 L18 34 L15.5 20.5 L2 18 L15.5 15.5 Z" fill="#2563EB"/>
+        </svg>
+      </div>
+    </a>
+    <div class="nav-right">
+      <a href="#works" class="nav-link">Works</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav">
+    <div class="mobile-nav-inner">
+      <svg width="28" height="28" viewBox="0 0 36 36" fill="none"><path d="M18 2 L20.5 15.5 L34 18 L20.5 20.5 L18 34 L15.5 20.5 L2 18 L15.5 15.5 Z" fill="#2563EB"/></svg>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#home" class="mobile-link">Home</a>
+      <a href="#about" class="mobile-link">About</a>
+      <a href="#works" class="mobile-link">Works</a>
+      <a href="#contact" class="mobile-link">Contact</a>
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section id="home" class="hero-wrapper">
+    <div class="hero-card">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Open to internships & collaborations
+      </div>
+      <h1 class="hero-title">
+        Kanishk Sigar<br />
+        <em>Student Developer.</em>
+      </h1>
+      <p class="hero-bio">
+        Hey — I'm Kanishk. CS undergrad focused on full-stack development, AI, and cybersecurity.
+      </p>
+      <div class="hero-cta-row">
+        <a href="#contact" class="hero-cta" id="hero-cta">
+          Get In Touch
+          <span class="cta-arrow">→</span>
+        </a>
+        <a href="profile.pdf" target="_blank" rel="noopener" class="hero-cta-ghost" id="resume-cta">
+          Download Resume
+          <span class="ghost-arrow">↓</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NOW STRIP ===== -->
+  <section class="now-strip" aria-label="Currently working on">
+    <div class="now-inner">
+      <span class="now-pulse"></span>
+      <span class="now-label">Now</span>
+      <span class="now-divider">/</span>
+      <span class="now-item">Writing a stack-based VM for <strong>Lively</strong></span>
+      <span class="now-dot">·</span>
+      <span class="now-item">Diving deep into DSA</span>
+      <span class="now-dot">·</span>
+      <span class="now-item">Open to summer 2026 internships</span>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" class="section-wrap">
+    <div class="about-grid">
+      <div class="about-left-col">
+        <div class="about-img-wrap">
+          <img src="profile.jpg" alt="Kanishk Sigar" class="about-photo" onerror="this.style.display='none'">
+          <div class="about-avatar">KS</div>
+        </div>
+        <div class="about-credential">
+          <span class="about-credential-icon">🎓</span>
+          <div>
+            <div class="about-credential-title">B.Tech CSE</div>
+            <div class="about-credential-sub">Graphic Era Hill University</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-text-col">
+        <div class="section-tag">About Me</div>
+        <h2 class="section-heading">Code, Build,<br/>Learn, Repeat.</h2>
+        <p class="about-text" style="margin-top:20px;">
+          I’m a CS undergrad at Graphic Era Hill University, Dehradun
+          (2023–2027), building full-stack applications, experimenting
+          with AI-powered tools, and exploring software engineering beyond
+          the surface.
+        </p>
+        <p class="about-text">
+          My interests span web development, cybersecurity, cloud technologies, 
+          and creating projects that solve real problems through clean, 
+          thoughtful engineering.
+        </p>
+        <p class="about-text">
+          Outside the IDE, I write technical documentation, create
+          content for student communities, and explore ideas at the
+          intersection of technology and creativity.
+        </p>
+        <p class="about-tagline">Always learning. Always building.</p>
+        <div class="skills-grid">
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">TypeScript</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">Java</span>
+          <span class="skill-tag">C++</span>
+          <span class="skill-tag">React</span>
+          <span class="skill-tag">Next.js</span>
+          <span class="skill-tag">Node.js</span>
+          <span class="skill-tag">Express</span>
+          <span class="skill-tag">Flask</span>
+          <span class="skill-tag">Tailwind CSS</span>
+          <span class="skill-tag">AWS S3</span>
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">Cybersecurity</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STATS ===== -->
+  <section class="stats-section" aria-label="At a glance">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-num">7+</span>
+        <span class="stat-label">Active Projects</span>
+        <span class="stat-sub">Live on GitHub</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">6+</span>
+        <span class="stat-label">Languages</span>
+        <span class="stat-sub">JS · TS · Python · Java · C++ · C</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">5+</span>
+        <span class="stat-label">Certifications</span>
+        <span class="stat-sub">Cybersecurity, AI &amp; more</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WORKS ===== -->
+  <section id="works" class="works-section">
+    <div class="section-header-row">
+      <div>
+        <div class="section-tag">Selected Works</div>
+        <h2 class="section-heading">Things I've<br/>Been Building</h2>
+      </div>
+      <a href="https://github.com/KanishkSigar" target="_blank" rel="noopener" class="btn-outline">All Projects →</a>
+    </div>
+    <div class="works-grid">
+
+      <article class="project-card project-card--light" id="project-1">
+        <div class="project-card-inner">
+          <div class="project-meta">
+            <span class="project-num project-num--dark">01</span>
+            <span class="project-tag project-tag--dark">C++ · Compilers</span>
+          </div>
+          <div>
+            <h3 class="project-title project-title--dark">Lively</h3>
+            <p class="project-desc project-desc--dark">A statically typed procedural language built from scratch — lexer, parser, three-address code, bytecode compiler, and a stack-based virtual machine.</p>
+          </div>
+          <div class="project-visual lively-visual">
+            <div class="code-block">
+              <div class="code-line"><span class="kw">fn</span> <span class="fn">fib</span>(n: <span class="ty">int</span>) -&gt; <span class="ty">int</span> {</div>
+              <div class="code-line">&nbsp;&nbsp;<span class="kw">if</span> n &lt; 2 { <span class="kw">return</span> n; }</div>
+              <div class="code-line">&nbsp;&nbsp;<span class="kw">return</span> <span class="fn">fib</span>(n-1) + <span class="fn">fib</span>(n-2);</div>
+              <div class="code-line">}</div>
+              <div class="code-line"><span class="cm">// → TAC → bytecode → VM</span></div>
+            </div>
+          </div>
+          <div class="project-footer">
+            <a href="lively.html" class="project-link project-link--light">Read the case study →</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card project-card--dark" id="project-2">
+        <div class="project-card-inner">
+          <div class="project-meta">
+            <span class="project-num">02</span>
+            <span class="project-tag">Python · AWS · Security</span>
+          </div>
+          <div>
+            <h3 class="project-title">s3-secure-vault</h3>
+            <p class="project-desc">A CLI-based secure file vault. Encrypts files locally and uploads them to AWS S3 — fetch and decrypt on demand, with keys that never leave your machine.</p>
+          </div>
+          <div class="project-visual code-visual">
+            <div class="terminal-mockup">
+              <div class="terminal-bar">
+                <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+                <span class="terminal-title">vault — zsh</span>
+              </div>
+              <div class="terminal-body">
+                <div class="term-line"><span class="term-prompt">$</span> vault encrypt notes.pdf</div>
+                <div class="term-line term-ok">✓ encrypted → notes.pdf.enc</div>
+                <div class="term-line"><span class="term-prompt">$</span> vault push s3://kvault</div>
+                <div class="term-line term-ok">✓ uploaded to S3 (AES-256)</div>
+              </div>
+            </div>
+          </div>
+          <div class="project-footer">
+            <a href="https://github.com/KanishkSigar/s3-secure-vault" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card project-card--dark" id="project-3">
+        <div class="project-card-inner">
+          <div class="project-meta">
+            <span class="project-num">03</span>
+            <span class="project-tag">AI · Chat · Internship</span>
+          </div>
+          <div>
+            <h3 class="project-title">IME AI Chat</h3>
+            <p class="project-desc">A web-based AI chat assistant built during my internship at Integrated Maritime Exchange. Conversational queries against internal tools and data, with an LLM-powered backend.</p>
+          </div>
+          <div class="project-visual chat-visual">
+            <div class="chat-mockup">
+              <div class="chat-header">
+                <span class="chat-avatar">⚓</span>
+                <div>
+                  <div class="chat-name">IME Assistant</div>
+                  <div class="chat-status"><span class="chat-dot"></span> Online</div>
+                </div>
+              </div>
+              <div class="chat-msg chat-msg--user">Show me last week's vessel transit summary</div>
+              <div class="chat-msg chat-msg--bot">Transit volume up 14% w/w. Generating chart…</div>
+              <div class="chat-input">Ask anything…</div>
+            </div>
+          </div>
+          <div class="project-footer">
+            <a href="https://github.com/KanishkSigar/IME-AI-Chat-" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card project-card--light" id="project-4">
+        <div class="project-card-inner">
+          <div class="project-meta">
+            <span class="project-num project-num--dark">04</span>
+            <span class="project-tag project-tag--dark">TypeScript · LegalTech</span>
+          </div>
+          <div>
+            <h3 class="project-title project-title--dark">Legal Reasoning Explorer</h3>
+            <p class="project-desc project-desc--dark">Converts unstructured legal judgment text into an interactive reasoning graph — making complex case logic navigable, traceable, and easier to study.</p>
+          </div>
+          <div class="project-visual graph-visual">
+            <div class="graph-mockup">
+              <span class="node node-a">Facts</span>
+              <span class="node node-b">Issue</span>
+              <span class="node node-c">Rule</span>
+              <span class="node node-d">Holding</span>
+              <svg class="graph-lines" viewBox="0 0 200 120" preserveAspectRatio="none">
+                <line x1="30" y1="30" x2="100" y2="30" />
+                <line x1="100" y1="30" x2="100" y2="90" />
+                <line x1="100" y1="90" x2="170" y2="90" />
+                <line x1="30" y1="30" x2="170" y2="90" />
+              </svg>
+            </div>
+          </div>
+          <div class="project-footer">
+            <a href="https://github.com/KanishkSigar/legal-reasoning-explorer" target="_blank" rel="noopener" class="project-link project-link--light">View on GitHub →</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===== PROFESSIONAL EXPERIENCE ===== -->
+  <section id="experience" class="section-wrap">
+    <div class="section-tag">Where I've Worked</div>
+    <h2 class="section-heading">Professional Experience</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">Oct 2025 – Nov 2025</div>
+        <h3 class="timeline-title">Full Stack Developer Intern</h3>
+        <p class="timeline-org">Integrated Maritime Exchange (IME) · Dehradun</p>
+        <p class="timeline-desc">Worked on API-based and backend features for internal tools. Supported data workflows and simple AI-assisted modules, and collaborated with the team on integrations and updates.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">Jul 2025 – Present</div>
+        <h3 class="timeline-title">Operations Executive</h3>
+        <p class="timeline-org">TBI GEU · Dehradun</p>
+        <p class="timeline-desc">Supporting the execution of major innovation and entrepreneurship programs through clear planning and structured coordination. Leading student teams during events and managing on-ground flow, movement, and transitions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LEADERSHIP & COMMUNITY ===== -->
+  <section id="leadership" class="leadership-section">
+    <div class="section-wrap">
+      <div class="section-tag">Beyond the Code</div>
+      <h2 class="section-heading">Leadership &amp; Community</h2>
+      <div class="leadership-grid">
+        <div class="role-card">
+          <div class="role-icon">⚡</div>
+          <div class="role-date">Aug 2025 – Present</div>
+          <h3 class="role-title">Events Lead</h3>
+          <p class="role-org">IEEE Student Branch, GEHU</p>
+          <p class="role-desc">Planning and executing IEEE workshops, technical sessions, and large-scale campus events. Directing volunteer operations across multiple programs.</p>
+        </div>
+        <div class="role-card">
+          <div class="role-icon">✎</div>
+          <div class="role-date">Jul 2025 – May 2026</div>
+          <h3 class="role-title">Content Cell Head</h3>
+          <p class="role-org">NSS GEHU</p>
+          <p class="role-desc">Heading the Content Cell — creating structured documentation for drives, events, and outreach. Keeping teams aligned through clear information flow.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CERTIFICATIONS ===== -->
+  <section id="certifications" class="certs-section">
+    <div class="section-wrap">
+      <div class="section-tag">Credentials</div>
+      <h2 class="section-heading">Certifications</h2>
+      <div class="certs-grid">
+        <div class="cert-card">
+          <div class="cert-icon">🛡</div>
+          <div class="cert-body">
+            <div class="cert-title">Career Essentials in Cybersecurity</div>
+            <div class="cert-issuer">Microsoft &amp; LinkedIn</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">🎓</div>
+          <div class="cert-body">
+            <div class="cert-title">TCS iON Career Edge — Young Professional</div>
+            <div class="cert-issuer">TCS iON</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">🤖</div>
+          <div class="cert-body">
+            <div class="cert-title">Introduction to Responsible AI</div>
+            <div class="cert-issuer">Google Cloud</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">☕</div>
+          <div class="cert-body">
+            <div class="cert-title">Getting Started with Java</div>
+            <div class="cert-issuer">LinkedIn Learning</div>
+          </div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">🌐</div>
+          <div class="cert-body">
+            <div class="cert-title">World Summit on Disaster Management 2025</div>
+            <div class="cert-issuer">Participant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TOOLS ===== -->
+  <section class="section-wrap" style="padding-top:90px;padding-bottom:90px">
+    <div class="section-tag">Tools & Technologies</div>
+    <div class="tools-grid">
+      <div class="tool-card"><div class="tool-icon">▲</div><div class="tool-name">Next.js</div><div class="tool-level">Frontend</div></div>
+      <div class="tool-card"><div class="tool-icon">🟢</div><div class="tool-name">Node.js</div><div class="tool-level">Backend</div></div>
+      <div class="tool-card"><div class="tool-icon">📘</div><div class="tool-name">TypeScript</div><div class="tool-level">Web</div></div>
+      <div class="tool-card"><div class="tool-icon">🐍</div><div class="tool-name">Python</div><div class="tool-level">Automation</div></div>
+      <div class="tool-card"><div class="tool-icon">⚙️</div><div class="tool-name">C++</div><div class="tool-level">Systems</div></div>
+      <div class="tool-card"><div class="tool-icon">🐬</div><div class="tool-name">MySQL</div><div class="tool-level">Database</div></div>
+      <div class="tool-card"><div class="tool-icon">☁️</div><div class="tool-name">AWS</div><div class="tool-level">Cloud</div></div>
+      <div class="tool-card"><div class="tool-icon">🌿</div><div class="tool-name">Git</div><div class="tool-level">Version Control</div></div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="contact-section">
+    <div class="contact-card">
+      <div class="section-tag">Let's Connect</div>
+      <h2 class="contact-heading">Let's Build Something<br/>Together</h2>
+      <p class="contact-sub">I'm open to internships, collaborative projects, and conversations about code, AI, or anything in between. Drop a line — I read everything.</p>
+      <div class="contact-buttons">
+        <a href="mailto:kanishksigar@gmail.com" class="btn-primary btn-large" id="email-btn">
+          kanishksigar@gmail.com <span class="btn-arrow">→</span>
+        </a>
+        <div class="social-links">
+          <a href="https://www.linkedin.com/in/kanishk-sigar" target="_blank" rel="noopener" class="social-link" id="linkedin-link">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/KanishkSigar" target="_blank" rel="noopener" class="social-link" id="github-link">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <svg width="22" height="22" viewBox="0 0 36 36" fill="none"><path d="M18 2 L20.5 15.5 L34 18 L20.5 20.5 L18 34 L15.5 20.5 L2 18 L15.5 15.5 Z" fill="#2563EB"/></svg>
+        <span class="footer-name">Kanishk Sigar</span>
+      </div>
+      <div class="footer-copy">© 2026 Kanishk Sigar. Code · Build · Learn · Repeat.</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

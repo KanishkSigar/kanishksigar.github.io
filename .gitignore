@@ -1,0 +1,18 @@
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build / deps (in case you add tooling later)
+node_modules/
+dist/
+.cache/
+
+# Raw text dump of resume — not needed in repo
+profile_text.txt
