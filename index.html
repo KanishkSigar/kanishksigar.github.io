@@ -205,28 +205,29 @@
         <div class="project-card-inner">
           <div class="project-meta">
             <span class="project-num">02</span>
-            <span class="project-tag">Python · AWS · Security</span>
+            <span class="project-tag">FastAPI · Next.js · AWS · Cryptography</span>
           </div>
           <div>
-            <h3 class="project-title">s3-secure-vault</h3>
-            <p class="project-desc">A CLI-based secure file vault. Encrypts files locally and uploads them to AWS S3 — fetch and decrypt on demand, with keys that never leave your machine.</p>
+            <h3 class="project-title">ArgonVault</h3>
+            <p class="project-desc">A zero-knowledge encrypted file vault. Argon2id derives keys in the browser; AES-256-GCM encrypts files before they leave; ciphertext goes to S3 via presigned URLs. The server cannot read your files, filenames, or password.</p>
           </div>
           <div class="project-visual code-visual">
             <div class="terminal-mockup">
               <div class="terminal-bar">
                 <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
-                <span class="terminal-title">vault — zsh</span>
+                <span class="terminal-title">argonvault — bash</span>
               </div>
               <div class="terminal-body">
-                <div class="term-line"><span class="term-prompt">$</span> vault encrypt notes.pdf</div>
-                <div class="term-line term-ok">✓ encrypted → notes.pdf.enc</div>
-                <div class="term-line"><span class="term-prompt">$</span> vault push s3://kvault</div>
-                <div class="term-line term-ok">✓ uploaded to S3 (AES-256)</div>
+                <div class="term-line"><span class="term-prompt">$</span> argonvault auth derive</div>
+                <div class="term-line term-ok">→ argon2id(64MiB, 3, 1) ✓</div>
+                <div class="term-line"><span class="term-prompt">$</span> argonvault encrypt ./file.pdf</div>
+                <div class="term-line term-ok">→ AES-256-GCM ✓ PUT → s3://… 200</div>
               </div>
             </div>
           </div>
           <div class="project-footer">
-            <a href="https://github.com/KanishkSigar/s3-secure-vault" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+            <a href="https://kanishksigar.me/argonvault/" target="_blank" rel="noopener" class="project-link">View Live →</a>
+            <a href="https://github.com/KanishkSigar/argonvault" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
           </div>
         </div>
       </article>
