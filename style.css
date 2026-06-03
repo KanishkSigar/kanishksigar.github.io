@@ -213,9 +213,9 @@ a { text-decoration: none; color: inherit; }
 }
 .about-photo {
   position: absolute;
-  top: 16px; left: 16px; right: 16px; bottom: 16px;
-  width: auto; height: auto; max-width: none; max-height: none;
-  object-fit: cover; object-position: center 25%;
+  inset: 16px;
+  width: calc(100% - 32px); height: calc(100% - 32px);
+  object-fit: cover; object-position: center 30%;
   z-index: 2;
   border-radius: 14px;
   box-shadow: 0 14px 36px rgba(11,27,59,0.18);
