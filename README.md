@@ -2,11 +2,11 @@
 
 Personal portfolio of **Kanishk Sigar** — CS undergrad at Graphic Era Hill University, Dehradun. Building full-stack apps, AI tools, and the occasional compiler.
 
-🌐 **Live site:** [kanishksigar.github.io](https://kanishksigar.github.io)
+🌐 **Live site:** [kanishksigar.me](https://kanishksigar.me)
 
 ## About
 
-A single-page portfolio with a deep-dive case study for one of my favourite projects. Designed and built from scratch — no frameworks, no build step.
+A single-page portfolio. Designed and built from scratch — no frameworks, no build step.
 
 ## Stack
 
@@ -19,11 +19,11 @@ A single-page portfolio with a deep-dive case study for one of my favourite proj
 ```
 .
 ├── index.html       # main portfolio page
-├── lively.html      # case study for the Lively language project
 ├── style.css        # all styles
 ├── script.js        # nav, scroll, animations
+├── og-image.png     # social share preview (1200×630)
 ├── profile.pdf      # resume
-└── profile.jpg      # photo (optional)
+└── profile.jpg      # photo (optional — falls back to "KS" avatar)
 ```
 
 ## Local preview
