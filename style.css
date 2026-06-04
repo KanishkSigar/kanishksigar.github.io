@@ -323,7 +323,7 @@ a { text-decoration: none; color: inherit; }
 .term-prompt { color:var(--accent); font-weight:700; margin-right:6px; }
 .term-ok { color:#5ad07d; }
 
-/* 02 — Graph (legal-reasoning-explorer) */
+/* 02 — Graph (lexmap) */
 .graph-visual { background:#f4f0ea; display:flex; align-items:center; justify-content:center; padding:14px; height:170px; position:relative; }
 .graph-mockup { position:relative; width:100%; height:100%; }
 .graph-mockup .graph-lines { position:absolute; inset:0; width:100%; height:100%; }
