@@ -104,8 +104,7 @@ a { text-decoration: none; color: inherit; }
   margin-bottom: 24px;
 }
 .badge-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
-  animation: pulse 2s ease-in-out infinite;
+  width: 2px; height: 12px; border-radius: 1px; background: var(--accent);
 }
 @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
 
