@@ -352,6 +352,14 @@ a { text-decoration: none; color: inherit; }
 .chat-msg--bot { background:var(--accent-tint); color:var(--text-dark); align-self:flex-start; border-bottom-left-radius:3px; }
 .chat-input { margin-top:2px; background:#f4f7fb; color:var(--text-muted); font-size:9px; padding:5px 9px; border-radius:14px; }
 
+/* 06 — Contribution heatmap (gitpulse) */
+.heat-visual { background:#f4f0ea; display:flex; align-items:center; justify-content:center; padding:16px; height:170px; }
+.heat-mockup { display:grid; grid-template-columns:repeat(15,1fr); gap:4px; width:100%; }
+.heat-cell { aspect-ratio:1; border-radius:2px; background:rgba(124,107,246,0.10); }
+.heat-cell.h1 { background:rgba(124,107,246,0.30); }
+.heat-cell.h2 { background:rgba(124,107,246,0.55); }
+.heat-cell.h3 { background:rgba(124,107,246,0.80); }
+
 /* ===== EXPERIENCE ===== */
 .timeline { margin-top: 48px; position: relative; }
 .timeline::before { content:'';position:absolute;left:10px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--accent),var(--accent-tint)); border-radius:2px; }
