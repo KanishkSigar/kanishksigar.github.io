@@ -50,7 +50,6 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
   </main>
 
   <footer>
-    <span class="colophon">set in Spectral</span>
     <nav>
       <a href="/tech">tech</a>
       <a href="https://kanishksigar.substack.com" target="_blank" rel="noopener">substack</a>
@@ -159,12 +158,6 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
     align-items: baseline;
     gap: 20px;
     flex-wrap: wrap;
-  }
-
-  .colophon {
-    font-size: 14px;
-    font-style: italic;
-    color: var(--ink-faint);
   }
 
   footer nav { display: flex; gap: 20px; }
