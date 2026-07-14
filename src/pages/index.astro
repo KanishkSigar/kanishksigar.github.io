@@ -2,7 +2,7 @@
 // The landing: an index, not a menu. Two ruled rows.
 // /tech stays the canonical portfolio URL, so resume links never land here.
 import Mark from '../components/Mark.astro';
-import { FAVICON_LIFE } from '../consts';
+import { FAVICON_GATE } from '../consts';
 ---
 
 <!DOCTYPE html>
@@ -14,9 +14,9 @@ import { FAVICON_LIFE } from '../consts';
   <meta name="description" content="Kanishk Sigar — the things I build, and the things I think about." />
   <link rel="canonical" href="https://kanishksigar.me/" />
   <meta name="author" content="Kanishk Sigar" />
-  <meta name="theme-color" content="#12140F" />
+  <meta name="theme-color" content="#0E0E0F" />
 
-  <link rel="icon" href={FAVICON_LIFE} />
+  <link rel="icon" href={FAVICON_GATE} />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Kanishk Sigar" />
@@ -62,12 +62,12 @@ import { FAVICON_LIFE } from '../consts';
 
 <style is:global>
   :root {
-    --ground: #12140F;
-    --ink: #E4E3DA;
-    --ink-2: #9C9E92;
-    --ink-3: #6C6F63;
-    --rule: #2A2E25;
-    --accent: #8AA36F;
+    --ground: #0E0E0F;
+    --ink: #F7F7F5;
+    --ink-2: #9A9A97;
+    --ink-3: #67676A;
+    --rule: #26262A;
+    --accent: #F7F7F5;
   }
 
   *, *::before, *::after { box-sizing: border-box; }
@@ -101,7 +101,7 @@ import { FAVICON_LIFE } from '../consts';
     gap: 12px;
   }
 
-  .gate-mark { color: var(--accent); display: block; }
+  .gate-mark { color: var(--ink-2); display: block; }
 
   .gate-name {
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;

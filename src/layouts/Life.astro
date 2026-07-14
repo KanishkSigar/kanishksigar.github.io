@@ -21,6 +21,7 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
   <meta name="description" content={description} />
   <link rel="canonical" href={url} />
   <meta name="author" content="Kanishk Sigar" />
+  <meta name="theme-color" content="#E9E7DE" />
 
   <link rel="icon" href={FAVICON_LIFE} />
 
@@ -37,18 +38,24 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
 </head>
 <body>
 
-  <a href="/" class="mark" aria-label="Home">
-    <Mark size={18} />
-  </a>
+  <header class="masthead">
+    <a href="/" class="mark" aria-label="Home">
+      <Mark size={17} />
+    </a>
+    <a href="/life" class="masthead-name">Kanishk Sigar</a>
+  </header>
 
   <main>
     <slot />
   </main>
 
   <footer>
-    <a href="/tech">tech</a>
-    <a href="https://kanishksigar.substack.com" target="_blank" rel="noopener">substack</a>
-    <a href="mailto:kanishksigar@gmail.com">email</a>
+    <span class="colophon">set in Spectral · written in Dehradun</span>
+    <nav>
+      <a href="/tech">tech</a>
+      <a href="https://kanishksigar.substack.com" target="_blank" rel="noopener">substack</a>
+      <a href="mailto:kanishksigar@gmail.com">email</a>
+    </nav>
   </footer>
 
 </body>
@@ -84,47 +91,83 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
     color: var(--ink);
     font-family: 'Spectral', Georgia, 'Times New Roman', serif;
     font-weight: 300;
-    font-size: 19px;
-    line-height: 1.72;
+    font-size: 20px;
+    line-height: 1.78;
     -webkit-font-smoothing: antialiased;
     display: flex;
     flex-direction: column;
     padding: 0 24px;
   }
 
+  /* ---- masthead ---- */
+  .masthead {
+    width: 100%;
+    max-width: 33rem;
+    margin: 0 auto;
+    padding: 44px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mark { color: var(--ink-faint); line-height: 0; transition: color .2s ease; }
+  .mark:hover { color: var(--accent); }
+
+  .masthead-name {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color .2s ease;
+  }
+  .masthead-name:hover { color: var(--ink); }
+
+  /* ---- the page ---- */
   main {
     width: 100%;
-    max-width: 34rem;
+    max-width: 33rem;
     margin: 0 auto;
-    padding: 116px 0 96px;
+    padding: 92px 0 110px;
     flex: 1;
   }
 
-  p { margin: 0 0 1.35em; }
+  main p { margin: 0 0 1.5em; }
 
-  a { color: var(--ink); text-decoration-color: var(--rule); text-underline-offset: 3px; }
-  a:hover { text-decoration-color: var(--accent); }
-
-  /* corner mark, the only thing shared with /tech */
-  .mark {
-    position: absolute;
-    top: 32px;
-    left: 32px;
-    color: var(--ink-faint);
-    line-height: 0;
-    transition: color .2s ease;
+  /* the opening line of a page carries the weight */
+  main > p:first-child {
+    font-size: 25px;
+    line-height: 1.55;
+    margin-bottom: 1.1em;
   }
-  .mark:hover { color: var(--accent); }
 
+  main a { color: var(--ink); text-decoration-color: var(--rule); text-underline-offset: 4px; }
+  main a:hover { text-decoration-color: var(--accent); }
+
+  main em { font-style: italic; }
+
+  /* ---- foot ---- */
   footer {
     width: 100%;
-    max-width: 34rem;
+    max-width: 33rem;
     margin: 0 auto;
-    padding: 28px 0 44px;
+    padding: 26px 0 48px;
     border-top: 1px solid var(--rule);
     display: flex;
-    gap: 22px;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    flex-wrap: wrap;
   }
+
+  .colophon {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-faint);
+  }
+
+  footer nav { display: flex; gap: 20px; }
 
   footer a {
     font-size: 15px;
@@ -134,8 +177,9 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
   footer a:hover { color: var(--ink); }
 
   @media (max-width: 640px) {
-    body { font-size: 18px; }
-    main { padding: 88px 0 72px; }
-    .mark { top: 24px; left: 24px; }
+    body { font-size: 19px; }
+    main { padding: 68px 0 84px; }
+    main > p:first-child { font-size: 22px; }
+    .masthead { padding-top: 32px; }
   }
 </style>

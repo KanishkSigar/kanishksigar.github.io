@@ -5,6 +5,9 @@
 
 export const BLUE = '#2563EB';
 export const MOSS = '#4F6B3E';
+// The landing carries no accent at all, so its mark is a neutral that reads
+// on both a light and a dark browser tab.
+export const GREY = '#8A8A88';
 
 // "The Rule" mark as an inline favicon. Same geometry as components/Mark.astro.
 export function favicon(color: string): string {
@@ -14,3 +17,4 @@ export function favicon(color: string): string {
 
 export const FAVICON_TECH = favicon(BLUE);
 export const FAVICON_LIFE = favicon(MOSS);
+export const FAVICON_GATE = favicon(GREY);
