@@ -1,0 +1,138 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+}
+
+const { title, description = 'Writing, books, and the things that are not projects.', canonical } = Astro.props;
+const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').href;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={url} />
+  <meta name="author" content="Kanishk Sigar" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2036%2036'%3E%3Cpath%20d='M18%202%20L20.5%2015.5%20L34%2018%20L20.5%2020.5%20L18%2034%20L15.5%2020.5%20L2%2018%20L15.5%2015.5%20Z'%20fill='%232563EB'/%3E%3C/svg%3E" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={url} />
+
+  <link rel="alternate" type="application/rss+xml" title="Kanishk Sigar" href="/rss.xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <a href="/" class="mark" aria-label="Home">
+    <svg viewBox="0 0 36 36" aria-hidden="true">
+      <path d="M18 2 L20.5 15.5 L34 18 L20.5 20.5 L18 34 L15.5 20.5 L2 18 L15.5 15.5 Z" fill="currentColor"/>
+    </svg>
+  </a>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer>
+    <a href="/tech">tech</a>
+    <a href="https://kanishksigar.substack.com" target="_blank" rel="noopener">substack</a>
+    <a href="mailto:kanishksigar@gmail.com">email</a>
+  </footer>
+
+</body>
+</html>
+
+<style is:global>
+  :root {
+    --paper: #FAF8F5;
+    --ink: #23201C;
+    --ink-soft: #6B655C;
+    --rule: #DFD8CE;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #14120F;
+      --ink: #E4DED4;
+      --ink-soft: #8B8377;
+      --rule: #2C2823;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Spectral', Georgia, 'Times New Roman', serif;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.72;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    padding: 0 24px;
+  }
+
+  main {
+    width: 100%;
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: 116px 0 96px;
+    flex: 1;
+  }
+
+  p { margin: 0 0 1.35em; }
+
+  a { color: var(--ink); text-decoration-color: var(--rule); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--ink); }
+
+  /* corner mark, the only thing shared with /tech */
+  .mark {
+    position: absolute;
+    top: 34px;
+    left: 34px;
+    width: 17px;
+    height: 17px;
+    color: var(--ink-soft);
+    transition: color .2s ease;
+  }
+  .mark:hover { color: var(--ink); }
+  .mark svg { width: 100%; height: 100%; display: block; }
+
+  footer {
+    width: 100%;
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: 28px 0 44px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    gap: 22px;
+  }
+
+  footer a {
+    font-size: 15px;
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+  footer a:hover { color: var(--ink); }
+
+  @media (max-width: 640px) {
+    body { font-size: 18px; }
+    main { padding: 88px 0 72px; }
+    .mark { top: 24px; left: 24px; }
+  }
+</style>
