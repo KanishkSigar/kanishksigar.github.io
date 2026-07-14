@@ -1,6 +1,8 @@
 ---
-// The landing page. Two doors, nothing else.
+// The landing: an index, not a menu. Two ruled rows.
 // /tech stays the canonical portfolio URL, so resume links never land here.
+import Mark from '../components/Mark.astro';
+import { FAVICON } from '../consts';
 ---
 
 <!DOCTYPE html>
@@ -12,9 +14,9 @@
   <meta name="description" content="Kanishk Sigar — the things I build, and the things I think about." />
   <link rel="canonical" href="https://kanishksigar.me/" />
   <meta name="author" content="Kanishk Sigar" />
-  <meta name="theme-color" content="#0B1B3B" />
+  <meta name="theme-color" content="#16161A" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2036%2036'%3E%3Cpath%20d='M18%202%20L20.5%2015.5%20L34%2018%20L20.5%2020.5%20L18%2034%20L15.5%2020.5%20L2%2018%20L15.5%2015.5%20Z'%20fill='%232563EB'/%3E%3C/svg%3E" />
+  <link rel="icon" href={FAVICON} />
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Kanishk Sigar" />
@@ -25,34 +27,32 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;1,300&family=Plus+Jakarta+Sans:wght@400;500&display=swap" rel="stylesheet" />
 </head>
 <body>
 
   <main class="gate">
 
     <header class="gate-head">
-      <svg class="gate-mark" viewBox="0 0 36 36" aria-hidden="true">
-        <path d="M18 2 L20.5 15.5 L34 18 L20.5 20.5 L18 34 L15.5 20.5 L2 18 L15.5 15.5 Z" fill="#2563EB"/>
-      </svg>
-      <h1 class="gate-name">Kanishk Sigar</h1>
+      <Mark size={22} class="gate-mark" />
+      <span class="gate-name">Kanishk Sigar</span>
     </header>
 
-    <nav class="doors" aria-label="Choose a section">
-      <a href="/tech" class="door door--tech">
-        <span class="door-label">tech</span>
-        <span class="door-desc">the things I build</span>
+    <nav class="index" aria-label="Sections">
+      <a href="/tech" class="row">
+        <span class="row-word">tech</span>
+        <span class="row-note">projects, experience, resume</span>
       </a>
-      <a href="/life" class="door door--life">
-        <span class="door-label">life</span>
-        <span class="door-desc">the things I think about</span>
+      <a href="/life" class="row">
+        <span class="row-word">life</span>
+        <span class="row-note">writing, books, everything else</span>
       </a>
     </nav>
 
     <footer class="gate-foot">
-      <a href="https://github.com/KanishkSigar" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.linkedin.com/in/kanishk-sigar" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="mailto:kanishksigar@gmail.com">Email</a>
+      <a href="https://github.com/KanishkSigar" target="_blank" rel="noopener">github</a>
+      <a href="https://www.linkedin.com/in/kanishk-sigar" target="_blank" rel="noopener">linkedin</a>
+      <a href="mailto:kanishksigar@gmail.com">email</a>
     </footer>
 
   </main>
@@ -61,101 +61,126 @@
 </html>
 
 <style is:global>
+  :root {
+    --ground: #16161A;
+    --ink: #E7E4DD;
+    --ink-2: #A19C93;
+    --ink-3: #6F6A62;
+    --rule: #2E2E34;
+    --accent: #CF6B54;
+  }
+
   *, *::before, *::after { box-sizing: border-box; }
 
   body {
     margin: 0;
     min-height: 100vh;
-    background: #0B1B3B;
-    color: #E8ECF5;
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: 'Spectral', Georgia, serif;
+    font-weight: 300;
     -webkit-font-smoothing: antialiased;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px 24px;
+    padding: 40px 24px;
   }
 
   .gate {
     width: 100%;
-    max-width: 640px;
+    max-width: 34rem;
     display: flex;
     flex-direction: column;
-    gap: 52px;
+    gap: 46px;
   }
 
-  .gate-head { text-align: center; }
-
-  .gate-mark {
-    width: 28px;
-    height: 28px;
-    margin-bottom: 20px;
+  /* --- head --- */
+  .gate-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
+
+  .gate-mark { color: var(--accent); display: block; }
 
   .gate-name {
-    margin: 0;
-    font-size: clamp(28px, 5vw, 38px);
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
   }
 
-  .doors {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
+  /* --- the index --- */
+  .index { display: flex; flex-direction: column; }
 
-  .door {
+  .row {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 30px 28px;
-    border: 1px solid rgba(255,255,255,0.11);
-    border-radius: 12px;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    padding: 26px 4px;
+    border-top: 1px solid var(--rule);
     text-decoration: none;
     color: inherit;
-    transition: border-color .2s ease, background .2s ease;
+    transition: padding-left .25s ease, border-color .25s ease;
   }
 
-  .door--tech { --accent: #2563EB; }
-  .door--life { --accent: #C9A227; }
+  .row:last-child { border-bottom: 1px solid var(--rule); }
 
-  .door:hover,
-  .door:focus-visible {
+  .row-word {
+    font-size: 34px;
+    line-height: 1;
+    transition: color .25s ease;
+  }
+
+  .row-note {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 13.5px;
+    color: var(--ink-3);
+    text-align: right;
+    transition: color .25s ease;
+  }
+
+  .row:hover,
+  .row:focus-visible {
+    padding-left: 14px;
     border-color: var(--accent);
-    background: rgba(255,255,255,0.03);
   }
 
-  .door-label {
-    font-size: 21px;
-    font-weight: 600;
-    color: var(--accent);
-  }
+  .row:hover .row-word,
+  .row:focus-visible .row-word { color: var(--accent); }
 
-  .door-desc {
-    font-size: 15px;
-    line-height: 1.5;
-    color: #93A3C2;
-  }
+  .row:hover .row-note,
+  .row:focus-visible .row-note { color: var(--ink-2); }
 
+  /* --- foot --- */
   .gate-foot {
     display: flex;
-    justify-content: center;
-    gap: 24px;
+    gap: 22px;
     flex-wrap: wrap;
   }
 
   .gate-foot a {
-    font-size: 13.5px;
-    color: #6E7E9C;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 13px;
+    color: var(--ink-3);
     text-decoration: none;
     transition: color .2s ease;
   }
 
-  .gate-foot a:hover { color: #E8ECF5; }
+  .gate-foot a:hover { color: var(--ink); }
 
-  @media (max-width: 640px) {
-    .gate { gap: 40px; }
-    .doors { grid-template-columns: 1fr; }
+  @media (max-width: 560px) {
+    .gate { gap: 36px; }
+    .row { flex-direction: column; align-items: flex-start; gap: 6px; padding: 22px 4px; }
+    .row-word { font-size: 29px; }
+    .row-note { text-align: left; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .row, .row-word, .row-note { transition: none; }
+    .row:hover { padding-left: 4px; }
   }
 </style>

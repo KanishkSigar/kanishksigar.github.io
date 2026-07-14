@@ -1,0 +1,26 @@
+---
+// "The Rule" — K and S divided by a hairline. The mark is the site's idea:
+// two things, one person, a line between them.
+// Used on the landing, /tech (nav, mobile nav, footer) and /life (corner).
+// Replace the contents of this file to change the logo everywhere.
+interface Props {
+  size?: number;
+  color?: string;
+  class?: string;
+}
+
+const { size = 24, color = 'currentColor', class: className } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 32 32"
+  width={size}
+  height={size}
+  class={className}
+  role="img"
+  aria-label="KS"
+>
+  <text x="3.5" y="23" font-family="Georgia, 'Times New Roman', serif" font-size="20" fill={color}>K</text>
+  <line x1="16" y1="6" x2="16" y2="26" stroke={color} stroke-width="1" />
+  <text x="19" y="23" font-family="Georgia, 'Times New Roman', serif" font-size="20" fill={color}>S</text>
+</svg>

@@ -1,4 +1,7 @@
 ---
+import Mark from '../components/Mark.astro';
+import { FAVICON } from '../consts';
+
 interface Props {
   title: string;
   description?: string;
@@ -19,7 +22,7 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
   <link rel="canonical" href={url} />
   <meta name="author" content="Kanishk Sigar" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2036%2036'%3E%3Cpath%20d='M18%202%20L20.5%2015.5%20L34%2018%20L20.5%2020.5%20L18%2034%20L15.5%2020.5%20L2%2018%20L15.5%2015.5%20Z'%20fill='%232563EB'/%3E%3C/svg%3E" />
+  <link rel="icon" href={FAVICON} />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content={title} />
@@ -35,9 +38,7 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
 <body>
 
   <a href="/" class="mark" aria-label="Home">
-    <svg viewBox="0 0 36 36" aria-hidden="true">
-      <path d="M18 2 L20.5 15.5 L34 18 L20.5 20.5 L18 34 L15.5 20.5 L2 18 L15.5 15.5 Z" fill="currentColor"/>
-    </svg>
+    <Mark size={18} />
   </a>
 
   <main>
@@ -55,18 +56,22 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
 
 <style is:global>
   :root {
-    --paper: #FAF8F5;
-    --ink: #23201C;
-    --ink-soft: #6B655C;
-    --rule: #DFD8CE;
+    --paper: #EDEAE4;
+    --ink: #1B1A18;
+    --ink-soft: #5E5A53;
+    --ink-faint: #8A857C;
+    --rule: #D2CCC2;
+    --accent: #8E3B2F;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --paper: #14120F;
-      --ink: #E4DED4;
-      --ink-soft: #8B8377;
-      --rule: #2C2823;
+      --paper: #16161A;
+      --ink: #E7E4DD;
+      --ink-soft: #A19C93;
+      --ink-faint: #6F6A62;
+      --rule: #2E2E34;
+      --accent: #CF6B54;
     }
   }
 
@@ -98,20 +103,18 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
   p { margin: 0 0 1.35em; }
 
   a { color: var(--ink); text-decoration-color: var(--rule); text-underline-offset: 3px; }
-  a:hover { text-decoration-color: var(--ink); }
+  a:hover { text-decoration-color: var(--accent); }
 
   /* corner mark, the only thing shared with /tech */
   .mark {
     position: absolute;
-    top: 34px;
-    left: 34px;
-    width: 17px;
-    height: 17px;
-    color: var(--ink-soft);
+    top: 32px;
+    left: 32px;
+    color: var(--ink-faint);
+    line-height: 0;
     transition: color .2s ease;
   }
-  .mark:hover { color: var(--ink); }
-  .mark svg { width: 100%; height: 100%; display: block; }
+  .mark:hover { color: var(--accent); }
 
   footer {
     width: 100%;
@@ -125,7 +128,7 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
 
   footer a {
     font-size: 15px;
-    color: var(--ink-soft);
+    color: var(--ink-faint);
     text-decoration: none;
   }
   footer a:hover { color: var(--ink); }
