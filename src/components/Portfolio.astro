@@ -1,6 +1,6 @@
 ---
 import Mark from './Mark.astro';
-import { FAVICON } from '../consts';
+import { FAVICON_TECH, BLUE } from '../consts';
 ---
 
 <!DOCTYPE html>
@@ -12,10 +12,10 @@ import { FAVICON } from '../consts';
   <meta name="description" content="Portfolio of Kanishk Sigar — Computer Science student and full-stack developer building useful software in Dehradun, India." />
   <link rel="canonical" href="https://kanishksigar.me/tech" />
   <meta name="author" content="Kanishk Sigar" />
-  <meta name="theme-color" content="#12140F" />
+  <meta name="theme-color" content="#0B1B3B" />
 
-  <link rel="icon" href={FAVICON} />
-  <link rel="apple-touch-icon" href={FAVICON} />
+  <link rel="icon" href={FAVICON_TECH} />
+  <link rel="apple-touch-icon" href={FAVICON_TECH} />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -48,7 +48,7 @@ import { FAVICON } from '../consts';
     </div>
     <a href="/" class="nav-logo" aria-label="Home">
       <div class="logo-mark">
-        <Mark size={26} color="#4F6B3E" />
+        <Mark size={26} color={BLUE} />
       </div>
     </a>
     <div class="nav-right">
@@ -60,7 +60,7 @@ import { FAVICON } from '../consts';
   <!-- Mobile Nav -->
   <div class="mobile-nav">
     <div class="mobile-nav-inner">
-      <Mark size={26} color="#4F6B3E" />
+      <Mark size={26} color={BLUE} />
       <button class="hamburger" id="hamburger" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
@@ -555,7 +555,7 @@ import { FAVICON } from '../consts';
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <Mark size={22} color="#4F6B3E" />
+        <Mark size={22} color={BLUE} />
         <span class="footer-name">Kanishk Sigar</span>
       </div>
       <div class="footer-copy">© 2026 Kanishk Sigar. Code · Build · Learn · Repeat.</div>

@@ -1,6 +1,6 @@
 ---
 import Mark from '../components/Mark.astro';
-import { FAVICON } from '../consts';
+import { FAVICON_LIFE } from '../consts';
 
 interface Props {
   title: string;
@@ -22,7 +22,7 @@ const url = canonical ?? new URL(Astro.url.pathname, 'https://kanishksigar.me').
   <link rel="canonical" href={url} />
   <meta name="author" content="Kanishk Sigar" />
 
-  <link rel="icon" href={FAVICON} />
+  <link rel="icon" href={FAVICON_LIFE} />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content={title} />
