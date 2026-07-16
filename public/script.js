@@ -28,7 +28,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 
 // ===== SCROLL FADE-IN ANIMATIONS =====
 const fadeEls = document.querySelectorAll(
-  '.hero-card, .about-grid, .project-card, .timeline-item, .role-card, .tool-card, .contact-card'
+  '.about-grid, .project-card, .timeline-item, .role-card, .tool-card, .contact-card'
 );
 fadeEls.forEach(el => el.classList.add('fade-up'));
 
