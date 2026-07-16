@@ -1,6 +1,6 @@
 ---
 import Mark from './Mark.astro';
-import { FAVICON_TECH, BLUE } from '../consts';
+import { FAVICON_TECH, TEAL } from '../consts';
 ---
 
 <!DOCTYPE html>
@@ -12,7 +12,7 @@ import { FAVICON_TECH, BLUE } from '../consts';
   <meta name="description" content="Portfolio of Kanishk Sigar — Computer Science student and full-stack developer building useful software in Dehradun, India." />
   <link rel="canonical" href="https://kanishksigar.me/tech" />
   <meta name="author" content="Kanishk Sigar" />
-  <meta name="theme-color" content="#192243" />
+  <meta name="theme-color" content="#00887A" />
 
   <link rel="icon" href={FAVICON_TECH} />
   <link rel="apple-touch-icon" href={FAVICON_TECH} />
@@ -48,7 +48,7 @@ import { FAVICON_TECH, BLUE } from '../consts';
     </div>
     <a href="/" class="nav-logo" aria-label="Home">
       <div class="logo-mark">
-        <Mark size={26} color={BLUE} />
+        <Mark size={26} color={TEAL} />
       </div>
     </a>
     <div class="nav-right">
@@ -60,7 +60,7 @@ import { FAVICON_TECH, BLUE } from '../consts';
   <!-- Mobile Nav -->
   <div class="mobile-nav">
     <div class="mobile-nav-inner">
-      <Mark size={26} color={BLUE} />
+      <Mark size={26} color={TEAL} />
       <button class="hamburger" id="hamburger" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
@@ -74,16 +74,14 @@ import { FAVICON_TECH, BLUE } from '../consts';
   </div>
 
   <!-- ===== HERO ===== -->
-  <section id="home" class="hero-wrapper">
-    <div class="hero-card">
-      <div class="hero-badge">Open to internships &amp; collaborations</div>
-      <h1 class="hero-title">
-        Kanishk Sigar<br />
-        <em>Building products for the web and beyond.</em>
-      </h1>
-      <p class="hero-bio">
-        Final-year Computer Science student working across full-stack development, cybersecurity, and research.
-      </p>
+  <section id="home" class="hero">
+    <p class="hero-eyebrow">Open to internships &amp; collaborations</p>
+    <h1 class="hero-name">Kanishk Sigar</h1>
+    <div class="hero-lower">
+      <div class="hero-lower-text">
+        <p class="hero-line">Building products for the web and beyond.</p>
+        <p class="hero-bio">Final-year Computer Science student working across full-stack development, cybersecurity, and research.</p>
+      </div>
       <div class="hero-cta-row">
         <a href="#contact" class="hero-cta" id="hero-cta">
           Get In Touch
@@ -97,7 +95,7 @@ import { FAVICON_TECH, BLUE } from '../consts';
     </div>
   </section>
 
-  <!-- ===== NOW STRIP ===== -->
+  <!-- ===== NOW RULE ===== -->
   <section class="now-strip" aria-label="Currently working on">
     <div class="now-inner">
       <span class="now-label">Now</span>
@@ -555,7 +553,7 @@ import { FAVICON_TECH, BLUE } from '../consts';
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <Mark size={22} color={BLUE} />
+        <Mark size={22} color={TEAL} />
         <span class="footer-name">Kanishk Sigar</span>
       </div>
       <div class="footer-copy">© 2026 Kanishk Sigar. Code · Build · Learn · Repeat.</div>
