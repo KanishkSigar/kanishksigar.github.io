@@ -2,36 +2,37 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Palette — periwinkle/indigo. The five source colours:
-     #3D52A0 indigo · #7091E6 blue · #8697C4 steel · #ADBBDA mist · #EDE8F5 wash
-     Everything below is one of those five or a tone derived from that hue
-     family (h≈227). To re-palette the whole page, change these and the
-     matching --*-rgb channels; nothing downstream hardcodes a colour. */
-  --accent: #3D52A0;
-  --accent-light: #7091E6;
-  --accent-soft: #8697C4;
-  --accent-mist: #ADBBDA;
-  --accent-tint: #DDE3F2;
+  /* Palette — teal + blue, peach as the warm counterpoint. The five sources:
+     #00887A teal · #FFCCBC peach · #FFFFFF white · #D3E3FC blue-light · #77A6F7 blue
+     Everything below is one of those five or a tone derived from them. To
+     re-palette the page, change these and the matching --*-rgb channels;
+     nothing downstream hardcodes a colour. */
+  --accent: #00887A;        /* teal — the wordmark, links, primary CTA */
+  --accent-light: #77A6F7;  /* blue — the hero block, accents on dark */
+  --accent-warm: #FFCCBC;   /* peach — icons, the eyebrow chip */
+  --accent-soft: #77A6F7;
+  --accent-mist: #D3E3FC;   /* blue-light — borders, rules, light cards */
+  --accent-tint: #D5EAE7;   /* derived teal wash — chips, visual panels */
 
-  --bg: #EDE8F5;
-  --bg-soft: #E5E2F1;
-  --hero-bg: #192243;
-  --card-dark: #202A54;
-  --card-light: #DEE4F4;
-  --surface: #ffffff;
+  --bg: #FFFFFF;
+  --bg-soft: #EDF4FE;
+  --hero-bg: #16323B;       /* derived ink — dark panels, contact card */
+  --card-dark: #1D3F49;
+  --card-light: #D3E3FC;
+  --surface: #FFFFFF;
 
-  --text-dark: #192243;
-  --text-mid: #4A5578;
-  --text-muted: #7C89AD;
+  --text-dark: #16323B;
+  --text-mid: #4A6069;
+  --text-muted: #7E959E;
   --white: #ffffff;
-  --border: rgba(25,34,67,0.10);
+  --border: rgba(22,50,59,0.10);
   --border-dark: rgba(255,255,255,0.1);
 
   /* rgba() channels for the tones above */
-  --accent-rgb: 61,82,160;
-  --accent-light-rgb: 112,145,230;
-  --ink-rgb: 25,34,67;
-  --bg-rgb: 237,232,245;
+  --accent-rgb: 0,136,122;
+  --accent-light-rgb: 119,166,247;
+  --ink-rgb: 22,50,59;
+  --bg-rgb: 255,255,255;
 
   --font: 'Plus Jakarta Sans', sans-serif;
   --radius: 20px;
@@ -52,9 +53,9 @@ a { text-decoration: none; color: inherit; }
 /* ===== NAVBAR — white bar ===== */
 .navbar {
   position: fixed; top: 0; left: 0; right: 0;
-  background: rgba(var(--bg-rgb),0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  /* Solid, not translucent: the hero's blue block runs under it, and a
+     see-through bar turns that into a washed-out seam. */
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
   z-index: 999;
   display: flex; align-items: center; justify-content: space-between;
@@ -92,46 +93,74 @@ a { text-decoration: none; color: inherit; }
 .mobile-menu.open { display: flex; }
 .mobile-link { padding: 12px 0; font-size: 15px; font-weight: 600; color: var(--text-mid); border-bottom: 1px solid var(--border); }
 
-/* ===== HERO — the name at full width, flush left =====
-   No card and no centring: the wordmark is the page's structure, and
-   everything under it (line, bio, CTAs, the Now rule) hangs off the same
-   left edge. The size is in vw so the name always spans the column. */
+/* ===== HERO — two full-bleed blocks butted together =====
+   White block carries the name, blue block carries Now. The blocks run
+   edge to edge, but their inner padding is computed so the text still
+   lines up with the 1100px column the rest of the page uses. */
 .hero {
-  max-width: 1100px; margin: 0 auto;
-  padding: 130px 32px 0;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  min-height: calc(100vh - 60px);
+}
+
+/* Aligns content to the page column while the block itself bleeds. */
+.hero-main {
+  background: var(--surface);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 120px 56px 84px;
+  padding-left: max(32px, calc((100vw - 1100px) / 2 + 32px));
 }
 
 .hero-eyebrow {
-  font-size: 12px; font-weight: 700; letter-spacing: 2.5px;
-  text-transform: uppercase; color: var(--accent);
-  margin-bottom: 18px;
+  align-self: flex-start;
+  background: var(--accent-warm); color: var(--text-dark);
+  font-size: 11.5px; font-weight: 700; letter-spacing: 1.6px;
+  text-transform: uppercase;
+  padding: 7px 14px; border-radius: 100px;
+  margin-bottom: 22px;
 }
 
 .hero-name {
-  font-size: clamp(44px, 12.8vw, 140px);
+  font-size: clamp(46px, 9.6vw, 132px);
   font-weight: 800; text-transform: uppercase;
-  line-height: 0.9; letter-spacing: -0.045em;
-  color: var(--text-dark);
+  line-height: 0.86; letter-spacing: -0.04em;
+  color: var(--accent);
+  margin-bottom: 24px;
 }
 
-/* The line and the CTAs share a baseline under the name. */
-.hero-lower {
-  display: flex; align-items: flex-end; justify-content: space-between;
-  gap: 40px; flex-wrap: wrap; margin-top: 34px;
-}
-.hero-lower-text { max-width: 460px; }
 .hero-line {
   font-size: 19px; font-weight: 700; line-height: 1.4;
   color: var(--text-dark); margin-bottom: 10px;
 }
 .hero-bio {
   font-size: 15px; line-height: 1.7; color: var(--text-mid);
+  max-width: 48ch; margin-bottom: 32px;
 }
 
 .hero-cta-row {
-  display: inline-flex; align-items: center; gap: 14px;
+  display: flex; align-items: center; gap: 14px;
   flex-wrap: wrap;
 }
+
+/* The blue block. Hairlines between items give it internal structure. */
+.hero-now {
+  background: var(--accent-light);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 120px 48px 84px;
+  padding-right: max(32px, calc((100vw - 1100px) / 2 + 32px));
+}
+.hero-now-label {
+  font-size: 11px; font-weight: 800; letter-spacing: 2.4px;
+  text-transform: uppercase; color: var(--text-dark);
+  opacity: 0.65; margin-bottom: 6px;
+}
+.hero-now-list { list-style: none; margin: 0; padding: 0; }
+.hero-now-list li {
+  font-size: 15px; line-height: 1.55; color: var(--text-dark);
+  padding: 16px 0; border-bottom: 1px solid rgba(var(--ink-rgb),0.20);
+}
+.hero-now-list li:first-child { border-top: 1px solid rgba(var(--ink-rgb),0.20); }
+.hero-now-list strong { font-weight: 800; }
 .hero-cta {
   display: inline-flex; align-items: center; gap: 10px;
   background: var(--accent); color: var(--white);
@@ -151,7 +180,7 @@ a { text-decoration: none; color: inherit; }
 .hero-cta-ghost {
   display: inline-flex; align-items: center; gap: 10px;
   background: transparent;
-  border: 1.5px solid var(--accent-mist);
+  border: 1.5px solid var(--accent-light);
   color: var(--text-dark);
   padding: 12.5px 26px; border-radius: 100px;
   font-size: 15px; font-weight: 700;
@@ -159,7 +188,7 @@ a { text-decoration: none; color: inherit; }
 }
 .hero-cta-ghost:hover {
   border-color: var(--accent); color: var(--accent);
-  background: var(--surface); transform: translateY(-2px);
+  background: var(--accent-tint); transform: translateY(-2px);
 }
 .hero-cta-ghost:hover .ghost-arrow { transform: translateY(2px); }
 .ghost-arrow {
@@ -350,9 +379,9 @@ a { text-decoration: none; color: inherit; }
 .code-block { width:100%; background:var(--hero-bg); border-radius:8px; padding:12px 14px; font-size:10.5px; line-height:1.7; color:var(--accent-tint); box-shadow:0 8px 24px rgba(var(--ink-rgb),0.30); border:1px solid rgba(var(--accent-light-rgb),0.18); }
 .code-line { white-space:nowrap; }
 .code-block .kw { color:var(--accent-light); font-weight:700; }
-.code-block .fn { color:#A9BBEE; }
-.code-block .ty { color:#B9AEE8; }
-.code-block .cm { color:#7C89AD; font-style:italic; }
+.code-block .fn { color:var(--accent-mist); }
+.code-block .ty { color:var(--accent-warm); }
+.code-block .cm { color:var(--text-muted); font-style:italic; }
 
 /* 03 — IME AI Chat — on dark card */
 .chat-visual { background:rgba(var(--accent-light-rgb),0.12); display:flex; align-items:center; justify-content:center; padding:14px; height:170px; }
@@ -451,8 +480,10 @@ a { text-decoration: none; color: inherit; }
 @media (max-width:900px) {
   .navbar { display:none; }
   .mobile-nav { display:block; }
-  .hero { padding:96px 24px 0; }
-  .now-strip { padding:0 24px; }
+  /* The blocks stack instead of splitting. */
+  .hero { grid-template-columns:1fr; min-height:0; }
+  .hero-main { padding:96px 24px 48px; }
+  .hero-now { padding:36px 24px 44px; }
   .about-grid { grid-template-columns:1fr; }
   .about-img-wrap { height:260px; }
   .works-grid { grid-template-columns:1fr; }
@@ -462,41 +493,10 @@ a { text-decoration: none; color: inherit; }
   .footer-links { justify-content:center; }
 }
 @media (max-width:500px) {
-  /* stretch, not flex-start: flex-start sizes the text block to its
-     460px max-width and overflows narrow screens. */
-  .hero-lower { flex-direction:column; align-items:stretch; gap:26px; }
-  .hero-lower-text { max-width:100%; }
   .section-header-row { flex-direction:column;align-items:flex-start; }
   .tools-grid { grid-template-columns:repeat(2,1fr); }
   .contact-heading { font-size:26px; }
   .social-links { flex-direction:column;width:100%; }
-}
-
-/* ===== NOW STRIP ===== */
-.now-strip {
-  max-width: 1100px; margin: 52px auto 0; padding: 0 32px;
-}
-/* A rule under the hero, not a floating pill — it reads as the last line
-   of the hero rather than a separate component. */
-.now-inner {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 12px;
-  border-top: 1px solid var(--accent-mist);
-  border-bottom: 1px solid var(--accent-mist);
-  padding: 14px 0;
-  font-size: 13px; color: var(--text-mid);
-}
-.now-label {
-  font-size: 11px; font-weight: 800; letter-spacing: 2px;
-  color: var(--accent); text-transform: uppercase;
-}
-.now-divider { color: var(--accent-mist); font-weight: 700; }
-.now-dot { color: var(--text-muted); font-weight: 700; }
-.now-item { font-weight: 500; }
-.now-item strong { color: var(--text-dark); font-weight: 700; }
-
-@media (max-width: 700px) {
-  .now-dot { display: none; }
-  .now-item { flex-basis: 100%; }
 }
 
 /* ===== STATS BENTO ===== */
@@ -546,7 +546,7 @@ a.stat-card { cursor: pointer; }
 .cert-card:hover { transform: translateY(-3px); border-color: var(--accent-soft); box-shadow: 0 12px 30px rgba(var(--accent-rgb),0.12); }
 .cert-icon {
   width: 42px; height: 42px; border-radius: 10px;
-  background: var(--accent-tint); color: var(--accent);
+  background: var(--accent-warm); color: var(--text-dark);
   display: flex; align-items: center; justify-content: center;
   font-size: 18px; font-weight: 800; flex-shrink: 0;
 }
@@ -589,7 +589,7 @@ a.stat-card { cursor: pointer; }
 .role-card:hover::before { opacity: 1; }
 .role-icon {
   width: 44px; height: 44px; border-radius: 12px;
-  background: var(--accent-tint); color: var(--accent);
+  background: var(--accent-warm); color: var(--text-dark);
   display: flex; align-items: center; justify-content: center;
   font-size: 20px; font-weight: 800;
 }

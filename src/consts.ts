@@ -1,9 +1,9 @@
 // Shared identity tokens. Change here, not in the pages.
 //
-// The mark takes the colour of the room it's in: blue on /tech, moss on the
+// The mark takes the colour of the room it's in: teal on /tech, moss on the
 // landing and /life. The two sides are meant to look nothing like each other.
 
-export const BLUE = '#3D52A0';
+export const TEAL = '#00887A';
 export const MOSS = '#4F6B3E';
 // The landing carries no accent at all, so its mark is a neutral that reads
 // on both a light and a dark browser tab.
@@ -15,6 +15,6 @@ export function favicon(color: string): string {
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
 
-export const FAVICON_TECH = favicon(BLUE);
+export const FAVICON_TECH = favicon(TEAL);
 export const FAVICON_LIFE = favicon(MOSS);
 export const FAVICON_GATE = favicon(GREY);
