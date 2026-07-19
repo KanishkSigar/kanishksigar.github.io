@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import Life from '../../../layouts/Life.astro';
+
+const pieces = (await getCollection('writing', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).toLowerCase();
+---
+
+<Life title="writing — Kanishk Sigar" description="Notes, essays, and marginalia.">
+
+  <p>writing.</p>
+
+  <p>
+    notes are short. essays take longer. marginalia are arguments with books.
+    newest first.
+  </p>
+
+  <ul class="index">
+    {pieces.map((p) => (
+      <li>
+        <a href={`/life/writing/${p.id}`}>
+          <span class="i-title">{p.data.title}</span>
+          <span class="i-meta">
+            <span class="i-form">{p.data.form}</span>
+            <span class="i-date">{fmt(p.data.date)}</span>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+</Life>
+
+<style>
+  .index {
+    list-style: none;
+    margin: 44px 0 0;
+    padding: 0;
+  }
+
+  .index li { border-top: 1px solid var(--rule); }
+  .index li:last-child { border-bottom: 1px solid var(--rule); }
+
+  .index a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    padding: 18px 2px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: padding-left .22s ease;
+  }
+  .index a:hover { padding-left: 10px; }
+
+  .i-title { font-size: 21px; }
+  .index a:hover .i-title { color: var(--accent); }
+
+  .i-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-shrink: 0;
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+
+  .i-form {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 11px;
+  }
+
+  @media (max-width: 560px) {
+    .index a { flex-direction: column; gap: 5px; }
+  }
+</style>

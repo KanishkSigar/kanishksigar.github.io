@@ -1,0 +1,86 @@
+---
+import Life from '../../layouts/Life.astro';
+import { read, unread } from '../../data/shelf';
+---
+
+<Life title="the shelf — Kanishk Sigar" description="What I've read, and what I haven't.">
+
+  <p>the shelf.</p>
+
+  <p>
+    two lists. the ones i've read, and the ones i haven't. the unread shelf is
+    the most honest thing i own - a list of the men i intended to become.
+  </p>
+
+  <section class="shelf">
+    <h2>read</h2>
+    <ul>
+      {read.map((b) => (
+        <li>
+          <span class="b-title">{b.title}</span>
+          <span class="b-author">{b.author}</span>
+          {b.note && <span class="b-note">{b.note}</span>}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="shelf">
+    <h2>unread</h2>
+    {unread.length === 0 ? (
+      <p class="pending">still compiling. it only gets longer.</p>
+    ) : (
+      <ul>
+        {unread.map((b) => (
+          <li>
+            <span class="b-title">{b.title}</span>
+            <span class="b-author">{b.author}</span>
+            {b.note && <span class="b-note">{b.note}</span>}
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+
+</Life>
+
+<style>
+  .shelf { margin-top: 48px; }
+
+  .shelf h2 {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 6px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .shelf ul { list-style: none; margin: 0; padding: 0; }
+
+  .shelf li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .b-title { font-size: 20px; }
+  .b-author { font-size: 15px; color: var(--ink-soft); }
+  .b-note {
+    margin-top: 6px;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--ink-faint);
+    line-height: 1.5;
+  }
+
+  .pending {
+    margin-top: 18px;
+    font-style: italic;
+    color: var(--ink-faint);
+  }
+</style>
