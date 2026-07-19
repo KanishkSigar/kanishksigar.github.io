@@ -1,6 +1,6 @@
 ---
 import Life from '../../layouts/Life.astro';
-import { read, unread } from '../../data/shelf';
+import { read, unread, readMore, unreadMore } from '../../data/shelf';
 ---
 
 <Life title="Kanishk Sigar Shelf" description="What I've read, and what I haven't.">
@@ -20,6 +20,7 @@ import { read, unread } from '../../data/shelf';
         </li>
       ))}
     </ul>
+    <p class="shelf-more">{readMore}</p>
   </section>
 
   <section class="shelf">
@@ -37,6 +38,7 @@ import { read, unread } from '../../data/shelf';
         ))}
       </ul>
     )}
+    {unread.length > 0 && <p class="shelf-more">{unreadMore}</p>}
   </section>
 
   <a href="/life" class="back">← life</a>
@@ -81,6 +83,12 @@ import { read, unread } from '../../data/shelf';
 
   .pending {
     margin-top: 18px;
+    font-style: italic;
+    color: var(--ink-faint);
+  }
+
+  .shelf-more {
+    margin: 16px 0 0;
     font-style: italic;
     color: var(--ink-faint);
   }
