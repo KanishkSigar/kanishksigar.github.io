@@ -2,21 +2,21 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Palette — teal + blue, peach as the warm counterpoint. The five sources:
+  /* Palette - teal + blue, peach as the warm counterpoint. The five sources:
      #00887A teal · #FFCCBC peach · #FFFFFF white · #D3E3FC blue-light · #77A6F7 blue
      Everything below is one of those five or a tone derived from them. To
      re-palette the page, change these and the matching --*-rgb channels;
      nothing downstream hardcodes a colour. */
-  --accent: #00887A;        /* teal — the wordmark, links, primary CTA */
-  --accent-light: #77A6F7;  /* blue — the hero block, accents on dark */
-  --accent-warm: #FFCCBC;   /* peach — icons, the eyebrow chip */
+  --accent: #00887A;        /* teal - the wordmark, links, primary CTA */
+  --accent-light: #77A6F7;  /* blue - the hero block, accents on dark */
+  --accent-warm: #FFCCBC;   /* peach - icons, the eyebrow chip */
   --accent-soft: #77A6F7;
-  --accent-mist: #D3E3FC;   /* blue-light — borders, rules, light cards */
-  --accent-tint: #D5EAE7;   /* derived teal wash — chips, visual panels */
+  --accent-mist: #D3E3FC;   /* blue-light - borders, rules, light cards */
+  --accent-tint: #D5EAE7;   /* derived teal wash - chips, visual panels */
 
   --bg: #FFFFFF;
   --bg-soft: #EDF4FE;
-  --hero-bg: #16323B;       /* derived ink — dark panels, contact card */
+  --hero-bg: #16323B;       /* derived ink - dark panels, contact card */
   --card-dark: #1D3F49;
   --card-light: #D3E3FC;
   --surface: #FFFFFF;
@@ -50,7 +50,7 @@ body {
 }
 a { text-decoration: none; color: inherit; }
 
-/* ===== NAVBAR — white bar ===== */
+/* ===== NAVBAR - white bar ===== */
 .navbar {
   position: fixed; top: 0; left: 0; right: 0;
   /* Solid, not translucent: the hero's blue block runs under it, and a
@@ -93,7 +93,7 @@ a { text-decoration: none; color: inherit; }
 .mobile-menu.open { display: flex; }
 .mobile-link { padding: 12px 0; font-size: 15px; font-weight: 600; color: var(--text-mid); border-bottom: 1px solid var(--border); }
 
-/* ===== HERO — the name at full width, flush left =====
+/* ===== HERO - the name at full width, flush left =====
    No card, no centring, no colour block: the wordmark is the structure and
    everything under it hangs off the same left edge. Sized in vw so the name
    always spans the column. */
@@ -177,7 +177,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .btn-primary {
-  /* Only used on the dark contact card — same reasoning as .hero-cta. */
+  /* Only used on the dark contact card - same reasoning as .hero-cta. */
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--accent-light); color: var(--hero-bg); padding: 13px 26px;
   border-radius: 100px; font-size: 14px; font-weight: 700;
@@ -312,7 +312,7 @@ a { text-decoration: none; color: inherit; }
 /* ===== PROJECT VISUALS (dev-themed) ===== */
 .project-visual { font-family: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace; }
 
-/* 02 — Terminal (argonvault) */
+/* 02 - Terminal (argonvault) */
 .code-visual { background: rgba(var(--accent-rgb),0.08); display:flex; align-items:center; justify-content:center; padding:16px; height:170px; }
 .terminal-mockup { width:100%; background:#0d0d0d; border-radius:10px; border:1px solid #2a2a2a; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.3); }
 .terminal-bar { display:flex; align-items:center; gap:5px; background:#1a1a1a; padding:7px 10px; border-bottom:1px solid #2a2a2a; }
@@ -326,7 +326,7 @@ a { text-decoration: none; color: inherit; }
 .term-prompt { color:var(--accent-light); font-weight:700; margin-right:6px; }
 .term-ok { color:#5ad07d; }
 
-/* 02 — Graph (lexmap) */
+/* 02 - Graph (lexmap) */
 .graph-visual { background:var(--accent-tint); display:flex; align-items:center; justify-content:center; padding:14px; height:170px; position:relative; }
 .graph-mockup { position:relative; width:100%; height:100%; }
 .graph-mockup .graph-lines { position:absolute; inset:0; width:100%; height:100%; }
@@ -341,7 +341,7 @@ a { text-decoration: none; color: inherit; }
 .node-c { top:72%; left:46%; }
 .node-d { top:72%; left:80%; background:var(--text-dark); color:var(--white); border-color:var(--text-dark); }
 
-/* 03 — Code block (Lively) — on light card */
+/* 03 - Code block (Lively) - on light card */
 .lively-visual { background:var(--accent-tint); display:flex; align-items:center; justify-content:center; padding:14px; height:170px; }
 .code-block { width:100%; background:var(--hero-bg); border-radius:8px; padding:12px 14px; font-size:10.5px; line-height:1.7; color:var(--accent-tint); box-shadow:0 8px 24px rgba(var(--ink-rgb),0.30); border:1px solid rgba(var(--accent-light-rgb),0.18); }
 .code-line { white-space:nowrap; }
@@ -350,7 +350,7 @@ a { text-decoration: none; color: inherit; }
 .code-block .ty { color:var(--accent-warm); }
 .code-block .cm { color:var(--text-muted); font-style:italic; }
 
-/* 03 — IME AI Chat — on dark card */
+/* 03 - IME AI Chat - on dark card */
 .chat-visual { background:rgba(var(--accent-light-rgb),0.12); display:flex; align-items:center; justify-content:center; padding:14px; height:170px; }
 .chat-mockup { width:100%; background:var(--surface); border-radius:10px; padding:10px 12px 8px; box-shadow:0 8px 24px rgba(var(--ink-rgb),0.30); font-family:var(--font); display:flex; flex-direction:column; gap:5px; }
 .chat-header { display:flex; align-items:center; gap:8px; padding-bottom:6px; border-bottom:1px solid var(--accent-tint); margin-bottom:2px; }
@@ -363,7 +363,7 @@ a { text-decoration: none; color: inherit; }
 .chat-msg--bot { background:var(--accent-tint); color:var(--text-dark); align-self:flex-start; border-bottom-left-radius:3px; }
 .chat-input { margin-top:2px; background:var(--bg-soft); color:var(--text-muted); font-size:9px; padding:5px 9px; border-radius:14px; }
 
-/* 06 — Contribution heatmap (gitpulse) */
+/* 06 - Contribution heatmap (gitpulse) */
 .heat-visual { background:var(--accent-tint); display:flex; align-items:center; justify-content:center; padding:16px; height:170px; }
 .heat-mockup { display:grid; grid-template-columns:repeat(15,1fr); gap:4px; width:100%; }
 .heat-cell { aspect-ratio:1; border-radius:2px; background:rgba(var(--accent-rgb),0.12); }
@@ -472,7 +472,7 @@ a { text-decoration: none; color: inherit; }
 .now-strip {
   max-width: 1100px; margin: 52px auto 0; padding: 0 32px;
 }
-/* A rule under the hero rather than a pill or a block — it reads as the
+/* A rule under the hero rather than a pill or a block - it reads as the
    hero's last line instead of a separate component. */
 .now-inner {
   display: flex; align-items: center; flex-wrap: wrap; gap: 12px;

@@ -2,7 +2,7 @@
 title: the axe
 form: marginalia
 date: 2026-07-10
-book: A letter to Oskar Pollak — Kafka
+book: Kafka, a letter to Oskar Pollak
 excerpt: a good book is not the one that moved you. it's the one you couldn't stand on afterwards.
 draft: false
 ---

@@ -57,7 +57,7 @@ window.addEventListener('scroll', () => {
   });
 });
 
-// ===== PROJECT CARD TILT (subtle) — skipped when reduced motion is preferred =====
+// ===== PROJECT CARD TILT (subtle) - skipped when reduced motion is preferred =====
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (!reduceMotion) {
   document.querySelectorAll('.project-card').forEach(card => {
@@ -83,4 +83,4 @@ document.querySelectorAll('.tool-card').forEach(card => {
   });
 });
 
-console.log('✦ Portfolio by Kanishk Sigar – Loaded');
+console.log('✦ Portfolio by Kanishk Sigar - Loaded');

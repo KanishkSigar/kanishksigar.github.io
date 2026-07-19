@@ -3,14 +3,9 @@ import Life from '../../layouts/Life.astro';
 import { read, unread } from '../../data/shelf';
 ---
 
-<Life title="the shelf — Kanishk Sigar" description="What I've read, and what I haven't.">
+<Life title="Kanishk Sigar Shelf" description="What I've read, and what I haven't.">
 
   <p>the shelf.</p>
-
-  <p>
-    two lists. the ones i've read, and the ones i haven't. the unread shelf is
-    the most honest thing i own - a list of the men i intended to become.
-  </p>
 
   <section class="shelf">
     <h2>read</h2>
@@ -42,10 +37,12 @@ import { read, unread } from '../../data/shelf';
     )}
   </section>
 
+  <a href="/life" class="back">← life</a>
+
 </Life>
 
 <style>
-  .shelf { margin-top: 48px; }
+  .shelf { margin-top: 44px; }
 
   .shelf h2 {
     font-size: 12px;
@@ -83,4 +80,13 @@ import { read, unread } from '../../data/shelf';
     font-style: italic;
     color: var(--ink-faint);
   }
+
+  .back {
+    display: inline-block;
+    margin-top: 52px;
+    font-size: 15px;
+    color: var(--ink-faint);
+    text-decoration: none;
+  }
+  .back:hover { color: var(--accent); }
 </style>

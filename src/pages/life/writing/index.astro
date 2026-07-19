@@ -3,41 +3,32 @@ import { getCollection } from 'astro:content';
 import Life from '../../../layouts/Life.astro';
 
 const pieces = (await getCollection('writing', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-
-const fmt = (d: Date) =>
-  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).toLowerCase();
+  .sort((a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0));
 ---
 
-<Life title="writing — Kanishk Sigar" description="Notes, essays, and marginalia.">
+<Life title="Kanishk Sigar Writing" description="Notes, essays, and marginalia.">
 
   <p>writing.</p>
-
-  <p>
-    notes are short. essays take longer. marginalia are arguments with books.
-    newest first.
-  </p>
 
   <ul class="index">
     {pieces.map((p) => (
       <li>
         <a href={`/life/writing/${p.id}`}>
           <span class="i-title">{p.data.title}</span>
-          <span class="i-meta">
-            <span class="i-form">{p.data.form}</span>
-            <span class="i-date">{fmt(p.data.date)}</span>
-          </span>
+          <span class="i-form">{p.data.form}</span>
         </a>
       </li>
     ))}
   </ul>
+
+  <a href="/life" class="back">← life</a>
 
 </Life>
 
 <style>
   .index {
     list-style: none;
-    margin: 44px 0 0;
+    margin: 40px 0 0;
     padding: 0;
   }
 
@@ -59,22 +50,20 @@ const fmt = (d: Date) =>
   .i-title { font-size: 21px; }
   .index a:hover .i-title { color: var(--accent); }
 
-  .i-meta {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    flex-shrink: 0;
-    font-size: 13px;
-    color: var(--ink-faint);
-  }
-
   .i-form {
+    flex-shrink: 0;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-size: 11px;
+    color: var(--ink-faint);
   }
 
-  @media (max-width: 560px) {
-    .index a { flex-direction: column; gap: 5px; }
+  .back {
+    display: inline-block;
+    margin-top: 52px;
+    font-size: 15px;
+    color: var(--ink-faint);
+    text-decoration: none;
   }
+  .back:hover { color: var(--accent); }
 </style>

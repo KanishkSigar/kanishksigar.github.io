@@ -8,8 +8,9 @@ const writing = defineCollection({
   schema: z.object({
     title: z.string(),
     form: z.enum(['essay', 'note', 'marginalia']),
-    date: z.coerce.date(),
-    book: z.string().optional(),   // marginalia only: "The Trial — Kafka"
+    // Optional. Used only to order the index; shown once real authored dates exist.
+    date: z.coerce.date().optional(),
+    book: z.string().optional(),   // marginalia only: "The Trial, Kafka"
     excerpt: z.string().optional(),
     draft: z.boolean().default(false),
   }),

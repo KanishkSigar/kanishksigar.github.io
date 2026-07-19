@@ -2,7 +2,7 @@
 title: the last page of the metamorphosis
 form: marginalia
 date: 2026-07-04
-book: The Metamorphosis — Kafka
+book: The Metamorphosis, Kafka
 excerpt: the horror was never the insect. the horror is that they were fine.
 draft: false
 ---

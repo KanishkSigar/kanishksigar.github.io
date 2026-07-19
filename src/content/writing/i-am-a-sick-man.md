@@ -2,7 +2,7 @@
 title: i am a sick man
 form: marginalia
 date: 2026-07-03
-book: Notes from Underground — Dostoevsky
+book: Notes from Underground, Dostoevsky
 excerpt: a man who tells you the worst of it in the first line is a man you will follow anywhere.
 draft: true
 ---

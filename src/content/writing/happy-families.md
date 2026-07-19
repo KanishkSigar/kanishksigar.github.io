@@ -2,7 +2,7 @@
 title: happy families
 form: marginalia
 date: 2026-07-05
-book: Anna Karenina — Tolstoy
+book: Anna Karenina, Tolstoy
 excerpt: he opens with a beautiful lie and then writes eight hundred pages taking it apart.
 draft: true
 ---
