@@ -52,4 +52,4 @@ export const unread: Book[] = [
   { title: 'Old Roads, New Roads', author: 'Ruskin Bond', note: 'bond in the hills. for a quiet week.' },
 ];
 
-export const unreadMore = 'and a longer list i keep pretending i\'ll finish.';
+export const unreadMore = 'and a longer list i keep meaning to finish.';
