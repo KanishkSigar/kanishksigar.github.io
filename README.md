@@ -10,7 +10,11 @@ Personal site of **Kanishk Sigar**. Two sides on one domain: the work, and every
 | --- | --- |
 | `/` | Landing page. A ruled index with two doors: tech or life. |
 | `/tech` | The portfolio. Projects, experience, certifications, resume. Canonical URL, safe to put on a resume. |
-| `/life` | Writing, books, and the things that don't belong on a resume. Under construction. |
+| `/life` | Writing, books, and the things that don't belong on a resume. |
+| `/life/writing` | Index of every published piece: notes, essays, marginalia. |
+| `/life/writing/<slug>` | A single piece. |
+| `/life/shelf` | Two lists: books read, and books unread. |
+| `/rss.xml` | Feed of the writing. |
 
 The project sites (`/lexmap`, `/argonvault`, `/gitpulse`) are separate repos with their own GitHub Pages deploys. They mount under the same custom domain automatically and are not built here.
 
@@ -43,12 +47,23 @@ The mark itself lives in `src/components/Mark.astro`, and its favicons are gener
 │   │   ├── Portfolio.astro    # the whole /tech page
 │   │   └── Mark.astro         # the KS logo, used everywhere
 │   ├── consts.ts              # accent colours, per room favicons
+│   ├── content.config.ts      # the writing collection schema
+│   ├── content/
+│   │   └── writing/           # one markdown file per piece
+│   ├── data/
+│   │   └── shelf.ts           # the read + unread book lists
 │   ├── layouts/
 │   │   └── Life.astro         # serif, paper, one column
 │   └── pages/
 │       ├── index.astro        # landing
 │       ├── tech.astro         # renders Portfolio
-│       └── life/index.astro
+│       ├── rss.xml.js         # the writing feed
+│       └── life/
+│           ├── index.astro
+│           ├── shelf.astro
+│           └── writing/
+│               ├── index.astro
+│               └── [...slug].astro
 ├── public/                    # served at the domain root
 │   ├── style.css              # /tech styles
 │   ├── script.js              # /tech nav, scroll, animations
@@ -58,6 +73,27 @@ The mark itself lives in `src/components/Mark.astro`, and its favicons are gener
 │   └── CNAME
 └── .github/workflows/deploy.yml
 ```
+
+## Writing and the shelf
+
+Each piece of writing is one markdown file in `src/content/writing/`. Publishing is:
+add a file, commit, push. The frontmatter:
+
+```yaml
+---
+title: the axe
+form: marginalia        # note | essay | marginalia
+date: 2026-07-10        # optional, ordering only; hidden until real dates exist
+book: Kafka, a letter to Oskar Pollak   # marginalia only
+excerpt: a good book is the one you couldn't stand on afterwards.
+draft: true             # builds locally, never ships
+---
+```
+
+`remark-breaks` is on, so single line breaks are kept: notes and marginalia are
+written line by line, like verse. The shelf is two arrays in `src/data/shelf.ts`.
+
+House rule: no long dashes anywhere on the site, hyphens only.
 
 ## Local development
 
