@@ -31,7 +31,7 @@ import { read, unread, readMore, unreadMore } from '../../data/shelf';
       <ul>
         {unread.map((b) => (
           <li>
-            <span class="b-title">{b.title}</span>
+            <span class="b-title">{b.title}{b.reading && <span class="b-status">reading now</span>}</span>
             <span class="b-author">{b.author}</span>
             {b.note && <span class="b-note">{b.note}</span>}
           </li>
@@ -72,6 +72,15 @@ import { read, unread, readMore, unreadMore } from '../../data/shelf';
   }
 
   .b-title { font-size: 20px; }
+
+  .b-status {
+    margin-left: 10px;
+    font-size: 11px;
+    font-style: italic;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    vertical-align: middle;
+  }
   .b-author { font-size: 15px; color: var(--ink-soft); }
   .b-note {
     margin-top: 6px;

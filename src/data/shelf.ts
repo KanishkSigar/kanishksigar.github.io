@@ -5,6 +5,7 @@ export interface Book {
   title: string;
   author: string;
   note?: string;
+  reading?: boolean;   // unread list only: currently reading
 }
 
 // Books Kanishk has read.
@@ -43,7 +44,8 @@ export const unread: Book[] = [
   { title: 'Crime and Punishment', author: 'Fyodor Dostoevsky', note: 'i know the whole plot and still haven\'t opened it.' },
   { title: 'A Little Life', author: 'Hanya Yanagihara', note: 'kept away on purpose. i\'ve been warned.' },
   { title: 'Intermezzo', author: 'Sally Rooney', note: 'rooney again. saving it.' },
-  { title: 'Frankenstein', author: 'Mary Shelley', note: 'the monster reads more than the doctor. that\'s the part i want.' },
+  { title: 'Frankenstein', author: 'Mary Shelley', note: 'the monster reads more than the doctor. that\'s the part i want.', reading: true },
+  { title: 'The Prophet', author: 'Kahlil Gibran', note: 'poems about love and work that everyone seems to own a copy of.' },
   { title: '1984', author: 'George Orwell', note: 'quoted to death. i\'d like to actually read it.' },
   { title: 'Animal Farm', author: 'George Orwell', note: 'everyone read it in school. i didn\'t.' },
   { title: 'The Alchemist', author: 'Paulo Coelho', note: 'the one everyone hands you. i keep not opening it.' },
