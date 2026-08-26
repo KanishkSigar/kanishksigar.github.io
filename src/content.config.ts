@@ -7,7 +7,7 @@ const writing = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/writing' }),
   schema: z.object({
     title: z.string(),
-    form: z.enum(['essay', 'note', 'marginalia']),
+    form: z.enum(['essay', 'note', 'marginalia', 'poem']),
     // Optional. Used only to order the index; shown once real authored dates exist.
     date: z.coerce.date().optional(),
     book: z.string().optional(),   // marginalia only: "The Trial, Kafka"
