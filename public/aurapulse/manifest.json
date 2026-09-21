@@ -1,0 +1,16 @@
+{
+  "name": "AuraPulse — Apple Watch Health Studio",
+  "short_name": "AuraPulse",
+  "description": "Apple Watch SE 3 & Health Analytics Web Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08090C",
+  "theme_color": "#00F0FF",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
