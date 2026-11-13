@@ -1,0 +1,29 @@
+/* ============================================
+   GitPulse — Responsive Overrides
+   (Most responsive rules are already in layout.css,
+    this file handles edge cases)
+   ============================================ */
+
+@media (max-width: 480px) {
+  .card {
+    padding: var(--space-5);
+    border-radius: 16px;
+  }
+  
+  .stat-card {
+    padding: var(--space-4);
+    border-radius: 16px;
+  }
+  
+  .stat-card__value {
+    font-size: 1.8rem;
+  }
+  
+  .landing__examples {
+    flex-direction: column;
+  }
+  
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}

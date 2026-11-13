@@ -1,0 +1,94 @@
+// ============================================
+// RepoPulse — Responsive Overrides
+// ============================================
+
+/* Large Tablets & Small Laptops (< 1200px) */
+@media (max-width: 1200px) {
+  .vitals-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Tablets & Mobile Landscape (< 900px) */
+@media (max-width: 900px) {
+  .analytics-bento-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .vitals-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tech-stack-chart-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cadence-container {
+    grid-template-columns: 1fr;
+  }
+
+  .health-and-release-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commit-stats-pills {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .landing__features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile Devices (< 640px) */
+@media (max-width: 640px) {
+  .landing__title {
+    font-size: 2.1rem;
+  }
+
+  .repo-header__top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .repo-header__actions {
+    margin-top: var(--space-3);
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .podium-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .podium-step {
+    width: 100%;
+    max-width: 260px;
+    transform: none !important;
+    order: unset !important;
+  }
+
+  .podium-pillar {
+    display: none;
+  }
+
+  .contributor-row {
+    flex-wrap: wrap;
+  }
+
+  .contributor-commits {
+    text-align: left;
+  }
+
+  .compare-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .chead {
+    margin-bottom: 12px;
+  }
+}

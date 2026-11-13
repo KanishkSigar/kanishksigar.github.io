@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GitPulse — Visualize any GitHub profile with beautiful analytics. Contribution heatmaps, language breakdowns, coding patterns, and more.">
+  <meta name="theme-color" content="#111014">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c8a2ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 12h-4l-3 9L9 3l-3 9H2'/%3E%3C/svg%3E">
+  <title>GitPulse</title>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
+
+  <!-- html2canvas (export dashboard as image) -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/variables.css?v=20260710">
+  <link rel="stylesheet" href="css/base.css?v=20260710">
+  <link rel="stylesheet" href="css/components.css?v=20260710">
+  <link rel="stylesheet" href="css/heatmap.css?v=20260710">
+  <link rel="stylesheet" href="css/responsive.css?v=20260710">
+  <link rel="stylesheet" href="css/layout.css?v=20260710">
+  <link rel="stylesheet" href="css/themes.css?v=20260710">
+
+  <!-- Apply saved theme before paint to avoid a flash -->
+  <script>try{var t=localStorage.getItem('gitpulse_theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       HEADER — Search + PAT input
+       ═══════════════════════════════════════ -->
+  <header class="header" id="header">
+    <div class="container">
+      <div class="header__content">
+        <!-- Brand -->
+        <a href="." class="header__brand">
+          <i data-lucide="activity" class="header__logo-icon"></i>
+          <span class="header__logo-text">Git<span class="header__logo-accent">Pulse</span></span>
+        </a>
+
+        <!-- Header search (shown on the dashboard so you can look up another user) -->
+        <div class="header__search" id="header-search" hidden>
+          <div class="input-icon" style="flex:1;">
+            <i data-lucide="search"></i>
+            <input
+              type="text"
+              class="input"
+              id="username-input"
+              placeholder="Search another username..."
+              autocomplete="off"
+              spellcheck="false"
+            >
+          </div>
+        </div>
+
+        <!-- Settings (PAT is tucked inside) -->
+        <div class="header__actions">
+          <div class="theme-menu" id="theme-menu">
+            <button class="btn btn-ghost btn-sm" id="theme-toggle" aria-label="Theme" title="Change theme">
+              <i data-lucide="palette" style="width:16px;height:16px;"></i>
+            </button>
+            <div class="theme-dropdown" id="theme-dropdown" hidden>
+              <button class="theme-opt" data-theme=""><span class="sw" style="background:#c8a2ff"></span> Lavender</button>
+              <button class="theme-opt" data-theme="indigo"><span class="sw" style="background:#5b8cff"></span> Indigo</button>
+              <button class="theme-opt" data-theme="green"><span class="sw" style="background:#34d399"></span> Green</button>
+              <button class="theme-opt" data-theme="amber"><span class="sw" style="background:#f59e0b"></span> Amber</button>
+              <button class="theme-opt" data-theme="light"><span class="sw" style="background:#f7f6f3"></span> Light</button>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="compare-btn" aria-label="Compare users" title="Compare two users">
+            <i data-lucide="git-compare" style="width:16px;height:16px;"></i>
+          </button>
+          <button class="btn btn-ghost btn-sm" id="export-btn" aria-label="Export as image" title="Export dashboard as image" hidden>
+            <i data-lucide="download" style="width:16px;height:16px;"></i>
+          </button>
+          <button class="btn btn-ghost btn-sm" id="pat-toggle" aria-label="GitHub token" title="GitHub Personal Access Token — unlocks contribution heatmaps and higher API limits">
+            <i data-lucide="key-round" style="width:16px;height:16px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- PAT Input (collapsible) -->
+      <div class="header__pat-panel" id="pat-panel" hidden>
+        <div class="pat-panel__inner">
+          <div class="pat-panel__head">
+            <span class="pat-panel__title"><i data-lucide="key-round" style="width:15px;height:15px;"></i> GitHub Token</span>
+            <button class="btn btn-ghost btn-sm" id="pat-close" aria-label="Close">
+              <i data-lucide="x" style="width:16px;height:16px;"></i>
+            </button>
+          </div>
+          <div class="pat-panel__info">
+            <i data-lucide="info" style="width:14px;height:14px;"></i>
+            <span>A <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">Personal Access Token</a> with <code>read:user</code> scope unlocks contribution heatmaps &amp; higher rate limits. Your token stays in your browser only.</span>
+          </div>
+          <div class="input-group">
+            <input
+              type="password"
+              class="input"
+              id="pat-input"
+              placeholder="ghp_xxxxxxxxxxxx"
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <button class="btn btn-secondary btn-sm" id="pat-save">Save</button>
+            <button class="btn btn-ghost btn-sm" id="pat-clear">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ═══════════════════════════════════════
+         LANDING — Shown before any search
+         ═══════════════════════════════════════ -->
+    <section class="landing" id="landing-section">
+      <div class="container landing__container">
+        <div class="landing__split">
+          <div class="landing__content">
+
+            <!-- Brand Mark -->
+            <div class="landing__brand-mark">
+              <i data-lucide="activity" style="width: 36px; height: 36px; color: var(--accent);"></i>
+              <span>Git<span style="color: var(--accent);">Pulse</span></span>
+            </div>
+
+            <!-- Tagline -->
+            <p class="landing__tagline">GitHub profile analytics</p>
+
+            <!-- Search Box -->
+            <div class="landing__search-box">
+              <div class="landing__search-input-wrapper">
+                <i data-lucide="search" class="search-icon"></i>
+                <input
+                  type="text"
+                  class="landing__search-input"
+                  id="landing-username-input"
+                  placeholder="Search a GitHub username..."
+                  autocomplete="off"
+                  spellcheck="false"
+                >
+              </div>
+              <button class="landing__search-btn" id="landing-search-btn">
+                <i data-lucide="arrow-right" style="width:18px;height:18px;"></i>
+              </button>
+            </div>
+
+            <!-- Example Users -->
+            <div class="landing__examples">
+              <button class="landing__example-btn" data-username="torvalds">
+                <img src="https://github.com/torvalds.png?size=24" alt="" class="landing__example-avatar" loading="lazy">
+                <span>torvalds</span>
+              </button>
+              <button class="landing__example-btn" data-username="sindresorhus">
+                <img src="https://github.com/sindresorhus.png?size=24" alt="" class="landing__example-avatar" loading="lazy">
+                <span>sindresorhus</span>
+              </button>
+              <button class="landing__example-btn" data-username="KanishkSigar">
+                <img src="https://github.com/KanishkSigar.png?size=24" alt="" class="landing__example-avatar" loading="lazy">
+                <span>KanishkSigar</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         DASHBOARD — Shown after search (BENTO REDESIGN)
+         ═══════════════════════════════════════ -->
+    <div class="dashboard container" id="dashboard" hidden style="margin-top: var(--space-8);">
+      
+      <div class="bento-grid">
+        
+        <!-- 1. Profile Area -->
+        <div class="bento-item bento-profile card" id="profile-card">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- 2. Stats -->
+        <div id="stats-bar" style="display: contents;">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- 3. Heatmap Area -->
+        <div class="bento-item bento-heatmap card">
+          <div class="bento-header">
+            <h2 style="display:flex; align-items:center; gap:8px; margin-bottom: 16px;"><i data-lucide="calendar"></i> Contributions</h2>
+          </div>
+          <div id="heatmap-card" class="bento-content"></div>
+        </div>
+
+        <!-- 4. Streaks Area -->
+        <div class="bento-item bento-streaks" style="display: flex; flex-direction: column;">
+          <h2 style="display:flex; align-items:center; gap:8px; margin-bottom: 16px;"><i data-lucide="flame"></i> Streaks</h2>
+          <div class="grid-3" id="streak-cards" style="flex-grow: 1;"></div>
+        </div>
+
+        <!-- 5. Languages Area -->
+        <div class="bento-item bento-languages card">
+          <div class="bento-header">
+            <h2 style="display:flex; align-items:center; gap:8px; margin-bottom: 16px;"><i data-lucide="code-2"></i> Languages</h2>
+          </div>
+          <div id="language-card" class="bento-content"></div>
+        </div>
+
+        <!-- 6. Patterns Area -->
+        <div class="bento-item bento-patterns card">
+          <div class="bento-header">
+            <h2 style="display:flex; align-items:center; gap:8px; margin-bottom: 16px;"><i data-lucide="clock"></i> Coding Patterns</h2>
+          </div>
+          <div class="grid-2" id="patterns-cards" style="gap: var(--space-4);"></div>
+        </div>
+
+        <!-- 7. Repos Area -->
+        <div class="bento-item bento-repos card">
+          <div class="bento-header">
+            <h2 style="display:flex; align-items:center; gap:8px; margin-bottom: 16px;"><i data-lucide="folder-git-2"></i> <span id="repos-heading">Top Repositories</span></h2>
+          </div>
+          <div id="repos-container"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         COMPARE — Two users side by side
+         ═══════════════════════════════════════ -->
+    <section class="compare container" id="compare-section" hidden style="margin-top: var(--space-8);">
+      <div class="compare__head">
+        <h2 class="compare__title"><i data-lucide="git-compare"></i> Compare users</h2>
+        <button class="btn btn-ghost btn-sm" id="compare-close" aria-label="Close compare" title="Close compare">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+      <div class="compare__form">
+        <div class="input-icon" style="flex:1; min-width:200px;">
+          <i data-lucide="user"></i>
+          <input type="text" class="input" id="compare-a" placeholder="First username..." autocomplete="off" spellcheck="false">
+        </div>
+        <span class="compare__vs">vs</span>
+        <div class="input-icon" style="flex:1; min-width:200px;">
+          <i data-lucide="user"></i>
+          <input type="text" class="input" id="compare-b" placeholder="Second username..." autocomplete="off" spellcheck="false">
+        </div>
+        <button class="btn btn-secondary" id="compare-go">Compare</button>
+      </div>
+      <div id="compare-results"></div>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer__content">
+        <div class="footer__brand">
+          <i data-lucide="activity" style="width:16px;height:16px;"></i>
+          <span>Git<span class="header__logo-accent">Pulse</span></span>
+        </div>
+        <p class="footer__text">
+          Open source GitHub analytics. Data fetched client-side via the GitHub API. No data is stored on any server.
+        </p>
+        <div class="footer__links">
+          <a href="https://github.com/KanishkSigar/gitpulse" target="_blank" rel="noopener">
+            <i data-lucide="github" style="width:16px;height:16px;"></i>
+            Source
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Tooltip (shared, positioned by JS) -->
+  <div class="tooltip" id="global-tooltip" role="tooltip"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/app.js?v=20260710"></script>
+</body>
+</html>

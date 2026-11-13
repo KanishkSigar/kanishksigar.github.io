@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RepoPulse — Visualize any GitHub repository with deep analytics. Tech stack summaries, commit frequency, and top contributors.">
+  <meta name="theme-color" content="#111014">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c8a2ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4'/%3E%3Cpath d='M9 18c-4.51 2-5-2-7-2'/%3E%3C/svg%3E">
+  <title>RepoPulse — GitHub Repository Analyzer</title>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
+
+  <!-- html2canvas (export dashboard as image) -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" defer></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/variables.css?v=20261113">
+  <link rel="stylesheet" href="css/base.css?v=20261113">
+  <link rel="stylesheet" href="css/components.css?v=20261113">
+  <link rel="stylesheet" href="css/responsive.css?v=20261113">
+  <link rel="stylesheet" href="css/layout.css?v=20261113">
+  <link rel="stylesheet" href="css/themes.css?v=20261113">
+
+  <!-- Apply saved theme before paint to avoid a flash -->
+  <script>try{var t=localStorage.getItem('repopulse_theme')||localStorage.getItem('gitpulse_theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+
+  <!-- ============================================
+       HEADER — Search, Compare, Export, Theme, PAT
+       ============================================ -->
+  <header class="header" id="header">
+    <div class="container">
+      <div class="header__content">
+        <!-- Brand -->
+        <a href="." class="header__brand">
+          <i data-lucide="git-branch" class="header__logo-icon"></i>
+          <span class="header__logo-text">Repo<span class="header__logo-accent">Pulse</span></span>
+        </a>
+
+        <!-- Header search (shown on dashboard) -->
+        <div class="header__search" id="header-search" hidden>
+          <div class="input-icon" style="flex:1;">
+            <i data-lucide="search"></i>
+            <input
+              type="text"
+              class="input"
+              id="repo-input"
+              placeholder="Analyze another repository (e.g. facebook/react or URL)..."
+              autocomplete="off"
+              spellcheck="false"
+            >
+          </div>
+        </div>
+
+        <!-- Header Actions -->
+        <div class="header__actions">
+          <div class="theme-menu" id="theme-menu">
+            <button class="btn btn-ghost btn-sm" id="theme-toggle" aria-label="Theme" title="Change theme">
+              <i data-lucide="palette" style="width:16px;height:16px;"></i>
+            </button>
+            <div class="theme-dropdown" id="theme-dropdown" hidden>
+              <button class="theme-opt" data-theme=""><span class="sw" style="background:#c8a2ff"></span> Lavender</button>
+              <button class="theme-opt" data-theme="indigo"><span class="sw" style="background:#5b8cff"></span> Indigo</button>
+              <button class="theme-opt" data-theme="green"><span class="sw" style="background:#34d399"></span> Green</button>
+              <button class="theme-opt" data-theme="amber"><span class="sw" style="background:#f59e0b"></span> Amber</button>
+              <button class="theme-opt" data-theme="light"><span class="sw" style="background:#f7f6f3"></span> Light</button>
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="compare-btn" aria-label="Compare repositories" title="Compare two repositories">
+            <i data-lucide="git-compare" style="width:16px;height:16px;"></i>
+          </button>
+          <button class="btn btn-ghost btn-sm" id="export-btn" aria-label="Export report" title="Export dashboard as image" hidden>
+            <i data-lucide="download" style="width:16px;height:16px;"></i>
+          </button>
+          <button class="btn btn-ghost btn-sm" id="pat-toggle" aria-label="GitHub token" title="GitHub Personal Access Token — unlocks higher API rate limits">
+            <i data-lucide="key-round" style="width:16px;height:16px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- PAT Input (collapsible) -->
+      <div class="header__pat-panel" id="pat-panel" hidden>
+        <div class="pat-panel__inner">
+          <div class="pat-panel__head">
+            <span class="pat-panel__title"><i data-lucide="key-round" style="width:15px;height:15px;"></i> GitHub API Token</span>
+            <button class="btn btn-ghost btn-sm" id="pat-close" aria-label="Close">
+              <i data-lucide="x" style="width:16px;height:16px;"></i>
+            </button>
+          </div>
+          <div class="pat-panel__info">
+            <i data-lucide="info" style="width:14px;height:14px;"></i>
+            <span>Add an optional <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">Personal Access Token (classic or fine-grained)</a> to lift GitHub's rate limit from 60 to 5,000 requests/hour. Stored locally in your browser only.</span>
+          </div>
+          <div class="input-group">
+            <input
+              type="password"
+              class="input"
+              id="pat-input"
+              placeholder="ghp_xxxxxxxxxxxx"
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <button class="btn btn-secondary btn-sm" id="pat-save">Save</button>
+            <button class="btn btn-ghost btn-sm" id="pat-clear">Clear</button>
+          </div>
+          <div class="pat-panel__status" id="rate-limit-status" style="margin-top:8px; font-size:12px; color:var(--text-muted);">
+            <!-- Populated via API rate limit check -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Landing / Hero placeholder -->
+    <section class="landing" id="landing-section">
+      <div class="container landing__container">
+        <div class="landing__content">
+          <div class="landing__badge">
+            <i data-lucide="sparkles" style="width:14px;height:14px;"></i>
+            <span>GitHub Repository Intelligence</span>
+          </div>
+
+          <h1 class="landing__title">
+            Analyze any GitHub repository <span class="landing__title-gradient">in seconds</span>
+          </h1>
+          <p class="landing__subtitle">
+            Instant visual breakdown of tech stack, 52-week commit cadence, top contributors, maintainer bus factor, and codebase health.
+          </p>
+
+          <!-- Search Input Box -->
+          <div class="landing__search-box">
+            <div class="landing__search-input-wrapper">
+              <i data-lucide="search" class="search-icon"></i>
+              <input
+                type="text"
+                class="landing__search-input"
+                id="landing-repo-input"
+                placeholder="Paste URL or enter owner/repo (e.g. facebook/react)..."
+                autocomplete="off"
+                spellcheck="false"
+              >
+            </div>
+            <button class="btn btn-primary landing__search-btn" id="landing-search-btn">
+              <span>Analyze</span>
+              <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+            </button>
+          </div>
+          <div id="landing-error" class="landing__error" hidden></div>
+
+          <!-- Quick Example Repositories -->
+          <div class="landing__presets">
+            <span class="landing__presets-label">Popular repositories:</span>
+            <div class="landing__preset-chips">
+              <button class="preset-chip" data-repo="facebook/react">
+                <i data-lucide="atom" style="width:14px;height:14px;color:#61dafb;"></i>
+                <span>facebook/react</span>
+              </button>
+              <button class="preset-chip" data-repo="vercel/next.js">
+                <i data-lucide="zap" style="width:14px;height:14px;color:#ffffff;"></i>
+                <span>vercel/next.js</span>
+              </button>
+              <button class="preset-chip" data-repo="astral-sh/uv">
+                <i data-lucide="box" style="width:14px;height:14px;color:#dea584;"></i>
+                <span>astral-sh/uv</span>
+              </button>
+              <button class="preset-chip" data-repo="shadcn-ui/ui">
+                <i data-lucide="layers" style="width:14px;height:14px;color:#a855f7;"></i>
+                <span>shadcn-ui/ui</span>
+              </button>
+              <button class="preset-chip" data-repo="torvalds/linux">
+                <i data-lucide="terminal" style="width:14px;height:14px;color:#f59e0b;"></i>
+                <span>torvalds/linux</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Feature Cards Grid -->
+          <div class="landing__features-grid">
+            <div class="feature-card">
+              <div class="feature-card__icon" style="background:rgba(200, 162, 255, 0.12); color:var(--accent);">
+                <i data-lucide="pie-chart"></i>
+              </div>
+              <h3>Tech Stack Breakdown</h3>
+              <p>Precise language composition with Linguist colors and automated framework & ecosystem detection.</p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card__icon" style="background:rgba(52, 211, 153, 0.12); color:#34d399;">
+                <i data-lucide="trending-up"></i>
+              </div>
+              <h3>52-Week Commit Velocity</h3>
+              <p>Full year of commit frequency, peak activity milestones, and day/hour coding cadence punchcards.</p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-card__icon" style="background:rgba(251, 191, 36, 0.12); color:#fbbf24;">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>Contributors &amp; Bus Factor</h3>
+              <p>Top contributor podium, contribution share distribution, and maintainer dependency index.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard container placeholder -->
+    <div class="dashboard container" id="dashboard" hidden style="margin-top: var(--space-8);">
+      <div id="repo-main-content"></div>
+    </div>
+
+    <!-- Compare container placeholder -->
+    <section class="compare container" id="compare-section" hidden style="margin-top: var(--space-8);">
+      <div id="compare-content"></div>
+    </section>
+  </main>
+
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer__content">
+        <div class="footer__brand">
+          <i data-lucide="git-branch" style="width:16px;height:16px;"></i>
+          <span>Repo<span class="header__logo-accent">Pulse</span></span>
+        </div>
+        <p class="footer__text">
+          Open source GitHub repository analyzer. Visual tech stack, commit frequency, and top contributors breakdown.
+        </p>
+        <div class="footer__links">
+          <a href="https://github.com/KanishkSigar/repopulse" target="_blank" rel="noopener">
+            <i data-lucide="github" style="width:16px;height:16px;"></i>
+            Source
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="tooltip" id="global-tooltip" role="tooltip"></div>
+  <script type="module" src="js/app.js?v=20261113"></script>
+</body>
+</html>

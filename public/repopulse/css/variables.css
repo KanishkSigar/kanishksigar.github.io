@@ -1,0 +1,86 @@
+/* ============================================
+   GitPulse — Design Tokens (Editorial Redesign)
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ── Background — warm charcoal, not pure black ── */
+  --bg-primary: #111014;
+  --bg-elevated: #1a181f;
+  --bg-surface: #211f27;
+  --bg-surface-hover: #2a2831;
+  --bg-input: #1a181f;
+  --bg-tooltip: #2a2831;
+
+  /* ── Text — warm whites instead of cold grays ── */
+  --text-primary: #f0ece4;
+  --text-secondary: #9e97a5;
+  --text-tertiary: #625c6b;
+  --text-muted: #453f4e;
+
+  /* ── Accent — single strong accent + muted companions ── */
+  --accent: #c8a2ff;          /* Soft lavender */
+  --accent-bright: #e0c4ff;
+  --accent-dim: rgba(200, 162, 255, 0.15);
+  --accent-secondary: #7dd3c0; /* Muted teal */
+  --accent-warm: #f5c16c;      /* Warm gold */
+  --accent-coral: #f08080;     /* Soft coral */
+
+  /* ── Heatmap — custom warm palette ── */
+  --heatmap-0: #1e1c24;
+  --heatmap-1: #3d2f5a;
+  --heatmap-2: #6b4c9a;
+  --heatmap-3: #9b6fd0;
+  --heatmap-4: #c8a2ff;
+
+  /* ── Borders — barely visible ── */
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* ── Card ── */
+  --card-radius: 20px;
+  --card-padding: 28px;
+
+  /* ── Shadows — warm-tinted ── */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+
+  /* ── Spacing (4px base) ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ── Typography ── */
+  --font-display: 'Outfit', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ── Transitions ── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 500ms;
+
+  /* ── Z-Index ── */
+  --z-base: 1;
+  --z-card: 10;
+  --z-sticky: 100;
+  --z-modal: 1000;
+  --z-tooltip: 1100;
+
+  /* ── Layout ── */
+  --max-width: 1240px;
+  --header-height: 56px;
+}
