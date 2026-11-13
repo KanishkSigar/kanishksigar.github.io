@@ -18,6 +18,30 @@
  * @param {string} input - Raw string from user or query param
  * @returns {{ isValid: boolean, owner?: string, repo?: string, fullName?: string, url?: string, error?: string }}
  */
+const POPULAR_ALIASES = {
+  react: 'facebook/react',
+  'next.js': 'vercel/next.js',
+  nextjs: 'vercel/next.js',
+  next: 'vercel/next.js',
+  vue: 'vuejs/core',
+  vuejs: 'vuejs/core',
+  linux: 'torvalds/linux',
+  uv: 'astral-sh/uv',
+  flask: 'pallets/flask',
+  django: 'django/django',
+  express: 'expressjs/express',
+  tailwind: 'tailwindlabs/tailwindcss',
+  tailwindcss: 'tailwindlabs/tailwindcss',
+  shadcn: 'shadcn-ui/ui',
+  'shadcn/ui': 'shadcn-ui/ui',
+  typescript: 'microsoft/TypeScript',
+  vscode: 'microsoft/vscode',
+  rust: 'rust-lang/rust',
+  go: 'golang/go',
+  bun: 'oven-sh/bun',
+  deno: 'denoland/deno'
+};
+
 export function parseRepoInput(input) {
   if (!input || typeof input !== 'string') {
     return { isValid: false, error: 'Please enter a GitHub repository URL or owner/repo.' };
@@ -26,6 +50,19 @@ export function parseRepoInput(input) {
   const trimmed = input.trim();
   if (!trimmed) {
     return { isValid: false, error: 'Repository input cannot be empty.' };
+  }
+
+  // Check known popular aliases (e.g. "react" -> "facebook/react")
+  const lowerTrimmed = trimmed.toLowerCase();
+  if (POPULAR_ALIASES[lowerTrimmed]) {
+    const [aliasOwner, aliasRepo] = POPULAR_ALIASES[lowerTrimmed].split('/');
+    return {
+      isValid: true,
+      owner: aliasOwner,
+      repo: aliasRepo,
+      fullName: `${aliasOwner}/${aliasRepo}`,
+      url: `https://github.com/${aliasOwner}/${aliasRepo}`
+    };
   }
 
   let owner = '';

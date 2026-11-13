@@ -19,7 +19,7 @@ export const API = {
    * Retrieves user-configured Personal Access Token
    */
   getToken() {
-    return localStorage.getItem('repopulse_pat') || localStorage.getItem('gitpulse_pat') || '';
+    return localStorage.getItem('repopulse_pat') || '';
   },
 
   /**
@@ -31,7 +31,8 @@ export const API = {
     };
     const pat = this.getToken();
     if (pat) {
-      headers['Authorization'] = `token ${pat.trim()}`;
+      // Support both fine-grained (github_pat_) and classic (ghp_) tokens
+      headers['Authorization'] = `Bearer ${pat.trim()}`;
     }
     return headers;
   },
