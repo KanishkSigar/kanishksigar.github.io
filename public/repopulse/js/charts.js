@@ -46,7 +46,7 @@ export const Charts = {
           <p style="color:var(--text-muted);font-size:0.875rem;">No language data detected in this repository.</p>
         </div>
       `;
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
       return;
     }
 
@@ -107,7 +107,10 @@ export const Charts = {
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
     const borderColor = isLight ? '#ffffff' : '#17161b';
 
-    this.instances.techStack = new Chart(canvas, {
+    const ChartClass = window.Chart;
+    if (!ChartClass) return;
+
+    this.instances.techStack = new ChartClass(canvas, {
       type: 'doughnut',
       data: {
         labels: labels,
@@ -190,7 +193,7 @@ export const Charts = {
           <p style="color:var(--text-muted);font-size:0.875rem;">Commit activity statistics currently unavailable for this repository.</p>
         </div>
       `;
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
       return;
     }
 
@@ -249,7 +252,10 @@ export const Charts = {
     gradient.addColorStop(0, accentColor.startsWith('#') ? `${accentColor}55` : 'rgba(200, 162, 255, 0.35)');
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0.0)');
 
-    this.instances.commitActivity = new Chart(canvas, {
+    const ChartClass = window.Chart;
+    if (!ChartClass) return;
+
+    this.instances.commitActivity = new ChartClass(canvas, {
       type: 'line',
       data: {
         labels: labels,
@@ -382,10 +388,11 @@ export const Charts = {
       </div>
     `;
 
-    if (window.lucide) lucide.createIcons();
+    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
 
     const canvas = container.querySelector('#cadenceCanvas');
-    if (!canvas || !window.Chart) return;
+    const ChartClass = window.Chart;
+    if (!canvas || !ChartClass) return;
 
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
     const computedStyle = getComputedStyle(document.documentElement);
@@ -396,7 +403,7 @@ export const Charts = {
       return ratio > 0.8 ? accent : (accent.startsWith('#') ? `${accent}88` : 'rgba(200, 162, 255, 0.5)');
     });
 
-    this.instances.cadence = new Chart(canvas, {
+    this.instances.cadence = new ChartClass(canvas, {
       type: 'bar',
       data: {
         labels: days,
@@ -473,13 +480,13 @@ export const Charts = {
       </div>
     `;
 
-    const canvas = container.querySelector('#contributorShareCanvas');
-    if (!canvas || !window.Chart) return;
+    const ChartClass = window.Chart;
+    if (!canvas || !ChartClass) return;
 
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
     const borderColor = isLight ? '#ffffff' : '#17161b';
 
-    this.instances.contributorShare = new Chart(canvas, {
+    this.instances.contributorShare = new ChartClass(canvas, {
       type: 'doughnut',
       data: {
         labels: labels,

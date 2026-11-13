@@ -5,34 +5,39 @@
 import { Stats } from './stats.js';
 
 export const UI = {
-  elements: {
-    landing: document.getElementById('landing-section'),
-    dashboard: document.getElementById('dashboard'),
-    headerSearch: document.getElementById('header-search'),
-    exportBtn: document.getElementById('export-btn'),
-    mainContent: document.getElementById('repo-main-content'),
-    rateLimitStatus: document.getElementById('rate-limit-status')
+  get elements() {
+    return {
+      landing: document.getElementById('landing-section'),
+      dashboard: document.getElementById('dashboard'),
+      headerSearch: document.getElementById('header-search'),
+      exportBtn: document.getElementById('export-btn'),
+      mainContent: document.getElementById('repo-main-content'),
+      rateLimitStatus: document.getElementById('rate-limit-status')
+    };
   },
 
   showDashboard() {
-    if (this.elements.landing) this.elements.landing.hidden = true;
-    if (this.elements.dashboard) this.elements.dashboard.hidden = false;
-    if (this.elements.headerSearch) this.elements.headerSearch.hidden = false;
-    if (this.elements.exportBtn) this.elements.exportBtn.hidden = false;
+    const els = this.elements;
+    if (els.landing) els.landing.hidden = true;
+    if (els.dashboard) els.dashboard.hidden = false;
+    if (els.headerSearch) els.headerSearch.hidden = false;
+    if (els.exportBtn) els.exportBtn.hidden = false;
   },
 
   showLanding() {
-    if (this.elements.landing) this.elements.landing.hidden = false;
-    if (this.elements.dashboard) this.elements.dashboard.hidden = true;
-    if (this.elements.headerSearch) this.elements.headerSearch.hidden = true;
-    if (this.elements.exportBtn) this.elements.exportBtn.hidden = true;
+    const els = this.elements;
+    if (els.landing) els.landing.hidden = false;
+    if (els.dashboard) els.dashboard.hidden = true;
+    if (els.headerSearch) els.headerSearch.hidden = true;
+    if (els.exportBtn) els.exportBtn.hidden = true;
   },
 
   showLoading(repoName = 'repository') {
     this.showDashboard();
-    if (!this.elements.mainContent) return;
+    const els = this.elements;
+    if (!els.mainContent) return;
 
-    this.elements.mainContent.innerHTML = `
+    els.mainContent.innerHTML = `
       <div class="repo-loading">
         <div class="skeleton-header card">
           <div style="display:flex; gap:16px; align-items:center;">
@@ -56,14 +61,15 @@ export const UI = {
         </div>
       </div>
     `;
-    if (window.lucide) lucide.createIcons();
+    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
   },
 
   showError(message, isRateLimit = false) {
     this.showDashboard();
-    if (!this.elements.mainContent) return;
+    const els = this.elements;
+    if (!els.mainContent) return;
 
-    this.elements.mainContent.innerHTML = `
+    els.mainContent.innerHTML = `
       <div class="card error-card" style="padding:var(--space-10); text-align:center; max-width:640px; margin:40px auto;">
         <div style="width:52px; height:52px; border-radius:50%; background:rgba(248,113,113,0.15); color:#f87171; display:flex; align-items:center; justify-content:center; margin:0 auto var(--space-4);">
           <i data-lucide="alert-triangle" style="width:26px; height:26px;"></i>
@@ -89,7 +95,7 @@ export const UI = {
         </div>
       </div>
     `;
-    if (window.lucide) lucide.createIcons();
+    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
   },
 
   /**
@@ -213,7 +219,7 @@ export const UI = {
           <p style="color:var(--text-muted);font-size:0.875rem;">No contributor data found for this repository.</p>
         </div>
       `;
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
       return;
     }
 
@@ -311,7 +317,7 @@ export const UI = {
       </div>
     `;
 
-    if (window.lucide) lucide.createIcons();
+    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
   },
 
   /**

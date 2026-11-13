@@ -125,4 +125,3 @@ export function detectTechStack(repo, languages = {}) {
 
   return detected;
 }
-

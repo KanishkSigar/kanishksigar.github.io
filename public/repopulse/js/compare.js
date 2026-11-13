@@ -8,30 +8,33 @@ import { getLangColor } from './langColors.js';
 import { Stats } from './stats.js';
 
 export const Compare = {
-  element: document.getElementById('compare-results'),
+  get element() {
+    return document.getElementById('compare-results');
+  },
 
   async render(inputA, inputB) {
-    if (!this.element) return;
+    const el = this.element;
+    if (!el) return;
 
     const parsedA = parseRepoInput(inputA);
     const parsedB = parseRepoInput(inputB);
 
     if (!parsedA.isValid) {
-      this.element.innerHTML = `<div class="compare-error">Invalid first repository: ${parsedA.error}</div>`;
+      el.innerHTML = `<div class="compare-error">Invalid first repository: ${parsedA.error}</div>`;
       return;
     }
     if (!parsedB.isValid) {
-      this.element.innerHTML = `<div class="compare-error">Invalid second repository: ${parsedB.error}</div>`;
+      el.innerHTML = `<div class="compare-error">Invalid second repository: ${parsedB.error}</div>`;
       return;
     }
 
-    this.element.innerHTML = `
+    el.innerHTML = `
       <div class="compare-loading card" style="text-align:center; padding:var(--space-8);">
         <i data-lucide="loader-2" class="spin-icon" style="width:28px;height:28px;margin-bottom:8px;color:var(--accent);"></i>
         <p style="color:var(--text-secondary);font-size:0.9rem;">Comparing <strong>${parsedA.fullName}</strong> vs <strong>${parsedB.fullName}</strong>...</p>
       </div>
     `;
-    if (window.lucide) lucide.createIcons();
+    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
 
     try {
       const [repoA, langsA, actA, repoB, langsB, actB] = await Promise.all([
@@ -97,7 +100,7 @@ export const Compare = {
         `;
       });
 
-      this.element.innerHTML = `
+      el.innerHTML = `
         <div class="card" style="padding:var(--space-6); margin-top:var(--space-4);">
           <div class="compare-grid">
             ${renderHeader(repoA, parsedA)}
@@ -109,9 +112,9 @@ export const Compare = {
         </div>
       `;
 
-      if (window.lucide) lucide.createIcons();
+      if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
     } catch (err) {
-      this.element.innerHTML = `
+      el.innerHTML = `
         <div class="compare-error card" style="text-align:center; padding:var(--space-6); color:#f87171;">
           <p>Failed to compare repositories: ${err.message}</p>
         </div>

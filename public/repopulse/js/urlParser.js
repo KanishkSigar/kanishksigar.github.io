@@ -109,4 +109,3 @@ export function parseRepoInput(input) {
     url: `https://github.com/${fullName}`
   };
 }
-

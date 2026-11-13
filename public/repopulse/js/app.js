@@ -64,7 +64,9 @@ const state = {
 //  INITIALIZATION
 // ═══════════════════════════════════════
 function init() {
-  if (window.lucide) lucide.createIcons();
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
 
   if (state.token) {
     els.patToggle?.classList.add('has-token');
@@ -109,8 +111,8 @@ function bindEvents() {
     });
   }
 
-  // Preset Chips
-  els.presetChips.forEach(chip => {
+  // Preset Chips (query dynamically)
+  document.querySelectorAll('.preset-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const repo = chip.dataset.repo;
       if (repo) {
@@ -135,6 +137,19 @@ function bindEvents() {
 
   // Popstate for browser back/forward buttons
   window.addEventListener('popstate', handleUrlRouting);
+}
+
+function bindNavigation() {
+  document.querySelectorAll('.header__brand').forEach(brand => {
+    brand.addEventListener('click', (e) => {
+      e.preventDefault();
+      state.currentRepo = null;
+      if (els.landingRepoInput) els.landingRepoInput.value = '';
+      if (els.headerRepoInput) els.headerRepoInput.value = '';
+      UI.showLanding();
+      window.history.pushState({}, '', window.location.pathname);
+    });
+  });
 }
 
 // ═══════════════════════════════════════
@@ -221,6 +236,8 @@ async function analyzeRepository(repoSpecifier) {
 
     state.languagesData = languages;
     state.statsData = commitStats;
+    state.commitActivityData = commitActivity;
+    state.recentCommitsData = recentCommits;
     state.contributorsData = contributorStats;
     state.stackData = detectedStack;
 
@@ -347,7 +364,7 @@ function renderDashboardLayout(repo, detectedStack, commitStats, latestRelease, 
     </div>
   `;
 
-  if (window.lucide) lucide.createIcons();
+  if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
 }
 
 // ═══════════════════════════════════════
@@ -384,8 +401,11 @@ function bindDashboardActions(repo) {
       if (success) {
         const origText = shareBtn.innerHTML;
         shareBtn.innerHTML = '<i data-lucide="check" style="width:15px;height:15px;"></i><span>Copied Report!</span>';
-        if (window.lucide) lucide.createIcons();
-        setTimeout(() => { shareBtn.innerHTML = origText; if (window.lucide) lucide.createIcons(); }, 2500);
+        if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
+        setTimeout(() => {
+          shareBtn.innerHTML = origText;
+          if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
+        }, 2500);
       }
     });
   }
@@ -434,7 +454,7 @@ function showCompare(prefillA = '', prefillB = '') {
     <div id="compare-results"></div>
   `;
 
-  if (window.lucide) lucide.createIcons();
+  if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
 
   $('#compare-close')?.addEventListener('click', closeCompare);
   $('#compare-run-btn')?.addEventListener('click', () => {
@@ -553,7 +573,10 @@ function bindTheme() {
           Charts.renderTechStack(state.languagesData, $('#tech-stack-container'));
         }
         if (state.statsData && $('#commit-velocity-container')) {
-          Charts.renderCommitActivity(state.statsData.activity || [], $('#commit-velocity-container'), state.statsData);
+          Charts.renderCommitActivity(state.commitActivityData || [], $('#commit-velocity-container'), state.statsData);
+        }
+        if (state.statsData && $('#commit-cadence-container')) {
+          Charts.renderCadence(state.statsData.dayDistribution || [0,0,0,0,0,0,0], state.recentCommitsData || [], $('#commit-cadence-container'));
         }
       });
     });
