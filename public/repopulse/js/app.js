@@ -286,79 +286,60 @@ function renderDashboardLayout(repo, detectedStack, commitStats, latestRelease, 
       ${headerHtml}
       ${vitalsHtml}
 
-      <!-- Main Visual Analytics Bento Grid -->
-      <div class="analytics-bento-grid" style="margin-top:var(--space-6); display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6);">
+      <!-- Bento Grid Row 1: Tech Stack & Velocity -->
+      <div class="analytics-bento-grid">
         
-        <!-- Tech Stack & Ecosystem Card -->
         <div class="card bento-card" id="card-tech-stack">
           <div class="bento-header">
-            <h3 style="display:flex; align-items:center; gap:8px; font-size:1.05rem; font-weight:700;">
-              <i data-lucide="layers" style="color:var(--accent);"></i>
-              Tech Stack &amp; Languages
-            </h3>
-            <span style="font-size:0.75rem; color:var(--text-tertiary);">Exact byte share via GitHub Linguist</span>
+            <span class="bento-title">Tech Stack</span>
+            <span class="bento-subtitle">GitHub Linguist byte share</span>
           </div>
-          <div id="tech-stack-container" style="margin-top:var(--space-4);"></div>
+          <div id="tech-stack-container"></div>
         </div>
 
-        <!-- 52-Week Commit Velocity Card -->
         <div class="card bento-card" id="card-commit-velocity">
           <div class="bento-header">
-            <h3 style="display:flex; align-items:center; gap:8px; font-size:1.05rem; font-weight:700;">
-              <i data-lucide="trending-up" style="color:#34d399;"></i>
-              Commit Frequency &amp; Velocity
-            </h3>
-            <span style="font-size:0.75rem; color:var(--text-tertiary);">Past 52 weeks activity</span>
+            <span class="bento-title">Commit Velocity</span>
+            <span class="bento-subtitle">Past 52 weeks</span>
           </div>
-          <div id="commit-velocity-container" style="margin-top:var(--space-4);"></div>
+          <div id="commit-velocity-container"></div>
         </div>
 
       </div>
 
-      <!-- Second Row: Cadence & Community Health -->
-      <div class="analytics-bento-grid" style="margin-top:var(--space-6); display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6);">
+      <!-- Bento Grid Row 2: Cadence & Codebase Health -->
+      <div class="analytics-bento-grid">
         
-        <!-- Commit Cadence Card -->
         <div class="card bento-card" id="card-commit-cadence">
           <div class="bento-header">
-            <h3 style="display:flex; align-items:center; gap:8px; font-size:1.05rem; font-weight:700;">
-              <i data-lucide="clock" style="color:#fbbf24;"></i>
-              Commit Cadence &amp; Time Distribution
-            </h3>
-            <span style="font-size:0.75rem; color:var(--text-tertiary);">Peak coding rhythm</span>
+            <span class="bento-title">Commit Cadence</span>
+            <span class="bento-subtitle">Day &amp; hour distribution</span>
           </div>
-          <div id="commit-cadence-container" style="margin-top:var(--space-4);"></div>
+          <div id="commit-cadence-container"></div>
         </div>
 
-        <!-- Codebase Health Card -->
         <div class="card bento-card" id="card-codebase-health">
           <div class="bento-header">
-            <h3 style="display:flex; align-items:center; gap:8px; font-size:1.05rem; font-weight:700;">
-              <i data-lucide="shield-check" style="color:#38bdf8;"></i>
-              Codebase Health &amp; Releases
-            </h3>
-            <span style="font-size:0.75rem; color:var(--text-tertiary);">Standards audit</span>
+            <span class="bento-title">Codebase Health</span>
+            <span class="bento-subtitle">Standards audit</span>
           </div>
-          <div style="margin-top:var(--space-4);">
+          <div>
             ${healthHtml}
           </div>
         </div>
 
       </div>
 
-      <!-- Full Width: Top Contributors & Bus Factor -->
-      <div class="card bento-card" id="card-top-contributors" style="margin-top:var(--space-6);">
-        <div class="bento-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+      <!-- Full Width: Top Contributors & Maintainer Risk -->
+      <div class="card bento-card" id="card-top-contributors" style="margin-top:var(--space-4);">
+        <div class="bento-header">
           <div>
-            <h3 style="display:flex; align-items:center; gap:8px; font-size:1.05rem; font-weight:700;">
-              <i data-lucide="users" style="color:var(--accent);"></i>
-              Top Contributors &amp; Bus Factor
-            </h3>
-            <span style="font-size:0.75rem; color:var(--text-tertiary);">Ranked commit volume, share distribution, and maintainer dependency</span>
+            <span class="bento-title">Contributors &amp; Maintainer Distribution</span>
+            <span class="bento-subtitle">Ranked volume and bus factor risk</span>
           </div>
-          <div id="contributor-share-container" style="min-width:240px; height:120px;"></div>
+          <div id="contributor-share-container" style="min-width:200px; height:100px;"></div>
         </div>
-        <div id="contributors-container" style="margin-top:var(--space-4);"></div>
+        <div id="contributors-container"></div>
       </div>
 
     </div>
@@ -433,25 +414,20 @@ function showCompare(prefillA = '', prefillB = '') {
   const valB = prefillB || 'vuejs/core';
 
   els.compareContent.innerHTML = `
-    <div class="compare__head">
-      <h2 class="compare__title"><i data-lucide="git-compare"></i> Compare Repositories</h2>
-      <button class="btn btn-ghost btn-sm" id="compare-close" aria-label="Close compare">
-        <i data-lucide="x" style="width:18px;height:18px;"></i>
-      </button>
-    </div>
-    <div class="compare__form">
-      <div class="input-icon" style="flex:1; min-width:240px;">
-        <i data-lucide="git-branch"></i>
-        <input type="text" class="input" id="compare-input-a" placeholder="First repo URL or owner/repo..." value="${valA}" autocomplete="off">
+    <div class="compare-box">
+      <div class="compare-top-bar">
+        <h2 style="font-size:1.05rem; font-weight:600;">Compare Repositories</h2>
+        <button class="btn btn-ghost btn-sm" id="compare-close" aria-label="Close compare">
+          <i data-lucide="x" style="width:14px;height:14px;"></i>
+        </button>
       </div>
-      <span class="compare__vs">vs</span>
-      <div class="input-icon" style="flex:1; min-width:240px;">
-        <i data-lucide="git-branch"></i>
-        <input type="text" class="input" id="compare-input-b" placeholder="Second repo URL or owner/repo..." value="${valB}" autocomplete="off">
+      <div class="compare-inputs-row">
+        <input type="text" class="input" id="compare-input-a" placeholder="First repository (e.g. facebook/react)" value="${valA}" autocomplete="off">
+        <input type="text" class="input" id="compare-input-b" placeholder="Second repository (e.g. vuejs/core)" value="${valB}" autocomplete="off">
+        <button class="btn btn-primary btn-sm" id="compare-run-btn">Compare</button>
       </div>
-      <button class="btn btn-primary" id="compare-run-btn">Compare</button>
+      <div id="compare-results"></div>
     </div>
-    <div id="compare-results"></div>
   `;
 
   if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();

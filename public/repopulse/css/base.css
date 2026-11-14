@@ -1,5 +1,5 @@
 /* ============================================
-   GitPulse — Base Styles (Editorial Redesign)
+   RepoPulse — Base Styles (Minimalist UI)
    ============================================ */
 
 *, *::before, *::after {
@@ -9,7 +9,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 15px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -20,52 +20,49 @@ body {
   font-family: var(--font-body);
   background: var(--bg-primary);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.5;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* ── Selection ── */
 ::selection {
-  background: var(--accent-dim);
-  color: var(--accent-bright);
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
 }
 
-/* ── Links ── */
 a {
-  color: var(--accent);
+  color: inherit;
   text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-out);
+  transition: color var(--duration-fast);
 }
+
 a:hover {
   color: var(--accent-bright);
 }
 
-/* ── Scrollbar — thin, invisible feel ── */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 99px;
+  background: var(--border-default);
+  border-radius: 4px;
 }
 
-/* ── Container ── */
 .container {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--space-6);
+  padding: 0 var(--space-5);
 }
 
-/* ── Typography Utilities ── */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 700;
-  line-height: 1.15;
+  font-weight: 600;
+  line-height: 1.25;
   color: var(--text-primary);
 }
 
@@ -73,12 +70,10 @@ code, pre, kbd {
   font-family: var(--font-mono);
 }
 
-/* ── Hidden ── */
 [hidden] {
   display: none !important;
 }
 
-/* ── Utility ── */
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;
@@ -89,9 +84,18 @@ code, pre, kbd {
   border: 0;
 }
 
-/* ── Interaction polish ── */
-button, a, [role="button"] { -webkit-tap-highlight-color: transparent; }
-button { cursor: pointer; }
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: inherit;
+  color: inherit;
+}
+
 :root { accent-color: var(--accent); }
 img { display: block; max-width: 100%; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+:focus-visible { outline: 1px solid var(--accent); outline-offset: 1px; border-radius: 4px; }
