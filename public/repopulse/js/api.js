@@ -52,9 +52,9 @@ export const API = {
   },
 
   /**
-   * Core REST fetch with caching and rate limit error handling
+   * Core REST fetch with caching, backoff retries, and rate limit error handling
    */
-  async fetchRest(endpoint, params = {}, ttl = Cache.DEFAULT_TTL) {
+  async fetchRest(endpoint, params = {}, ttl = Cache.DEFAULT_TTL, retries = 2) {
     const cacheKey = Cache.getKey(endpoint, params);
     const cached = Cache.get(cacheKey);
     if (cached) return cached;
@@ -63,8 +63,24 @@ export const API = {
     const ghPath = endpoint + (qs ? `?${qs}` : '');
     const url = `${this.REST_BASE}${ghPath}`;
 
-    const response = await fetch(url, { headers: this.getHeaders() });
+    let response;
+    try {
+      response = await fetch(url, { headers: this.getHeaders() });
+    } catch (networkErr) {
+      if (retries > 0) {
+        await new Promise(r => setTimeout(r, 600));
+        return this.fetchRest(endpoint, params, ttl, retries - 1);
+      }
+      throw new Error('Network error connecting to GitHub. Please check your internet connection.');
+    }
+
     this.updateRateLimits(response);
+
+    // GitHub 202 Accepted: asynchronous calculation in progress
+    if (response.status === 202 && retries > 0) {
+      await new Promise(r => setTimeout(r, 800 * (3 - retries)));
+      return this.fetchRest(endpoint, params, ttl, retries - 1);
+    }
 
     if (!response.ok) {
       if (response.status === 403 || response.status === 429) {

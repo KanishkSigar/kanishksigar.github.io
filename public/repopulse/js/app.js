@@ -85,6 +85,7 @@ function bindEvents() {
   bindTheme();
   bindAuth();
   bindNavigation();
+  bindKeyboardShortcuts();
 
   // Landing Search
   if (els.landingSearchBtn) {
@@ -149,6 +150,41 @@ function bindNavigation() {
       UI.showLanding();
       window.history.pushState({}, '', window.location.pathname);
     });
+  });
+}
+
+function bindKeyboardShortcuts() {
+  window.addEventListener('keydown', (e) => {
+    const isInputActive = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
+
+    // Escape: close panels or blur inputs
+    if (e.key === 'Escape') {
+      if (!els.patPanel.hidden) {
+        els.patPanel.hidden = true;
+        return;
+      }
+      if (!els.compareSection.hidden) {
+        closeCompare();
+        return;
+      }
+      if (isInputActive) {
+        document.activeElement.blur();
+      }
+      return;
+    }
+
+    // Slash (/) or Cmd/Ctrl+K: focus search bar
+    const isSearchShortcut = (e.key === '/' && !isInputActive) || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k');
+    if (isSearchShortcut) {
+      e.preventDefault();
+      if (!els.dashboard.hidden && els.headerRepoInput) {
+        els.headerRepoInput.focus();
+        els.headerRepoInput.select();
+      } else if (els.landingRepoInput) {
+        els.landingRepoInput.focus();
+        els.landingRepoInput.select();
+      }
+    }
   });
 }
 

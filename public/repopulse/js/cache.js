@@ -8,6 +8,8 @@
  */
 export const Cache = {
   PREFIX: 'repopulse_cache_',
+  mem: new Map(),
+  MAX_MEM_ITEMS: 100,
 
   // Default TTLs (in milliseconds)
   TTL: {
@@ -34,32 +36,49 @@ export const Cache = {
   },
 
   /**
-   * Stores data in localStorage with TTL and auto-eviction on quota limit
+   * Stores data in memory and localStorage with TTL
    */
   set(key, data, ttl = this.DEFAULT_TTL) {
+    const record = {
+      value: data,
+      timestamp: Date.now(),
+      ttl: ttl
+    };
+
+    // Tier 1: In-memory cache
+    if (this.mem.size >= this.MAX_MEM_ITEMS) {
+      const oldestKey = this.mem.keys().next().value;
+      if (oldestKey) this.mem.delete(oldestKey);
+    }
+    this.mem.set(key, record);
+
+    // Tier 2: Persistent localStorage
     try {
-      const record = {
-        value: data,
-        timestamp: Date.now(),
-        ttl: ttl
-      };
       localStorage.setItem(key, JSON.stringify(record));
     } catch (e) {
-      // Storage quota might be exceeded — evict expired and old repopulse keys
       this.evictOldest(5);
       try {
-        const record = { value: data, timestamp: Date.now(), ttl };
         localStorage.setItem(key, JSON.stringify(record));
-      } catch (retryErr) {
-        console.warn('Cache write failed after eviction:', retryErr);
-      }
+      } catch (retryErr) {}
     }
   },
 
   /**
-   * Retrieves data from the cache if not expired
+   * Retrieves data from the cache (memory first, then storage) if not expired
    */
   get(key) {
+    const now = Date.now();
+
+    // 1. Check in-memory cache
+    if (this.mem.has(key)) {
+      const record = this.mem.get(key);
+      if (record && now - record.timestamp <= record.ttl) {
+        return record.value;
+      }
+      this.mem.delete(key);
+    }
+
+    // 2. Check localStorage
     try {
       const item = localStorage.getItem(key);
       if (!item) return null;
@@ -70,15 +89,15 @@ export const Cache = {
         return null;
       }
 
-      // Check if record is expired
-      if (Date.now() - record.timestamp > record.ttl) {
+      if (now - record.timestamp > record.ttl) {
         this.remove(key);
         return null;
       }
 
+      // Populate memory cache for faster subsequent reads
+      this.mem.set(key, record);
       return record.value;
     } catch (e) {
-      console.warn('Error reading from cache:', e);
       return null;
     }
   },
@@ -87,6 +106,7 @@ export const Cache = {
    * Removes a specific key from cache
    */
   remove(key) {
+    this.mem.delete(key);
     try {
       localStorage.removeItem(key);
     } catch (e) {}

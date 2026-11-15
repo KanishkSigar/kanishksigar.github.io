@@ -58,13 +58,20 @@ const ECOSYSTEM_RULES = [
   { name: 'Playwright', category: 'Testing', icon: 'play-circle', match: ['playwright'] },
   { name: 'pytest', category: 'Testing', icon: 'check-circle-2', match: ['pytest'] },
 
+  // Database & ORM
+  { name: 'Prisma', category: 'ORM', icon: 'database', match: ['prisma', 'prisma-orm'] },
+  { name: 'Drizzle', category: 'ORM', icon: 'database', match: ['drizzle', 'drizzle-orm'] },
+  { name: 'Supabase', category: 'Backend / DB', icon: 'database', match: ['supabase'] },
+  { name: 'PostgreSQL', category: 'Database', icon: 'database', match: ['postgres', 'postgresql'] },
+  { name: 'Redis', category: 'Database', icon: 'database', match: ['redis'] },
+  { name: 'GraphQL', category: 'API', icon: 'share-2', match: ['graphql', 'apollo'] },
+
   // AI & Data
   { name: 'PyTorch', category: 'AI / ML', icon: 'cpu', match: ['pytorch', 'torch'] },
   { name: 'TensorFlow', category: 'AI / ML', icon: 'cpu', match: ['tensorflow', 'keras'] },
   { name: 'LangChain', category: 'AI / LLM', icon: 'bot', match: ['langchain'] },
-  { name: 'PostgreSQL', category: 'Database', icon: 'database', match: ['postgres', 'postgresql'] },
-  { name: 'Redis', category: 'Database', icon: 'database', match: ['redis'] },
-  { name: 'GraphQL', category: 'API', icon: 'share-2', match: ['graphql', 'apollo'] }
+  { name: 'Hugging Face', category: 'AI / ML', icon: 'cpu', match: ['huggingface', 'transformers'] },
+  { name: 'Ollama', category: 'AI / LLM', icon: 'cpu', match: ['ollama'] }
 ];
 
 export function detectTechStack(repo, languages = {}) {

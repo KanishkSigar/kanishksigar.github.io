@@ -43,21 +43,35 @@ export const UI = {
           <div style="display:flex; gap:14px; align-items:center;">
             <div class="skeleton-pulse" style="width:40px; height:40px; border-radius:6px;"></div>
             <div style="flex:1;">
-              <div class="skeleton-pulse" style="width:200px; height:18px; border-radius:4px; margin-bottom:8px;"></div>
-              <div class="skeleton-pulse" style="width:320px; height:12px; border-radius:3px;"></div>
+              <div class="skeleton-pulse" style="width:200px; height:18px; margin-bottom:8px;"></div>
+              <div class="skeleton-pulse" style="width:340px; height:12px;"></div>
             </div>
           </div>
         </div>
 
         <div class="vitals-strip" style="margin-top:var(--space-4);">
           ${Array(7).fill(`
-            <div class="vital-item skeleton-pulse" style="height:64px;"></div>
+            <div class="vital-item" style="padding:14px 16px;">
+              <div class="skeleton-pulse" style="width:60px; height:20px; margin-bottom:6px;"></div>
+              <div class="skeleton-pulse" style="width:40px; height:10px;"></div>
+            </div>
           `).join('')}
         </div>
 
         <div class="analytics-bento-grid">
-          <div class="card skeleton-pulse" style="height:280px;"></div>
-          <div class="card skeleton-pulse" style="height:280px;"></div>
+          <div class="card bento-card" style="height:320px;">
+            <div class="skeleton-pulse" style="width:120px; height:16px; margin-bottom:16px;"></div>
+            <div class="skeleton-pulse" style="width:100%; height:230px;"></div>
+          </div>
+          <div class="card bento-card" style="height:320px;">
+            <div class="skeleton-pulse" style="width:140px; height:16px; margin-bottom:16px;"></div>
+            <div class="skeleton-pulse" style="width:100%; height:230px;"></div>
+          </div>
+        </div>
+
+        <div class="card bento-card" style="height:260px; margin-top:var(--space-4);">
+          <div class="skeleton-pulse" style="width:180px; height:16px; margin-bottom:16px;"></div>
+          <div class="skeleton-pulse" style="width:100%; height:180px;"></div>
         </div>
       </div>
     `;
@@ -159,20 +173,20 @@ export const UI = {
     const releaseTag = latestRelease ? (latestRelease.tag_name || 'Tagged') : 'None';
 
     const items = [
-      { label: 'Stars', value: stars },
-      { label: 'Forks', value: forks },
-      { label: 'Watchers', value: watchers },
-      { label: 'Open Issues', value: issues },
-      { label: 'Size', value: size },
-      { label: 'License', value: license },
-      { label: 'Release', value: releaseTag }
+      { label: 'Stars', value: stars, detail: `${(repo.stargazers_count || 0).toLocaleString()} stargazers` },
+      { label: 'Forks', value: forks, detail: `${(repo.forks_count || 0).toLocaleString()} forks` },
+      { label: 'Watchers', value: watchers, detail: `${((repo.subscribers_count || repo.watchers_count) || 0).toLocaleString()} watchers` },
+      { label: 'Open Issues', value: issues, detail: `${(repo.open_issues_count || 0).toLocaleString()} open issues` },
+      { label: 'Size', value: size, detail: `Repository disk size: ${size}` },
+      { label: 'License', value: license, detail: `SPDX License: ${license}` },
+      { label: 'Release', value: releaseTag, detail: `Latest release tag: ${releaseTag}` }
     ];
 
     return `
       <div class="vitals-strip">
         ${items.map(item => `
-          <div class="vital-item">
-            <span class="vital-item__value" title="${item.value}">${item.value}</span>
+          <div class="vital-item" title="${item.detail}">
+            <span class="vital-item__value">${item.value}</span>
             <span class="vital-item__label">${item.label}</span>
           </div>
         `).join('')}
@@ -245,6 +259,16 @@ export const UI = {
       { name: 'PR Template', exists: Boolean(files.pull_request_template) }
     ];
 
+    const spdx = (repo.license?.spdx_id || '').toUpperCase();
+    let licenseType = 'Custom';
+    if (['MIT', 'APACHE-2.0', 'BSD-2-CLAUSE', 'BSD-3-CLAUSE', 'ISC', 'UNLICENSE'].includes(spdx)) {
+      licenseType = 'Permissive';
+    } else if (['GPL-2.0', 'GPL-3.0', 'AGPL-3.0', 'LGPL-2.1', 'LGPL-3.0', 'MPL-2.0'].includes(spdx)) {
+      licenseType = 'Copyleft';
+    } else if (!spdx) {
+      licenseType = 'Unlicensed';
+    }
+
     const releaseHtml = latestRelease ? `
       <div class="latest-release-box">
         <div class="release-header">
@@ -252,13 +276,19 @@ export const UI = {
           <span class="release-date">${latestRelease.published_at ? Stats.formatRelativeTime(latestRelease.published_at) : ''}</span>
         </div>
         <p class="release-title">${latestRelease.name ? this.escapeHtml(latestRelease.name) : 'Release ' + latestRelease.tag_name}</p>
-        <a href="${latestRelease.html_url}" target="_blank" rel="noopener" class="release-link">
-          View Release Notes ↗
-        </a>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+          <span style="font-size:0.72rem; color:var(--text-tertiary); font-family:var(--font-mono);">${licenseType} (${spdx || 'None'})</span>
+          <a href="${latestRelease.html_url}" target="_blank" rel="noopener" class="release-link">
+            Notes ↗
+          </a>
+        </div>
       </div>
     ` : `
       <div class="latest-release-box">
         <p style="color:var(--text-muted);font-size:0.82rem;">No formal releases published on GitHub.</p>
+        <span style="font-size:0.72rem; color:var(--text-tertiary); font-family:var(--font-mono); margin-top:4px; display:block;">
+          Default branch: <code>${repo.default_branch || 'main'}</code> · ${licenseType}
+        </span>
       </div>
     `;
 

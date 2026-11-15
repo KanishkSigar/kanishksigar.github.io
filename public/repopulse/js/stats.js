@@ -124,6 +124,26 @@ export const Stats = {
       trendDirection = 'up';
     }
 
+    // Consistency & active week streaks
+    let activeWeeks = 0;
+    let currentStreak = 0;
+    let longestStreak = 0;
+
+    activity.forEach(item => {
+      const count = item.total || 0;
+      if (count > 0) {
+        activeWeeks++;
+        currentStreak++;
+        if (currentStreak > longestStreak) longestStreak = currentStreak;
+      } else {
+        currentStreak = 0;
+      }
+    });
+
+    const consistencyPercent = activity.length > 0
+      ? Math.round((activeWeeks / activity.length) * 100)
+      : 0;
+
     // Most active day calculation
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     let maxDayCount = -1;
@@ -147,6 +167,9 @@ export const Stats = {
         date: peakWeekTime ? peakWeekTime.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : null
       },
       recentCommits,
+      activeWeeks,
+      longestStreak,
+      consistencyPercent,
       trend,
       trendDirection,
       dayDistribution: dayTotals,
@@ -204,19 +227,29 @@ export const Stats = {
     let dependencyDescription = 'Well-distributed contributor base with healthy community participation.';
     let riskColor = 'var(--accent-green, #34d399)';
 
+    // Calculate core team size (number of maintainers who account for 80% of commits)
+    let cumulative = 0;
+    let coreMaintainersCount = 0;
+    for (const c of enriched) {
+      cumulative += c.contributions;
+      coreMaintainersCount++;
+      if (cumulative >= totalContribs * 0.8) break;
+    }
+
     if (top1Share >= 65) {
       dependencyRisk = 'High (Single Maintainer)';
-      dependencyDescription = `Lead maintainer accounts for ${top1Share}% of commits. Higher dependency risk.`;
+      dependencyDescription = `Lead maintainer accounts for ${top1Share}% of commits. High maintainer dependency.`;
       riskColor = 'var(--accent-red, #f87171)';
     } else if (top3Share >= 75) {
       dependencyRisk = 'Moderate (Core Group)';
-      dependencyDescription = `Top 3 contributors drive ${top3Share}% of commits.`;
+      dependencyDescription = `Top 3 contributors drive ${top3Share}% of commits. Core group of ${coreMaintainersCount} accounts for 80%.`;
       riskColor = 'var(--accent-amber, #fbbf24)';
     }
 
     return {
       totalContributions: totalContribs,
       contributorsCount: list.length,
+      coreMaintainersCount,
       top1Share,
       top3Share,
       dependencyRisk,

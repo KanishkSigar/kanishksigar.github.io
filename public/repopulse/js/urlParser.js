@@ -25,10 +25,14 @@ const POPULAR_ALIASES = {
   next: 'vercel/next.js',
   vue: 'vuejs/core',
   vuejs: 'vuejs/core',
+  svelte: 'sveltejs/svelte',
+  angular: 'angular/angular',
+  astro: 'withastro/astro',
   linux: 'torvalds/linux',
   uv: 'astral-sh/uv',
   flask: 'pallets/flask',
   django: 'django/django',
+  fastapi: 'fastapi/fastapi',
   express: 'expressjs/express',
   tailwind: 'tailwindlabs/tailwindcss',
   tailwindcss: 'tailwindlabs/tailwindcss',
@@ -39,7 +43,17 @@ const POPULAR_ALIASES = {
   rust: 'rust-lang/rust',
   go: 'golang/go',
   bun: 'oven-sh/bun',
-  deno: 'denoland/deno'
+  deno: 'denoland/deno',
+  flutter: 'flutter/flutter',
+  electron: 'electron/electron',
+  supabase: 'supabase/supabase',
+  zig: 'ziglang/zig',
+  neovim: 'neovim/neovim',
+  nvim: 'neovim/neovim',
+  pytorch: 'pytorch/pytorch',
+  tensorflow: 'tensorflow/tensorflow',
+  kubernetes: 'kubernetes/kubernetes',
+  k8s: 'kubernetes/kubernetes'
 };
 
 export function parseRepoInput(input) {

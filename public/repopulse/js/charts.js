@@ -17,7 +17,11 @@ export const Charts = {
    */
   destroy(key) {
     if (this.instances[key]) {
-      this.instances[key].destroy();
+      try {
+        this.instances[key].destroy();
+      } catch (e) {
+        console.warn(`Chart destroy failed for ${key}:`, e);
+      }
       this.instances[key] = null;
     }
   },
@@ -124,6 +128,7 @@ export const Charts = {
         }]
       },
       options: {
+        devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
         responsive: true,
         maintainAspectRatio: false,
         cutout: '72%',
@@ -275,6 +280,7 @@ export const Charts = {
         }]
       },
       options: {
+        devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
         responsive: true,
         maintainAspectRatio: false,
         interaction: {
@@ -416,6 +422,7 @@ export const Charts = {
         }]
       },
       options: {
+        devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
         responsive: true,
         maintainAspectRatio: false,
         scales: {
@@ -475,11 +482,12 @@ export const Charts = {
     const palette = ['#c8a2ff', '#38bdf8', '#34d399', '#fbbf24', '#f472b6', '#71717a'];
 
     container.innerHTML = `
-      <div style="position:relative; width:100%; height:180px;">
+      <div style="position:relative; width:100%; height:100%;">
         <canvas id="contributorShareCanvas"></canvas>
       </div>
     `;
 
+    const canvas = container.querySelector('#contributorShareCanvas');
     const ChartClass = window.Chart;
     if (!canvas || !ChartClass) return;
 
@@ -498,6 +506,7 @@ export const Charts = {
         }]
       },
       options: {
+        devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
         responsive: true,
         maintainAspectRatio: false,
         cutout: '65%',

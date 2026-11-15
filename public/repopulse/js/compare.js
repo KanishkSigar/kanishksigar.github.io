@@ -92,10 +92,13 @@ export const Compare = {
         const langDotA = row.isLang ? `<span class="cdot" style="background:${getLangColor(row.a)}"></span>` : '';
         const langDotB = row.isLang ? `<span class="cdot" style="background:${getLangColor(row.b)}"></span>` : '';
 
+        const tagA = winA ? '<span class="cwin-tag">Leader</span>' : '';
+        const tagB = winB ? '<span class="cwin-tag">Leader</span>' : '';
+
         gridRows += `
-          <div class="cval ${winA ? 'win' : ''}">${langDotA} ${valA}</div>
+          <div class="cval ${winA ? 'win' : ''}">${langDotA} ${valA} ${tagA}</div>
           <div class="crow-label">${row.label}</div>
-          <div class="cval ${winB ? 'win' : ''}">${langDotB} ${valB}</div>
+          <div class="cval ${winB ? 'win' : ''}">${langDotB} ${valB} ${tagB}</div>
           <div class="cspacer"></div>
         `;
       });

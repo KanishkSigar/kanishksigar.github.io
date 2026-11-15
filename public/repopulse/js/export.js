@@ -55,8 +55,22 @@ export const Exporter = {
       if (triggerBtn && origHtml) {
         triggerBtn.disabled = false;
         triggerBtn.innerHTML = origHtml;
-        if (window.lucide) lucide.createIcons();
+        if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
       }
+    }
+  },
+
+  /**
+   * Copies the direct URL to the repository analysis to the clipboard
+   */
+  async copyShareLink(repoFullName) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('repo', repoFullName);
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      return true;
+    } catch (e) {
+      return false;
     }
   },
 
@@ -76,27 +90,43 @@ export const Exporter = {
     const stackItems = stack.map(s => s.name).join(', ') || 'Standard';
 
     const markdown = [
-      `# 📊 RepoPulse Analysis: [${repo.full_name}](${repo.html_url})`,
+      `# RepoPulse: [${repo.full_name}](${repo.html_url})`,
       ``,
       `> ${repo.description || 'No description provided.'}`,
       ``,
-      `### 🌟 Key Metrics`,
-      `- **Stars:** ${Stats.formatCompactNumber(repo.stargazers_count)}`,
+      `### Metrics`,
+      `- **Stars:** ${Stats.formatCompactNumber(repo.stargazers_count)} (${(repo.stargazers_count || 0).toLocaleString()})`,
       `- **Forks:** ${Stats.formatCompactNumber(repo.forks_count)}`,
       `- **Watchers:** ${Stats.formatCompactNumber(repo.subscribers_count || repo.watchers_count)}`,
       `- **Open Issues:** ${Stats.formatCompactNumber(repo.open_issues_count)}`,
-      `- **Repository Size:** ${Stats.formatSize(repo.size)}`,
+      `- **Size:** ${Stats.formatSize(repo.size)}`,
       `- **License:** ${repo.license?.spdx_id || repo.license?.name || 'None'}`,
       ``,
-      `### 🛠️ Tech Stack & Ecosystem`,
-      `- **Top Languages:** ${langs}`,
-      `- **Detected Stack:** ${stackItems}`,
+      `### Tech Stack`,
+      `- **Languages:** ${langs}`,
+      `- **Detected Ecosystem:** ${stackItems}`,
       ``,
-      `### 📈 Commit Velocity`,
+      `### Commit Velocity`,
       `- **Annual Commits:** ${stats.totalYearCommits?.toLocaleString() || 'N/A'}`,
       `- **Weekly Average:** ${stats.weeklyAverage || 'N/A'} commits/week`,
       `- **Peak Week:** ${stats.peakWeek?.count || 'N/A'} commits (${stats.peakWeek?.date || ''})`,
-      `- **Most Active Day:** ${stats.mostActiveDay || 'N/A'}`,
+      `- **Active Day:** ${stats.mostActiveDay || 'N/A'}`,
+      ``,
+      `### Top Contributors`,
+      topContribs || 'N/A',
+      ``,
+      `---`,
+      `*Generated with [RepoPulse](${window.location.origin}${window.location.pathname}?repo=${encodeURIComponent(repo.full_name)})*`
+    ].join('\n');
+
+    try {
+      await navigator.clipboard.writeText(markdown);
+      return true;
+    } catch (e) {
+      console.warn('Clipboard write failed:', e);
+      return false;
+    }
+  }
       ``,
       `### 👥 Top Contributors`,
       topContribs || 'N/A',
