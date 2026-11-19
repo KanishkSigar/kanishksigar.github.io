@@ -79,7 +79,7 @@ import { FAVICON_TECH, TEAL } from '../consts';
     <div class="hero-lower">
       <div class="hero-lower-text">
         <p class="hero-line">Building products for the web and beyond.</p>
-        <p class="hero-bio">Final-year Computer Science student working across full-stack development, cybersecurity, and research.</p>
+        <p class="hero-bio">Final-year Computer Science student working across compilers, explainable AI, and full-stack software engineering.</p>
       </div>
       <div class="hero-cta-row">
         <a href="#contact" class="hero-cta" id="hero-cta">
@@ -99,9 +99,9 @@ import { FAVICON_TECH, TEAL } from '../consts';
     <div class="now-inner">
       <span class="now-label">Now</span>
       <span class="now-divider">/</span>
-      <span class="now-item">Building <strong>SHADE</strong>, an explainable hybrid IDS for zero-day detection</span>
+      <span class="now-item">Final-year CSE @ Graphic Era Hill University</span>
       <span class="now-dot">·</span>
-      <span class="now-item">Open to Fall 2026 internships</span>
+      <span class="now-item">Open to 2027 SWE &amp; Research opportunities</span>
     </div>
   </section>
 
@@ -141,20 +141,19 @@ import { FAVICON_TECH, TEAL } from '../consts';
         </p>
         <p class="about-tagline">Always learning. Always building.</p>
         <div class="skills-grid">
-          <span class="skill-tag">JavaScript</span>
           <span class="skill-tag">TypeScript</span>
           <span class="skill-tag">Python</span>
-          <span class="skill-tag">Java</span>
           <span class="skill-tag">C++</span>
+          <span class="skill-tag">PyTorch</span>
           <span class="skill-tag">React</span>
           <span class="skill-tag">Next.js</span>
+          <span class="skill-tag">FastAPI</span>
           <span class="skill-tag">Node.js</span>
-          <span class="skill-tag">Express</span>
-          <span class="skill-tag">Flask</span>
-          <span class="skill-tag">Tailwind CSS</span>
+          <span class="skill-tag">PostgreSQL</span>
           <span class="skill-tag">AWS S3</span>
-          <span class="skill-tag">Git</span>
+          <span class="skill-tag">Docker</span>
           <span class="skill-tag">Cybersecurity</span>
+          <span class="skill-tag">Git</span>
         </div>
       </div>
     </div>
@@ -163,11 +162,11 @@ import { FAVICON_TECH, TEAL } from '../consts';
   <!-- ===== STATS ===== -->
   <section class="stats-section" aria-label="At a glance">
     <div class="stats-grid">
-      <div class="stat-card">
-        <span class="stat-num">7+</span>
+      <a href="#works" class="stat-card" aria-label="View projects">
+        <span class="stat-num">12+</span>
         <span class="stat-label">Active Projects</span>
-        <span class="stat-sub">Live on GitHub</span>
-      </div>
+        <span class="stat-sub">Compilers · AI · Web · 3D</span>
+      </a>
       <div class="stat-card">
         <span class="stat-num">6+</span>
         <span class="stat-label">Languages</span>
@@ -196,23 +195,45 @@ import { FAVICON_TECH, TEAL } from '../consts';
         <div class="project-card-inner">
           <div class="project-meta">
             <span class="project-num project-num--dark">01</span>
-            <span class="project-tag project-tag--dark">C++ · Compilers</span>
+            <span class="project-tag project-tag--dark">PyTorch · SHAP · Explainable AI</span>
           </div>
           <div>
-            <h3 class="project-title project-title--dark">Lively</h3>
-            <p class="project-desc project-desc--dark">A statically typed procedural language built from scratch - lexer, parser, three-address code, bytecode compiler, and a stack-based virtual machine.</p>
+            <h3 class="project-title project-title--dark">SHADE</h3>
+            <p class="project-desc project-desc--dark">An explainable hybrid intrusion detection system. Evaluates zero-day generalization via a leave-one-family-out protocol on UNSW-NB15 and CIC-IDS2017 using a label-free PyTorch autoencoder and supervised baselines, with SHAP attributions explaining every alert.</p>
           </div>
-          <div class="project-visual lively-visual">
-            <div class="code-block">
-              <div class="code-line"><span class="kw">fn</span> <span class="fn">fib</span>(n: <span class="ty">int</span>) -&gt; <span class="ty">int</span> &#123;</div>
-              <div class="code-line">&nbsp;&nbsp;<span class="kw">if</span> n &lt; 2 &#123; <span class="kw">return</span> n; &#125;</div>
-              <div class="code-line">&nbsp;&nbsp;<span class="kw">return</span> <span class="fn">fib</span>(n-1) + <span class="fn">fib</span>(n-2);</div>
-              <div class="code-line">&#125;</div>
-              <div class="code-line"><span class="cm">// → TAC → bytecode → VM</span></div>
+          <div class="project-visual shap-visual">
+            <div class="shap-mockup">
+              <div class="shap-header">
+                <span class="shap-title">SHAP Feature Attribution · Anomaly Alert</span>
+                <span class="shap-badge">Loss: 0.042 (High)</span>
+              </div>
+              <div class="shap-bars">
+                <div class="shap-row">
+                  <span class="shap-feat">sttl</span>
+                  <div class="shap-bar-track"><div class="shap-bar-fill" style="width:85%"></div></div>
+                  <span class="shap-val">+0.48</span>
+                </div>
+                <div class="shap-row">
+                  <span class="shap-feat">ct_dst_src_ltm</span>
+                  <div class="shap-bar-track"><div class="shap-bar-fill" style="width:68%"></div></div>
+                  <span class="shap-val">+0.36</span>
+                </div>
+                <div class="shap-row">
+                  <span class="shap-feat">sbytes</span>
+                  <div class="shap-bar-track"><div class="shap-bar-fill shap-bar-alt" style="width:52%"></div></div>
+                  <span class="shap-val">+0.22</span>
+                </div>
+                <div class="shap-row">
+                  <span class="shap-feat">dur</span>
+                  <div class="shap-bar-track"><div class="shap-bar-fill shap-bar-mint" style="width:34%"></div></div>
+                  <span class="shap-val">-0.14</span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="project-footer">
-            <a href="https://github.com/KanishkSigar/Lively" target="_blank" rel="noopener" class="project-link project-link--light">View on GitHub →</a>
+            <a href="https://kanishksigar.github.io/shade/" target="_blank" rel="noopener" class="project-link project-link--light">View Live →</a>
+            <a href="https://github.com/KanishkSigar/shade" target="_blank" rel="noopener" class="project-link project-link--light">View on GitHub →</a>
           </div>
         </div>
       </article>
@@ -221,6 +242,31 @@ import { FAVICON_TECH, TEAL } from '../consts';
         <div class="project-card-inner">
           <div class="project-meta">
             <span class="project-num">02</span>
+            <span class="project-tag">C++ · Compilers · Virtual Machine</span>
+          </div>
+          <div>
+            <h3 class="project-title">Lively</h3>
+            <p class="project-desc">A statically typed procedural language built from scratch — lexer, recursive-descent parser, three-address code (TAC) intermediate representation, bytecode compiler, and a stack-based virtual machine.</p>
+          </div>
+          <div class="project-visual lively-visual">
+            <div class="code-block">
+              <div class="code-line"><span class="kw">fn</span> <span class="fn">fib</span>(n: <span class="ty">int</span>) -&gt; <span class="ty">int</span> &#123;</div>
+              <div class="code-line">&nbsp;&nbsp;<span class="kw">if</span> n &lt; 2 &#123; <span class="kw">return</span> n; &#125;</div>
+              <div class="code-line">&nbsp;&nbsp;<span class="kw">return</span> <span class="fn">fib</span>(n-1) + <span class="fn">fib</span>(n-2);</div>
+              <div class="code-line">&#125;</div>
+              <div class="code-line"><span class="cm">// → TAC IR → bytecode generator → stack VM</span></div>
+            </div>
+          </div>
+          <div class="project-footer">
+            <a href="https://github.com/KanishkSigar/Lively" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card project-card--dark" id="project-3">
+        <div class="project-card-inner">
+          <div class="project-meta">
+            <span class="project-num">03</span>
             <span class="project-tag">FastAPI · Next.js · AWS · Cryptography</span>
           </div>
           <div>
@@ -248,45 +294,51 @@ import { FAVICON_TECH, TEAL } from '../consts';
         </div>
       </article>
 
-      <article class="project-card project-card--dark" id="project-3">
-        <div class="project-card-inner">
-          <div class="project-meta">
-            <span class="project-num">03</span>
-            <span class="project-tag">PHP · MySQL · Internship</span>
-          </div>
-          <div>
-            <h3 class="project-title">CharterDesk</h3>
-            <p class="project-desc">A structured charter-party negotiation and document-generation tool for maritime fixture deals, built during my internship at Integrated Maritime Exchange. Two parties negotiate ~38 fixture terms in versioned offer/counter rounds, lock what they agree on, and export a finished Charter Party or recap as HTML or PDF. Includes an AI assist that explains CP terms, drafts clauses, and flags risky offers.</p>
-          </div>
-          <div class="project-visual chat-visual">
-            <div class="chat-mockup">
-              <div class="chat-header">
-                <span class="chat-avatar">⚓</span>
-                <div>
-                  <div class="chat-name">Fixture · MV Aurora</div>
-                  <div class="chat-status"><span class="chat-dot"></span> Negotiating</div>
-                </div>
-              </div>
-              <div class="chat-msg chat-msg--user">Owner: Freight USD 14.50/mt - firm offer</div>
-              <div class="chat-msg chat-msg--bot">Charterer: Counter 13.75/mt, laycan 12-18 Jun</div>
-              <div class="chat-input">Draft rider clause…</div>
-            </div>
-          </div>
-          <div class="project-footer">
-            <a href="https://github.com/KanishkSigar/CharterDesk" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-          </div>
-        </div>
-      </article>
-
       <article class="project-card project-card--light" id="project-4">
         <div class="project-card-inner">
           <div class="project-meta">
             <span class="project-num project-num--dark">04</span>
-            <span class="project-tag project-tag--dark">TypeScript · LegalTech</span>
+            <span class="project-tag project-tag--dark">React 18 · Vite · HTML5 Canvas · Apple Health</span>
+          </div>
+          <div>
+            <h3 class="project-title project-title--dark">AuraPulse</h3>
+            <p class="project-desc project-desc--dark">A privacy-first health and biometrics platform for Apple Watch users. Parses native Apple Health XML/JSON exports in the browser to compute clinical sports science telemetry — real-time cardiac waveforms, HRV spectral power, and circadian rhythm models.</p>
+          </div>
+          <div class="project-visual ecg-visual">
+            <div class="ecg-mockup">
+              <div class="ecg-header">
+                <span class="ecg-status"><span class="ecg-pulse-dot"></span> Telemetry Active</span>
+                <div class="ecg-badges">
+                  <span class="ecg-pill">HRV 68ms</span>
+                  <span class="ecg-pill ecg-pill--mint">Zone 2</span>
+                </div>
+              </div>
+              <svg class="ecg-line" viewBox="0 0 300 70" preserveAspectRatio="none">
+                <path d="M0,35 L40,35 L50,35 L55,20 L60,50 L65,10 L72,60 L78,35 L90,35 L120,35 L125,25 L130,45 L135,15 L142,58 L148,35 L160,35 L190,35 L195,22 L200,48 L205,12 L212,62 L218,35 L230,35 L260,35 L265,24 L270,46 L275,14 L282,59 L288,35 L300,35" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <div class="ecg-footer">
+                <span class="ecg-stat"><strong>74</strong> BPM</span>
+                <span class="ecg-stat"><strong>98%</strong> SpO2</span>
+                <span class="ecg-stat"><strong>4.2</strong> SRI</span>
+              </div>
+            </div>
+          </div>
+          <div class="project-footer">
+            <a href="https://kanishksigar.me/aurapulse/" target="_blank" rel="noopener" class="project-link project-link--light">View Live →</a>
+            <a href="https://github.com/KanishkSigar/AuraPulse" target="_blank" rel="noopener" class="project-link project-link--light">View on GitHub →</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project-card project-card--light" id="project-5">
+        <div class="project-card-inner">
+          <div class="project-meta">
+            <span class="project-num project-num--dark">05</span>
+            <span class="project-tag project-tag--dark">TypeScript · React · LegalTech</span>
           </div>
           <div>
             <h3 class="project-title project-title--dark">LexMap</h3>
-            <p class="project-desc project-desc--dark">Converts unstructured legal judgment text into an interactive reasoning graph - making complex case logic navigable, traceable, and easier to study.</p>
+            <p class="project-desc project-desc--dark">Converts unstructured legal judgment text into an interactive reasoning graph with an AI legal assistant — making complex case logic, holdings, and precedents navigable and traceable.</p>
           </div>
           <div class="project-visual graph-visual">
             <div class="graph-mockup">
@@ -309,89 +361,32 @@ import { FAVICON_TECH, TEAL } from '../consts';
         </div>
       </article>
 
-      <article class="project-card project-card--dark" id="project-5">
+      <article class="project-card project-card--dark" id="project-6">
         <div class="project-card-inner">
           <div class="project-meta">
-            <span class="project-num">05</span>
-            <span class="project-tag">Django · PostgreSQL · LegalTech</span>
+            <span class="project-num">06</span>
+            <span class="project-tag">PHP · MySQL · Maritime Tech</span>
           </div>
           <div>
-            <h3 class="project-title">CaseHarbor</h3>
-            <p class="project-desc">A role-based legal case-management system - cases, appointments, lawyers and clients on a normalised PostgreSQL core. Access is enforced at the query level for three roles (Admin, Lawyer, Client), not just hidden in the UI. Self-service sign-up, search, tests &amp; CI.</p>
+            <h3 class="project-title">CharterDesk</h3>
+            <p class="project-desc">A structured charter-party negotiation and document-generation tool for maritime fixture deals, built during my internship at Integrated Maritime Exchange. Parties negotiate ~38 fixture terms in versioned offers, lock agreed clauses, and export finished recap PDFs.</p>
           </div>
-          <div class="project-visual code-visual">
-            <div class="terminal-mockup">
-              <div class="terminal-bar">
-                <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
-                <span class="terminal-title">caseharbor - manage.py</span>
+          <div class="project-visual chat-visual">
+            <div class="chat-mockup">
+              <div class="chat-header">
+                <span class="chat-avatar">⚓</span>
+                <div>
+                  <div class="chat-name">Fixture · MV Aurora</div>
+                  <div class="chat-status"><span class="chat-dot"></span> Negotiating</div>
+                </div>
               </div>
-              <div class="terminal-body">
-                <div class="term-line"><span class="term-prompt">$</span> python manage.py runserver</div>
-                <div class="term-line term-ok">→ Django · PostgreSQL ✓ · 3 roles, 5 tables</div>
-                <div class="term-line"><span class="term-prompt">›</span> GET /dashboard/ · role=client</div>
-                <div class="term-line term-ok">→ WHERE client.user_id = ? (query-scoped) ✓</div>
-              </div>
+              <div class="chat-msg chat-msg--user">Owner: Freight USD 14.50/mt - firm offer</div>
+              <div class="chat-msg chat-msg--bot">Charterer: Counter 13.75/mt, laycan 12-18 Jun</div>
+              <div class="chat-input">Draft rider clause…</div>
             </div>
           </div>
           <div class="project-footer">
-            <a href="https://caseharbor.onrender.com" target="_blank" rel="noopener" class="project-link">View Live →</a>
-            <a href="https://github.com/KanishkSigar/CaseHarbor" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card project-card--light" id="project-6">
-        <div class="project-card-inner">
-          <div class="project-meta">
-            <span class="project-num project-num--dark">06</span>
-            <span class="project-tag project-tag--dark">JavaScript · GraphQL · C++</span>
-          </div>
-          <div>
-            <h3 class="project-title project-title--dark">GitPulse</h3>
-            <p class="project-desc project-desc--dark">A client-side GitHub analytics dashboard. Enter any username to see a contribution heatmap, language breakdown, coding patterns, streaks and pinned repos - all fetched and rendered in the browser, with an optional C++ proxy so visitors never need a token.</p>
-          </div>
-          <div class="project-visual heat-visual">
-            <div class="heat-mockup" aria-hidden="true">
-              <span class="heat-cell"></span><span class="heat-cell h1"></span><span class="heat-cell"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span><span class="heat-cell"></span><span class="heat-cell h3"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell"></span><span class="heat-cell h1"></span><span class="heat-cell h3"></span><span class="heat-cell"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span>
-              <span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell"></span><span class="heat-cell h3"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell"></span><span class="heat-cell h1"></span><span class="heat-cell"></span><span class="heat-cell h2"></span>
-              <span class="heat-cell"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span><span class="heat-cell h3"></span><span class="heat-cell"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell"></span>
-              <span class="heat-cell h2"></span><span class="heat-cell"></span><span class="heat-cell h1"></span><span class="heat-cell h3"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span><span class="heat-cell"></span><span class="heat-cell h2"></span><span class="heat-cell h3"></span><span class="heat-cell h1"></span><span class="heat-cell"></span><span class="heat-cell h2"></span><span class="heat-cell h1"></span><span class="heat-cell h3"></span><span class="heat-cell h1"></span>
-            </div>
-          </div>
-          <div class="project-footer">
-            <a href="https://kanishksigar.me/gitpulse" target="_blank" rel="noopener" class="project-link project-link--light">View Live →</a>
-            <a href="https://github.com/KanishkSigar/gitpulse" target="_blank" rel="noopener" class="project-link project-link--light">View on GitHub →</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card project-card--dark" id="project-7">
-        <div class="project-card-inner">
-          <div class="project-meta">
-            <span class="project-num">07</span>
-            <span class="project-tag">JavaScript · REST API · Chart.js</span>
-          </div>
-          <div>
-            <h3 class="project-title">RepoPulse</h3>
-            <p class="project-desc">A GitHub repository intelligence dashboard. Enter any public repository URL to visualize its tech stack breakdown with GitHub Linguist colors, 52-week commit velocity, top contributors podium, maintainer bus factor, and codebase health standards.</p>
-          </div>
-          <div class="project-visual code-visual">
-            <div class="terminal-mockup">
-              <div class="terminal-bar">
-                <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
-                <span class="terminal-title">repopulse - analyzer</span>
-              </div>
-              <div class="terminal-body">
-                <div class="term-line"><span class="term-prompt">$</span> repopulse analyze facebook/react</div>
-                <div class="term-line term-ok">→ Stack: TypeScript (94.2%) · Vite · Docker ✓</div>
-                <div class="term-line"><span class="term-prompt">›</span> Velocity: 52 wks · 1,840 commits · 35/wk</div>
-                <div class="term-line term-ok">→ Maintainers: Low Dependency Risk (32% top-1) ✓</div>
-              </div>
-            </div>
-          </div>
-          <div class="project-footer">
-            <a href="https://kanishksigar.me/repopulse" target="_blank" rel="noopener" class="project-link">View Live →</a>
-            <a href="https://github.com/KanishkSigar/repopulse" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
+            <a href="https://github.com/KanishkSigar/CharterDesk" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
           </div>
         </div>
       </article>
@@ -399,12 +394,40 @@ import { FAVICON_TECH, TEAL } from '../consts';
     </div>
 
     <div class="also-built">
-      <h3 class="also-heading">Also built</h3>
+      <h3 class="also-heading">Also built &amp; explored</h3>
       <ul class="also-list">
         <li class="also-item">
-          <a href="https://github.com/KanishkSigar/threatlens" target="_blank" rel="noopener">
-            <span class="also-name">threatlens</span>
-            <span class="also-desc">AI-powered phishing detection - SwiftUI iOS app with a Python FastAPI backend.</span>
+          <a href="https://kanishksigar.me/gitpulse" target="_blank" rel="noopener">
+            <span class="also-name">gitpulse</span>
+            <span class="also-desc">Client-side GitHub analytics dashboard with contribution heatmap, language stats &amp; C++ caching proxy.</span>
+            <span class="also-arrow">→</span>
+          </a>
+        </li>
+        <li class="also-item">
+          <a href="https://kanishksigar.me/repopulse" target="_blank" rel="noopener">
+            <span class="also-name">repopulse</span>
+            <span class="also-desc">Repository intelligence visualizer analyzing commit velocity, tech stacks, and maintainer bus factor.</span>
+            <span class="also-arrow">→</span>
+          </a>
+        </li>
+        <li class="also-item">
+          <a href="https://caseharbor.onrender.com" target="_blank" rel="noopener">
+            <span class="also-name">caseharbor</span>
+            <span class="also-desc">Role-based legal case management system with query-scoped permissions and PostgreSQL backend.</span>
+            <span class="also-arrow">→</span>
+          </a>
+        </li>
+        <li class="also-item">
+          <a href="https://github.com/KanishkSigar/liberty-drive" target="_blank" rel="noopener">
+            <span class="also-name">liberty-drive-3d</span>
+            <span class="also-desc">GTA III-inspired 3D driving engine built with Three.js, custom vehicle shaders, day/night cycles, and physics.</span>
+            <span class="also-arrow">→</span>
+          </a>
+        </li>
+        <li class="also-item">
+          <a href="https://github.com/KanishkSigar/arc-track" target="_blank" rel="noopener">
+            <span class="also-name">arc-track</span>
+            <span class="also-desc">Minimal daily habit tracker &amp; reflection journal with SHA-256 PIN privacy and GitHub Gist cloud synchronization.</span>
             <span class="also-arrow">→</span>
           </a>
         </li>
@@ -416,9 +439,16 @@ import { FAVICON_TECH, TEAL } from '../consts';
           </a>
         </li>
         <li class="also-item">
+          <a href="https://github.com/KanishkSigar/threatlens" target="_blank" rel="noopener">
+            <span class="also-name">threatlens</span>
+            <span class="also-desc">AI-powered phishing detection — SwiftUI iOS application with a Python FastAPI inference backend.</span>
+            <span class="also-arrow">→</span>
+          </a>
+        </li>
+        <li class="also-item">
           <a href="https://github.com/KanishkSigar/powerguard-iot" target="_blank" rel="noopener">
             <span class="also-name">powerguard-iot</span>
-            <span class="also-desc">Python-based IoT power monitoring and safety project.</span>
+            <span class="also-desc">Smart energy meter IoT project with real-time telemetry and edge anomaly detection.</span>
             <span class="also-arrow">→</span>
           </a>
         </li>
@@ -542,13 +572,17 @@ import { FAVICON_TECH, TEAL } from '../consts';
   <section class="section-wrap" style="padding-top:90px;padding-bottom:90px">
     <div class="section-tag">Tools & Technologies</div>
     <div class="tools-grid">
-      <div class="tool-card"><div class="tool-icon">▲</div><div class="tool-name">Next.js</div><div class="tool-level">Frontend</div></div>
-      <div class="tool-card"><div class="tool-icon">🟢</div><div class="tool-name">Node.js</div><div class="tool-level">Backend</div></div>
-      <div class="tool-card"><div class="tool-icon">📘</div><div class="tool-name">TypeScript</div><div class="tool-level">Web</div></div>
-      <div class="tool-card"><div class="tool-icon">🐍</div><div class="tool-name">Python</div><div class="tool-level">Automation</div></div>
-      <div class="tool-card"><div class="tool-icon">⚙️</div><div class="tool-name">C++</div><div class="tool-level">Systems</div></div>
-      <div class="tool-card"><div class="tool-icon">🐬</div><div class="tool-name">MySQL</div><div class="tool-level">Database</div></div>
-      <div class="tool-card"><div class="tool-icon">☁️</div><div class="tool-name">AWS</div><div class="tool-level">Cloud</div></div>
+      <div class="tool-card"><div class="tool-icon">⚛️</div><div class="tool-name">React / Next.js</div><div class="tool-level">Frontend</div></div>
+      <div class="tool-card"><div class="tool-icon">📘</div><div class="tool-name">TypeScript</div><div class="tool-level">Web Systems</div></div>
+      <div class="tool-card"><div class="tool-icon">🐍</div><div class="tool-name">Python</div><div class="tool-level">Core &amp; AI</div></div>
+      <div class="tool-card"><div class="tool-icon">⚙️</div><div class="tool-name">C++</div><div class="tool-level">Systems &amp; VM</div></div>
+      <div class="tool-card"><div class="tool-icon">🔥</div><div class="tool-name">PyTorch</div><div class="tool-level">Deep Learning</div></div>
+      <div class="tool-card"><div class="tool-icon">⚡</div><div class="tool-name">FastAPI</div><div class="tool-level">Backend APIs</div></div>
+      <div class="tool-card"><div class="tool-icon">🟢</div><div class="tool-name">Node.js</div><div class="tool-level">Runtime</div></div>
+      <div class="tool-card"><div class="tool-icon">🐘</div><div class="tool-name">PostgreSQL</div><div class="tool-level">Databases</div></div>
+      <div class="tool-card"><div class="tool-icon">☁️</div><div class="tool-name">AWS S3</div><div class="tool-level">Cloud Storage</div></div>
+      <div class="tool-card"><div class="tool-icon">🐳</div><div class="tool-name">Docker</div><div class="tool-level">Containers</div></div>
+      <div class="tool-card"><div class="tool-icon">🎮</div><div class="tool-name">Three.js</div><div class="tool-level">3D Graphics</div></div>
       <div class="tool-card"><div class="tool-icon">🌿</div><div class="tool-name">Git</div><div class="tool-level">Version Control</div></div>
     </div>
   </section>
