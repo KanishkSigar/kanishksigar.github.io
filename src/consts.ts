@@ -3,7 +3,7 @@
 // The mark takes the colour of the room it's in: teal on /tech, moss on the
 // landing and /life. The two sides are meant to look nothing like each other.
 
-export const TEAL = '#00887A';
+export const TEAL = '#388087';
 export const MOSS = '#4F6B3E';
 // The landing carries no accent at all, so its mark is a neutral that reads
 // on both a light and a dark browser tab.

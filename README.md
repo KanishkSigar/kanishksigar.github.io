@@ -32,7 +32,7 @@ Each room has its own accent, and the KS mark takes the colour of the room it is
 | Room | Ground | Accent |
 | --- | --- | --- |
 | `/` | `#0E0E0F` | none, by design |
-| `/tech` | `#16323B` | `#00887A` teal |
+| `/tech` | `#16323B` | `#388087` teal |
 | `/life` | `#E9E7DE` paper, `#12140F` dark | `#4F6B3E` moss |
 
 The mark itself lives in `src/components/Mark.astro`, and its favicons are generated per room from `src/consts.ts`. Change the logo in those two files and it changes everywhere.
