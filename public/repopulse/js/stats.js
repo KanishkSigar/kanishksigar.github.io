@@ -7,10 +7,20 @@ export const Stats = {
    * Formats large numbers compactly (e.g. 1.2k, 4.5M)
    */
   formatCompactNumber(num) {
-    if (num === null || num === undefined || isNaN(num)) return '0';
-    if (num < 1000) return num.toLocaleString();
-    if (num < 1000000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    const n = Number(num);
+    if (!n || isNaN(n)) return '0';
+    if (n < 1000) return n.toLocaleString();
+    if (n < 1_000_000) return `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k`;
+    return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+  },
+
+  /**
+   * Computes a rounded percentage string
+   */
+  formatPercent(val, total) {
+    const v = Number(val) || 0;
+    const t = Number(total) || 0;
+    return t > 0 ? `${Math.round((v / t) * 100)}%` : '0%';
   },
 
   /**
@@ -24,23 +34,23 @@ export const Stats = {
   },
 
   /**
-   * Formats relative ISO timestamp (e.g. "2 days ago")
+   * Formats relative ISO timestamp with compact interval mapping
    */
   formatRelativeTime(dateString) {
     if (!dateString) return 'unknown';
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now - date;
-    const diffSec = Math.floor(diffMs / 1000);
-    const diffMin = Math.floor(diffSec / 60);
-    const diffHr = Math.floor(diffMin / 60);
-    const diffDays = Math.floor(diffHr / 24);
-
-    if (diffDays > 365) return `${Math.floor(diffDays / 365)}y ago`;
-    if (diffDays > 30) return `${Math.floor(diffDays / 30)}mo ago`;
-    if (diffDays > 0) return `${diffDays}d ago`;
-    if (diffHr > 0) return `${diffHr}h ago`;
-    if (diffMin > 0) return `${diffMin}m ago`;
+    const sec = Math.floor((Date.now() - new Date(dateString)) / 1000);
+    if (sec < 60) return 'just now';
+    const intervals = [
+      [31536000, 'y'],
+      [2592000, 'mo'],
+      [86400, 'd'],
+      [3600, 'h'],
+      [60, 'm']
+    ];
+    for (const [divisor, unit] of intervals) {
+      const val = Math.floor(sec / divisor);
+      if (val >= 1) return `${val}${unit} ago`;
+    }
     return 'just now';
   },
 
@@ -81,6 +91,9 @@ export const Stats = {
     let totalYearCommits = 0;
     let peakCount = 0;
     let peakWeekTime = null;
+    let activeWeeks = 0;
+    let currentStreak = 0;
+    let longestStreak = 0;
     const dayTotals = [0, 0, 0, 0, 0, 0, 0]; // Sun to Sat
 
     activity.forEach(item => {
@@ -90,6 +103,14 @@ export const Stats = {
       if (count > peakCount) {
         peakCount = count;
         peakWeekTime = item.week ? new Date(item.week * 1000) : null;
+      }
+
+      if (count > 0) {
+        activeWeeks++;
+        currentStreak++;
+        if (currentStreak > longestStreak) longestStreak = currentStreak;
+      } else {
+        currentStreak = 0;
       }
 
       if (Array.isArray(item.days)) {
@@ -123,22 +144,6 @@ export const Stats = {
       trend = '+100%';
       trendDirection = 'up';
     }
-
-    // Consistency & active week streaks
-    let activeWeeks = 0;
-    let currentStreak = 0;
-    let longestStreak = 0;
-
-    activity.forEach(item => {
-      const count = item.total || 0;
-      if (count > 0) {
-        activeWeeks++;
-        currentStreak++;
-        if (currentStreak > longestStreak) longestStreak = currentStreak;
-      } else {
-        currentStreak = 0;
-      }
-    });
 
     const consistencyPercent = activity.length > 0
       ? Math.round((activeWeeks / activity.length) * 100)
@@ -195,27 +200,23 @@ export const Stats = {
       };
     }
 
-    // Separate bots vs human contributors
-    const humanContributors = contributors.filter(c => {
-      const login = (c.login || '').toLowerCase();
-      return !login.endsWith('[bot]') && login !== 'dependabot' && login !== 'github-actions' && c.type !== 'Bot';
-    });
-
-    const list = humanContributors.length > 0 ? humanContributors : contributors;
+    // Filter automated service accounts
+    const isBot = (c) => {
+      const l = (c.login || '').toLowerCase();
+      return l.endsWith('[bot]') || l === 'dependabot' || l === 'github-actions' || c.type === 'Bot';
+    };
+    const humanList = contributors.filter(c => !isBot(c));
+    const list = humanList.length > 0 ? humanList : contributors;
     const totalContribs = list.reduce((sum, c) => sum + (c.contributions || 0), 0);
 
-    const enriched = list.map((c, idx) => {
-      const share = totalContribs > 0 ? (c.contributions / totalContribs) * 100 : 0;
-      return {
-        rank: idx + 1,
-        login: c.login,
-        avatar_url: c.avatar_url,
-        html_url: c.html_url,
-        contributions: c.contributions,
-        share: Math.round(share * 10) / 10,
-        type: c.type
-      };
-    });
+    const enriched = list.map((c, idx) => ({
+      rank: idx + 1,
+      login: c.login,
+      avatar_url: c.avatar_url,
+      html_url: c.html_url,
+      contributions: c.contributions || 0,
+      share: totalContribs > 0 ? Math.round(((c.contributions || 0) / totalContribs) * 1000) / 10 : 0
+    }));
 
     const top1Contribs = enriched[0]?.contributions || 0;
     const top3Contribs = enriched.slice(0, 3).reduce((acc, c) => acc + c.contributions, 0);

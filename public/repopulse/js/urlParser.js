@@ -56,20 +56,35 @@ const POPULAR_ALIASES = {
   k8s: 'kubernetes/kubernetes'
 };
 
+export function resolveAlias(term) {
+  if (!term || typeof term !== 'string') return null;
+  const raw = term.trim().toLowerCase();
+  if (POPULAR_ALIASES[raw]) return POPULAR_ALIASES[raw];
+  const normalized = raw.replace(/[-_.]/g, '');
+  for (const [k, v] of Object.entries(POPULAR_ALIASES)) {
+    if (k.replace(/[-_.]/g, '') === normalized) return v;
+  }
+  return null;
+}
+
 export function parseRepoInput(input) {
   if (!input || typeof input !== 'string') {
     return { isValid: false, error: 'Please enter a GitHub repository URL or owner/repo.' };
   }
 
-  const trimmed = input.trim();
+  // Sanitize: strip whitespace, leading @, trailing slashes/hashes/queries
+  let trimmed = input.trim().replace(/^@/, '');
   if (!trimmed) {
     return { isValid: false, error: 'Repository input cannot be empty.' };
   }
 
+  // Remove query params and hash fragments from URL inputs
+  trimmed = trimmed.split(/[?#]/)[0].replace(/\/+$/, '');
+
   // Check known popular aliases (e.g. "react" -> "facebook/react")
-  const lowerTrimmed = trimmed.toLowerCase();
-  if (POPULAR_ALIASES[lowerTrimmed]) {
-    const [aliasOwner, aliasRepo] = POPULAR_ALIASES[lowerTrimmed].split('/');
+  const aliasTarget = resolveAlias(trimmed);
+  if (aliasTarget) {
+    const [aliasOwner, aliasRepo] = aliasTarget.split('/');
     return {
       isValid: true,
       owner: aliasOwner,
@@ -79,48 +94,36 @@ export function parseRepoInput(input) {
     };
   }
 
+  // Reject other git hosting domains explicitly
+  if (/^(https?:\/\/)?(www\.)?(gitlab\.com|bitbucket\.org|gitea\.com)/i.test(trimmed)) {
+    return { isValid: false, error: 'Only GitHub repositories (github.com) are currently supported.' };
+  }
+
   let owner = '';
   let repo = '';
 
-  // 1. Handle SSH format: git@github.com:owner/repo.git
+  // 1. SSH format: git@github.com:owner/repo.git
   const sshMatch = trimmed.match(/^git@github\.com:([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+?)(\.git)?$/i);
   if (sshMatch) {
     owner = sshMatch[1];
     repo = sshMatch[2];
   }
 
-  // 2. Handle HTTP / HTTPS URL format
+  // 2. HTTP / HTTPS / github.com URL format
   if (!owner) {
-    try {
-      const urlCandidate = trimmed.startsWith('http://') || trimmed.startsWith('https://')
-        ? trimmed
-        : (trimmed.startsWith('github.com/') ? `https://${trimmed}` : null);
-
-      if (urlCandidate) {
-        const parsedUrl = new URL(urlCandidate);
-        const host = parsedUrl.hostname.toLowerCase();
-        if (host !== 'github.com' && host !== 'www.github.com') {
-          return { isValid: false, error: 'Only GitHub repositories (github.com) are currently supported.' };
-        }
-
-        const segments = parsedUrl.pathname.split('/').filter(Boolean);
-        if (segments.length >= 2) {
-          owner = segments[0];
-          repo = segments[1].replace(/\.git$/i, '');
-        }
-      }
-    } catch (e) {
-      // Not a valid URL, proceed to shorthand check
+    const urlMatch = trimmed.match(/(?:https?:\/\/)?(?:www\.)?github\.com\/([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+)/i);
+    if (urlMatch) {
+      owner = urlMatch[1];
+      repo = urlMatch[2].replace(/\.git$/i, '');
     }
   }
 
-  // 3. Handle shorthand "owner/repo" or "github.com/owner/repo"
+  // 3. Shorthand "owner/repo"
   if (!owner) {
-    const cleaned = trimmed.replace(/^https?:\/\//i, '').replace(/^github\.com\//i, '').replace(/\.git$/i, '');
-    const parts = cleaned.split('/').filter(Boolean);
-    if (parts.length >= 2) {
-      owner = parts[0];
-      repo = parts[1];
+    const shortMatch = trimmed.match(/^([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+?)(?:\.git)?(?:\/.*)?$/);
+    if (shortMatch) {
+      owner = shortMatch[1];
+      repo = shortMatch[2];
     }
   }
 
@@ -159,4 +162,15 @@ export function parseRepoInput(input) {
     fullName,
     url: `https://github.com/${fullName}`
   };
+}
+
+/**
+ * Concise throwing helper for functional pipelines
+ */
+export function parseRepo(input) {
+  const res = parseRepoInput(input);
+  if (!res.isValid) {
+    throw new Error(res.error || 'Invalid repository identifier');
+  }
+  return { owner: res.owner, repo: res.repo, fullName: res.fullName, url: res.url };
 }

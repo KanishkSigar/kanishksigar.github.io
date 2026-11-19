@@ -8,6 +8,7 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--card-radius);
   padding: var(--card-padding);
+  box-sizing: border-box;
 }
 
 /* ── Buttons ── */
@@ -22,6 +23,7 @@
   cursor: pointer;
   transition: all var(--duration-fast);
   white-space: nowrap;
+  user-select: none;
 }
 
 .btn-primary {
@@ -58,6 +60,17 @@
 .btn-ghost:hover {
   color: var(--text-primary);
   background: var(--bg-surface);
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 0.775rem;
+  height: 28px;
+  line-height: 1;
+}
+
+.btn:active {
+  transform: translateY(1px);
 }
 
 .btn-sm {

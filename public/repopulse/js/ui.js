@@ -5,31 +5,38 @@
 import { Stats } from './stats.js';
 
 export const UI = {
+  _cache: {},
+
+  $(id) {
+    if (typeof document === 'undefined') return null;
+    return this._cache[id] || (this._cache[id] = document.getElementById(id));
+  },
+
   get elements() {
     return {
-      landing: document.getElementById('landing-section'),
-      dashboard: document.getElementById('dashboard'),
-      headerSearch: document.getElementById('header-search'),
-      exportBtn: document.getElementById('export-btn'),
-      mainContent: document.getElementById('repo-main-content'),
-      rateLimitStatus: document.getElementById('rate-limit-status')
+      landing: this.$('landing-section'),
+      dashboard: this.$('dashboard'),
+      headerSearch: this.$('header-search'),
+      exportBtn: this.$('export-btn'),
+      mainContent: this.$('repo-main-content'),
+      rateLimitStatus: this.$('rate-limit-status')
     };
   },
 
   showDashboard() {
-    const els = this.elements;
-    if (els.landing) els.landing.hidden = true;
-    if (els.dashboard) els.dashboard.hidden = false;
-    if (els.headerSearch) els.headerSearch.hidden = false;
-    if (els.exportBtn) els.exportBtn.hidden = false;
+    const { landing, dashboard, headerSearch, exportBtn } = this.elements;
+    if (landing) landing.hidden = true;
+    if (dashboard) dashboard.hidden = false;
+    if (headerSearch) headerSearch.hidden = false;
+    if (exportBtn) exportBtn.hidden = false;
   },
 
   showLanding() {
-    const els = this.elements;
-    if (els.landing) els.landing.hidden = false;
-    if (els.dashboard) els.dashboard.hidden = true;
-    if (els.headerSearch) els.headerSearch.hidden = true;
-    if (els.exportBtn) els.exportBtn.hidden = true;
+    const { landing, dashboard, headerSearch, exportBtn } = this.elements;
+    if (landing) landing.hidden = false;
+    if (dashboard) dashboard.hidden = true;
+    if (headerSearch) headerSearch.hidden = true;
+    if (exportBtn) exportBtn.hidden = true;
   },
 
   showLoading(repoName = 'repository') {
@@ -113,7 +120,17 @@ export const UI = {
   renderRepoHeader(repo, detectedStack = []) {
     const owner = repo.owner || {};
     const topics = Array.isArray(repo.topics) ? repo.topics : [];
-    const isFork = Boolean(repo.fork);
+    const badges = [
+      repo.private && '<span class="badge badge-private">Private</span>',
+      repo.fork && '<span class="badge badge-fork">Fork</span>',
+      repo.archived && '<span class="badge badge-archived">Archived</span>'
+    ].filter(Boolean).join(' ');
+
+    const tags = [
+      ...topics.slice(0, 6).map(t => `<span class="tag-chip">#${t}</span>`),
+      ...detectedStack.slice(0, 5).map(item => `<span class="tag-chip">${item.name}</span>`),
+      repo.homepage ? `<a href="${repo.homepage.startsWith('http') ? repo.homepage : 'https://' + repo.homepage}" target="_blank" rel="noopener" class="tag-chip" style="color:var(--text-primary);">${repo.homepage.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗</a>` : null
+    ].filter(Boolean).join('');
 
     return `
       <div class="repo-header">
@@ -127,9 +144,7 @@ export const UI = {
                 <a href="${owner.html_url || '#'}" target="_blank" rel="noopener" class="repo-header__owner">${owner.login}</a>
                 <span class="repo-header__slash">/</span>
                 <a href="${repo.html_url}" target="_blank" rel="noopener" class="repo-header__name">${repo.name}</a>
-                ${repo.private ? '<span class="badge badge-private">Private</span>' : ''}
-                ${isFork ? '<span class="badge badge-fork">Fork</span>' : ''}
-                ${repo.archived ? '<span class="badge badge-archived">Archived</span>' : ''}
+                ${badges}
               </div>
               <p class="repo-header__desc">${repo.description ? this.escapeHtml(repo.description) : 'No description provided.'}</p>
             </div>
@@ -143,19 +158,7 @@ export const UI = {
           </div>
         </div>
 
-        ${(topics.length > 0 || detectedStack.length > 0 || repo.homepage) ? `
-          <div class="repo-header__tags">
-            ${topics.slice(0, 6).map(t => `<span class="tag-chip">#${t}</span>`).join('')}
-            ${detectedStack.slice(0, 5).map(item => `
-              <span class="tag-chip">${item.name}</span>
-            `).join('')}
-            ${repo.homepage ? `
-              <a href="${repo.homepage.startsWith('http') ? repo.homepage : 'https://' + repo.homepage}" target="_blank" rel="noopener" class="tag-chip" style="color:var(--text-primary);">
-                ${repo.homepage.replace(/^https?:\/\//, '').replace(/\/$/, '')} ↗
-              </a>
-            ` : ''}
-          </div>
-        ` : ''}
+        ${tags ? `<div class="repo-header__tags">${tags}</div>` : ''}
       </div>
     `;
   },
@@ -163,33 +166,47 @@ export const UI = {
   /**
    * Renders the Vitals Metric Strip
    */
-  renderVitals(repo, commitStats = {}, latestRelease = null, communityProfile = null) {
-    const stars = Stats.formatCompactNumber(repo.stargazers_count);
-    const forks = Stats.formatCompactNumber(repo.forks_count);
-    const watchers = Stats.formatCompactNumber(repo.subscribers_count || repo.watchers_count);
-    const issues = Stats.formatCompactNumber(repo.open_issues_count);
-    const size = Stats.formatSize(repo.size);
-    const license = repo.license ? (repo.license.spdx_id || repo.license.name) : 'None';
-    const releaseTag = latestRelease ? (latestRelease.tag_name || 'Tagged') : 'None';
-
+  renderVitals(repo, commitStats = {}, latestRelease = null) {
     const items = [
-      { label: 'Stars', value: stars, detail: `${(repo.stargazers_count || 0).toLocaleString()} stargazers` },
-      { label: 'Forks', value: forks, detail: `${(repo.forks_count || 0).toLocaleString()} forks` },
-      { label: 'Watchers', value: watchers, detail: `${((repo.subscribers_count || repo.watchers_count) || 0).toLocaleString()} watchers` },
-      { label: 'Open Issues', value: issues, detail: `${(repo.open_issues_count || 0).toLocaleString()} open issues` },
-      { label: 'Size', value: size, detail: `Repository disk size: ${size}` },
-      { label: 'License', value: license, detail: `SPDX License: ${license}` },
-      { label: 'Release', value: releaseTag, detail: `Latest release tag: ${releaseTag}` }
+      ['Stars', Stats.formatCompactNumber(repo.stargazers_count), `${(repo.stargazers_count || 0).toLocaleString()} stargazers`],
+      ['Forks', Stats.formatCompactNumber(repo.forks_count), `${(repo.forks_count || 0).toLocaleString()} forks`],
+      ['Watchers', Stats.formatCompactNumber(repo.subscribers_count || repo.watchers_count), `${((repo.subscribers_count || repo.watchers_count) || 0).toLocaleString()} watchers`],
+      ['Open Issues', Stats.formatCompactNumber(repo.open_issues_count), `${(repo.open_issues_count || 0).toLocaleString()} open issues`],
+      ['Size', Stats.formatSize(repo.size), `Disk size: ${Stats.formatSize(repo.size)}`],
+      ['License', repo.license?.spdx_id || repo.license?.name || 'None', `License: ${repo.license?.spdx_id || repo.license?.name || 'None'}`],
+      ['Release', latestRelease?.tag_name || 'None', `Latest release: ${latestRelease?.tag_name || 'None'}`]
     ];
 
     return `
       <div class="vitals-strip">
-        ${items.map(item => `
-          <div class="vital-item" title="${item.detail}">
-            <span class="vital-item__value">${item.value}</span>
-            <span class="vital-item__label">${item.label}</span>
+        ${items.map(([label, val, title]) => `
+          <div class="vital-item" title="${title}">
+            <span class="vital-item__value">${val}</span>
+            <span class="vital-item__label">${label}</span>
           </div>
         `).join('')}
+      </div>
+    `;
+  },
+
+  /**
+   * Renders a single contributor row
+   */
+  renderContributorRow(c) {
+    return `
+      <div class="contributor-row">
+        <span class="contributor-rank">#${c.rank}</span>
+        <a href="${c.html_url}" target="_blank" rel="noopener" class="contributor-user">
+          <img src="${c.avatar_url}" alt="${c.login}" class="contributor-user-avatar" loading="lazy">
+          <span class="contributor-user-name">${c.login}</span>
+        </a>
+        <div class="contributor-share-bar-box">
+          <div class="contributor-share-bar">
+            <div class="contributor-share-fill" style="width:${Math.max(c.share, 3)}%;"></div>
+          </div>
+        </div>
+        <span class="contributor-commits">${c.contributions.toLocaleString()} commits</span>
+        <span class="contributor-share-pct">${c.share}%</span>
       </div>
     `;
   },
@@ -201,16 +218,10 @@ export const UI = {
     if (!container) return;
     const { ranked = [], dependencyRisk, dependencyDescription, riskColor } = contributorData;
 
-    if (ranked.length === 0) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <p style="color:var(--text-muted);font-size:0.85rem;">No contributor data found for this repository.</p>
-        </div>
-      `;
+    if (!ranked.length) {
+      container.innerHTML = '<div class="empty-state"><p style="color:var(--text-muted);font-size:0.85rem;">No contributor data found for this repository.</p></div>';
       return;
     }
-
-    const list = ranked.slice(0, 10);
 
     container.innerHTML = `
       <div class="contributors-content">
@@ -218,29 +229,28 @@ export const UI = {
           <span class="dependency-info-text">${dependencyDescription}</span>
           <span class="dependency-badge" style="background: ${riskColor}18; color: ${riskColor};">${dependencyRisk} Risk</span>
         </div>
-
         <div class="contributors-table">
-          ${list.map(c => `
-            <div class="contributor-row">
-              <span class="contributor-rank">#${c.rank}</span>
-              <a href="${c.html_url}" target="_blank" rel="noopener" class="contributor-user">
-                <img src="${c.avatar_url}" alt="${c.login}" class="contributor-user-avatar" loading="lazy">
-                <span class="contributor-user-name">${c.login}</span>
-              </a>
-              <div class="contributor-share-bar-box">
-                <div class="contributor-share-bar">
-                  <div class="contributor-share-fill" style="width:${Math.max(c.share, 3)}%;"></div>
-                </div>
-              </div>
-              <span class="contributor-commits">${c.contributions.toLocaleString()} commits</span>
-              <span class="contributor-share-pct">${c.share}%</span>
-            </div>
-          `).join('')}
+          ${ranked.slice(0, 10).map(c => this.renderContributorRow(c)).join('')}
         </div>
       </div>
     `;
 
     if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
+  },
+
+  /**
+   * Classify repository license type
+   */
+  classifyLicense(spdx = '') {
+    const code = (spdx || '').toUpperCase();
+    if (!code) return { type: 'Unlicensed', code: 'None' };
+    if (['MIT', 'APACHE-2.0', 'BSD-2-CLAUSE', 'BSD-3-CLAUSE', 'ISC', 'UNLICENSE'].includes(code)) {
+      return { type: 'Permissive', code };
+    }
+    if (['GPL-2.0', 'GPL-3.0', 'AGPL-3.0', 'LGPL-2.1', 'LGPL-3.0', 'MPL-2.0'].includes(code)) {
+      return { type: 'Copyleft', code };
+    }
+    return { type: 'Custom', code };
   },
 
   /**
@@ -251,23 +261,15 @@ export const UI = {
     const healthPercent = communityProfile?.health_percentage ?? (repo.license ? 75 : 50);
 
     const checkItems = [
-      { name: 'README', exists: Boolean(files.readme || true) },
-      { name: 'LICENSE', exists: Boolean(files.license || repo.license) },
-      { name: 'Contributing Guide', exists: Boolean(files.contributing) },
-      { name: 'Code of Conduct', exists: Boolean(files.code_of_conduct) },
-      { name: 'Issue Templates', exists: Boolean(files.issue_template) },
-      { name: 'PR Template', exists: Boolean(files.pull_request_template) }
+      ['README', Boolean(files.readme || true)],
+      ['LICENSE', Boolean(files.license || repo.license)],
+      ['Contributing Guide', Boolean(files.contributing)],
+      ['Code of Conduct', Boolean(files.code_of_conduct)],
+      ['Issue Templates', Boolean(files.issue_template)],
+      ['PR Template', Boolean(files.pull_request_template)]
     ];
 
-    const spdx = (repo.license?.spdx_id || '').toUpperCase();
-    let licenseType = 'Custom';
-    if (['MIT', 'APACHE-2.0', 'BSD-2-CLAUSE', 'BSD-3-CLAUSE', 'ISC', 'UNLICENSE'].includes(spdx)) {
-      licenseType = 'Permissive';
-    } else if (['GPL-2.0', 'GPL-3.0', 'AGPL-3.0', 'LGPL-2.1', 'LGPL-3.0', 'MPL-2.0'].includes(spdx)) {
-      licenseType = 'Copyleft';
-    } else if (!spdx) {
-      licenseType = 'Unlicensed';
-    }
+    const { type: licenseType, code: spdx } = this.classifyLicense(repo.license?.spdx_id);
 
     const releaseHtml = latestRelease ? `
       <div class="latest-release-box">
@@ -277,7 +279,7 @@ export const UI = {
         </div>
         <p class="release-title">${latestRelease.name ? this.escapeHtml(latestRelease.name) : 'Release ' + latestRelease.tag_name}</p>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
-          <span style="font-size:0.72rem; color:var(--text-tertiary); font-family:var(--font-mono);">${licenseType} (${spdx || 'None'})</span>
+          <span style="font-size:0.72rem; color:var(--text-tertiary); font-family:var(--font-mono);">${licenseType} (${spdx})</span>
           <a href="${latestRelease.html_url}" target="_blank" rel="noopener" class="release-link">
             Notes ↗
           </a>
@@ -303,13 +305,13 @@ export const UI = {
             <div class="health-progress-fill" style="width:${healthPercent}%;"></div>
           </div>
           <div class="health-checklist">
-            ${checkItems.map(item => `
-              <div class="checklist-item ${item.exists ? 'item-pass' : 'item-missing'}">
+            ${checkItems.map(([name, exists]) => `
+              <div class="checklist-item ${exists ? 'item-pass' : 'item-missing'}">
                 <div class="checklist-left">
                   <span class="checklist-dot"></span>
-                  <span class="checklist-label">${item.name}</span>
+                  <span class="checklist-label">${name}</span>
                 </div>
-                <span class="checklist-status">${item.exists ? 'Found' : 'Missing'}</span>
+                <span class="checklist-status">${exists ? 'Found' : 'Missing'}</span>
               </div>
             `).join('')}
           </div>

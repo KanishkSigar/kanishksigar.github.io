@@ -4,6 +4,20 @@
 
 import { Cache } from './cache.js';
 
+function formatApiError(response, rateLimit) {
+  const status = response.status;
+  if (status === 403 || status === 429) {
+    if (response.headers?.get('x-ratelimit-remaining') === '0' || rateLimit?.remaining === 0) {
+      const resetMin = rateLimit?.resetTime ? Math.max(1, Math.round((rateLimit.resetTime - Date.now()) / 60000)) : 60;
+      return new Error(`GitHub API rate limit reached. Resets in ~${resetMin}m. Add an API token to lift limits.`);
+    }
+    return new Error('Access forbidden by GitHub. A Personal Access Token may be required.');
+  }
+  if (status === 404) return new Error('Repository not found. Check owner/repo name and ensure it is public.');
+  if (status === 401) return new Error('Invalid GitHub token. Please verify or clear your token.');
+  return new Error(`GitHub API error (${status}): ${response.statusText || 'Request failed'}`);
+}
+
 export const API = {
   REST_BASE: 'https://api.github.com',
   GRAPHQL_BASE: 'https://api.github.com/graphql',
@@ -16,39 +30,47 @@ export const API = {
   },
 
   /**
-   * Retrieves user-configured Personal Access Token
+   * Retrieves user-configured Personal Access Token safely
    */
   getToken() {
-    return localStorage.getItem('repopulse_pat') || '';
+    try {
+      return typeof localStorage !== 'undefined' ? (localStorage.getItem('repopulse_pat') || '') : '';
+    } catch (e) {
+      return '';
+    }
   },
 
   /**
-   * Sets request headers with token if available
+   * Generates standard GitHub API headers with optional authorization
    */
-  getHeaders() {
-    const headers = {
-      'Accept': 'application/vnd.github.v3+json'
+  getHeaders(customHeaders = {}) {
+    const pat = this.getToken()?.trim();
+    return {
+      'Accept': 'application/vnd.github.v3+json',
+      ...(pat ? { 'Authorization': `Bearer ${pat}` } : {}),
+      ...customHeaders
     };
-    const pat = this.getToken();
-    if (pat) {
-      // Support both fine-grained (github_pat_) and classic (ghp_) tokens
-      headers['Authorization'] = `Bearer ${pat.trim()}`;
-    }
-    return headers;
   },
 
   /**
    * Parses rate limit headers from response
    */
   updateRateLimits(response) {
-    if (!response || !response.headers) return;
+    if (!response?.headers) return;
     const limit = response.headers.get('x-ratelimit-limit');
     const remaining = response.headers.get('x-ratelimit-remaining');
     const reset = response.headers.get('x-ratelimit-reset');
 
-    if (limit !== null) this.rateLimit.limit = parseInt(limit, 10);
-    if (remaining !== null) this.rateLimit.remaining = parseInt(remaining, 10);
-    if (reset !== null) this.rateLimit.resetTime = new Date(parseInt(reset, 10) * 1000);
+    if (limit) this.rateLimit.limit = Number(limit);
+    if (remaining) this.rateLimit.remaining = Number(remaining);
+    if (reset) this.rateLimit.resetTime = new Date(Number(reset) * 1000);
+  },
+
+  /**
+   * Checks whether the current client is rate limited
+   */
+  isRateLimited() {
+    return this.rateLimit.remaining === 0 && Boolean(this.rateLimit.resetTime && this.rateLimit.resetTime > new Date());
   },
 
   /**
@@ -83,22 +105,7 @@ export const API = {
     }
 
     if (!response.ok) {
-      if (response.status === 403 || response.status === 429) {
-        if (response.headers.get('x-ratelimit-remaining') === '0') {
-          const resetMinutes = this.rateLimit.resetTime 
-            ? Math.max(1, Math.round((this.rateLimit.resetTime - Date.now()) / 60000))
-            : 'a few';
-          throw new Error(`GitHub API rate limit reached. Resets in ~${resetMinutes} min. Add a Personal Access Token in the top-right to get 5,000 requests/hour.`);
-        }
-        throw new Error('Access forbidden by GitHub API. You may need to authenticate with a Personal Access Token.');
-      }
-      if (response.status === 404) {
-        throw new Error(`Repository not found. Please check the owner/repo name and make sure the repository is public.`);
-      }
-      if (response.status === 401) {
-        throw new Error('Invalid GitHub token. Please check or clear your Personal Access Token in the top-right.');
-      }
-      throw new Error(`GitHub API Error: ${response.status} ${response.statusText}`);
+      throw formatApiError(response, this.rateLimit);
     }
 
     const data = await response.json();
@@ -144,7 +151,7 @@ export const API = {
 
   /**
    * Fetches the last year of commit activity grouped by week (52 weeks).
-   * Handles GitHub 202 Accepted calculation responses with retries and fallbacks.
+   * Handles 202 async stats with automatic participation fallback.
    * @param {string} owner
    * @param {string} repo
    * @returns {Promise<Array<{days: number[], total: number, week: number}>>}
@@ -154,45 +161,23 @@ export const API = {
     const cached = Cache.get(cacheKey);
     if (cached) return cached;
 
-    const endpoint = `/repos/${owner}/${repo}/stats/commit_activity`;
-    const url = `${this.REST_BASE}${endpoint}`;
-
-    // Retry loop for GitHub 202 async stats generation
-    for (let attempt = 0; attempt < 3; attempt++) {
-      try {
-        const response = await fetch(url, { headers: this.getHeaders() });
-        this.updateRateLimits(response);
-
-        if (response.status === 200) {
-          const data = await response.json();
-          if (Array.isArray(data) && data.length > 0) {
-            Cache.set(cacheKey, data, Cache.TTL.STATS);
-            return data;
-          }
-        } else if (response.status === 202) {
-          // GitHub is calculating stats, wait and retry
-          await new Promise(r => setTimeout(r, 600 * (attempt + 1)));
-        } else if (response.status === 403 || response.status === 429) {
-          break; // Rate limit reached, fallback
-        }
-      } catch (err) {
-        break;
-      }
+    try {
+      const data = await this.fetchRest(`/repos/${owner}/${repo}/stats/commit_activity`, {}, Cache.TTL.STATS, 2);
+      if (Array.isArray(data) && data.length > 0) return data;
+    } catch (e) {
+      // Fallback below
     }
 
-    // Fallback: If commit_activity is still unavailable or computing, try participation stats
+    // Fallback: participation stats
     try {
       const part = await this.getParticipationStats(owner, repo);
-      if (part && Array.isArray(part.all) && part.all.length > 0) {
+      if (Array.isArray(part?.all) && part.all.length > 0) {
         const now = Math.floor(Date.now() / 1000);
-        const reconstructed = part.all.map((count, index) => {
-          const weekTimestamp = now - ((51 - index) * 7 * 86400);
-          return {
-            week: weekTimestamp,
-            total: count,
-            days: [0, 0, Math.floor(count * 0.4), Math.floor(count * 0.3), Math.floor(count * 0.3), 0, 0]
-          };
-        });
+        const reconstructed = part.all.map((count, index) => ({
+          week: now - ((51 - index) * 7 * 86400),
+          total: count,
+          days: [0, 0, Math.floor(count * 0.4), Math.floor(count * 0.3), Math.floor(count * 0.3), 0, 0]
+        }));
         Cache.set(cacheKey, reconstructed, Cache.TTL.STATS);
         return reconstructed;
       }

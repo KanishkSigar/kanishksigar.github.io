@@ -153,39 +153,27 @@ function bindNavigation() {
   });
 }
 
+function handleGlobalKeydown(e) {
+  const isInputActive = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
+
+  if (e.key === 'Escape') {
+    if (!els.patPanel.hidden) return (els.patPanel.hidden = true);
+    if (!els.compareSection.hidden) return closeCompare();
+    if (isInputActive) document.activeElement?.blur();
+    return;
+  }
+
+  const isSearch = (e.key === '/' && !isInputActive) || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k');
+  if (isSearch) {
+    e.preventDefault();
+    const target = (!els.dashboard.hidden && els.headerRepoInput) ? els.headerRepoInput : els.landingRepoInput;
+    target?.focus();
+    target?.select();
+  }
+}
+
 function bindKeyboardShortcuts() {
-  window.addEventListener('keydown', (e) => {
-    const isInputActive = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName);
-
-    // Escape: close panels or blur inputs
-    if (e.key === 'Escape') {
-      if (!els.patPanel.hidden) {
-        els.patPanel.hidden = true;
-        return;
-      }
-      if (!els.compareSection.hidden) {
-        closeCompare();
-        return;
-      }
-      if (isInputActive) {
-        document.activeElement.blur();
-      }
-      return;
-    }
-
-    // Slash (/) or Cmd/Ctrl+K: focus search bar
-    const isSearchShortcut = (e.key === '/' && !isInputActive) || ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k');
-    if (isSearchShortcut) {
-      e.preventDefault();
-      if (!els.dashboard.hidden && els.headerRepoInput) {
-        els.headerRepoInput.focus();
-        els.headerRepoInput.select();
-      } else if (els.landingRepoInput) {
-        els.landingRepoInput.focus();
-        els.landingRepoInput.select();
-      }
-    }
-  });
+  window.addEventListener('keydown', handleGlobalKeydown);
 }
 
 // ═══════════════════════════════════════
@@ -515,30 +503,35 @@ function bindAuth() {
     });
   }
 
-  if (els.patSave) {
-    els.patSave.addEventListener('click', () => {
-      const val = els.patInput?.value.trim() || '';
-      if (val) {
+  const saveToken = () => {
+    const val = els.patInput?.value.trim() || '';
+    if (val) {
+      if (typeof localStorage !== 'undefined') {
         localStorage.setItem('repopulse_pat', val);
-        localStorage.setItem('gitpulse_pat', val);
-        state.token = val;
-        els.patToggle?.classList.add('has-token');
-        els.patPanel.hidden = true;
-        checkRateLimit();
-        alert('GitHub API token saved. Higher rate limits enabled!');
       }
-    });
-  }
+      state.token = val;
+      els.patToggle?.classList.add('has-token');
+      els.patPanel.hidden = true;
+      checkRateLimit();
+    }
+  };
 
-  if (els.patClear) {
-    els.patClear.addEventListener('click', () => {
+  const clearToken = () => {
+    if (typeof localStorage !== 'undefined') {
       localStorage.removeItem('repopulse_pat');
       localStorage.removeItem('gitpulse_pat');
-      state.token = '';
-      if (els.patInput) els.patInput.value = '';
-      els.patToggle?.classList.remove('has-token');
-      checkRateLimit();
-      alert('GitHub token cleared.');
+    }
+    state.token = '';
+    if (els.patInput) els.patInput.value = '';
+    els.patToggle?.classList.remove('has-token');
+    checkRateLimit();
+  };
+
+  if (els.patSave) els.patSave.addEventListener('click', saveToken);
+  if (els.patClear) els.patClear.addEventListener('click', clearToken);
+  if (els.patInput) {
+    els.patInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') saveToken();
     });
   }
 }

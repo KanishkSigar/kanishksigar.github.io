@@ -12,6 +12,28 @@ export const Compare = {
     return document.getElementById('compare-results');
   },
 
+  renderRow(row) {
+    const isNum = typeof row.a === 'number' && typeof row.b === 'number';
+    const winA = row.cmp === 'high' && isNum && row.a > row.b;
+    const winB = row.cmp === 'high' && isNum && row.b > row.a;
+
+    const valA = row.format ? row.format(row.a) : (row.a ?? '—');
+    const valB = row.format ? row.format(row.b) : (row.b ?? '—');
+
+    const dotA = row.isLang ? `<span class="cdot" style="background:${getLangColor(row.a)}"></span>` : '';
+    const dotB = row.isLang ? `<span class="cdot" style="background:${getLangColor(row.b)}"></span>` : '';
+
+    const tagA = winA ? '<span class="cwin-tag">Leader</span>' : '';
+    const tagB = winB ? '<span class="cwin-tag">Leader</span>' : '';
+
+    return `
+      <div class="cval ${winA ? 'win' : ''}">${dotA} ${valA} ${tagA}</div>
+      <div class="crow-label">${row.label}</div>
+      <div class="cval ${winB ? 'win' : ''}">${dotB} ${valB} ${tagB}</div>
+      <div class="cspacer"></div>
+    `;
+  },
+
   async render(inputA, inputB) {
     const el = this.element;
     if (!el) return;
@@ -76,32 +98,7 @@ export const Compare = {
         </div>
       `;
 
-      let gridRows = '';
-      rows.forEach(row => {
-        let winA = false;
-        let winB = false;
-
-        if (row.cmp === 'high' && typeof row.a === 'number' && typeof row.b === 'number') {
-          if (row.a > row.b) winA = true;
-          else if (row.b > row.a) winB = true;
-        }
-
-        const valA = row.format ? row.format(row.a) : row.a;
-        const valB = row.format ? row.format(row.b) : row.b;
-
-        const langDotA = row.isLang ? `<span class="cdot" style="background:${getLangColor(row.a)}"></span>` : '';
-        const langDotB = row.isLang ? `<span class="cdot" style="background:${getLangColor(row.b)}"></span>` : '';
-
-        const tagA = winA ? '<span class="cwin-tag">Leader</span>' : '';
-        const tagB = winB ? '<span class="cwin-tag">Leader</span>' : '';
-
-        gridRows += `
-          <div class="cval ${winA ? 'win' : ''}">${langDotA} ${valA} ${tagA}</div>
-          <div class="crow-label">${row.label}</div>
-          <div class="cval ${winB ? 'win' : ''}">${langDotB} ${valB} ${tagB}</div>
-          <div class="cspacer"></div>
-        `;
-      });
+      const gridRows = rows.map(row => this.renderRow(row)).join('');
 
       el.innerHTML = `
         <div class="card" style="padding:var(--space-6); margin-top:var(--space-4);">

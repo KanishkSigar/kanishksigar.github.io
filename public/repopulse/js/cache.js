@@ -45,21 +45,25 @@ export const Cache = {
       ttl: ttl
     };
 
-    // Tier 1: In-memory cache
-    if (this.mem.size >= this.MAX_MEM_ITEMS) {
+    // Tier 1: In-memory cache with LRU refresh
+    if (this.mem.has(key)) {
+      this.mem.delete(key);
+    } else if (this.mem.size >= this.MAX_MEM_ITEMS) {
       const oldestKey = this.mem.keys().next().value;
       if (oldestKey) this.mem.delete(oldestKey);
     }
     this.mem.set(key, record);
 
     // Tier 2: Persistent localStorage
-    try {
-      localStorage.setItem(key, JSON.stringify(record));
-    } catch (e) {
-      this.evictOldest(5);
+    if (typeof localStorage !== 'undefined') {
       try {
         localStorage.setItem(key, JSON.stringify(record));
-      } catch (retryErr) {}
+      } catch (e) {
+        this.evictOldest(5);
+        try {
+          localStorage.setItem(key, JSON.stringify(record));
+        } catch (_) {}
+      }
     }
   },
 
@@ -73,12 +77,16 @@ export const Cache = {
     if (this.mem.has(key)) {
       const record = this.mem.get(key);
       if (record && now - record.timestamp <= record.ttl) {
+        this.mem.delete(key);
+        this.mem.set(key, record);
         return record.value;
       }
       this.mem.delete(key);
     }
 
     // 2. Check localStorage
+    if (typeof localStorage === 'undefined') return null;
+
     try {
       const item = localStorage.getItem(key);
       if (!item) return null;
@@ -97,7 +105,7 @@ export const Cache = {
       // Populate memory cache for faster subsequent reads
       this.mem.set(key, record);
       return record.value;
-    } catch (e) {
+    } catch (_) {
       return null;
     }
   },
@@ -107,15 +115,18 @@ export const Cache = {
    */
   remove(key) {
     this.mem.delete(key);
-    try {
-      localStorage.removeItem(key);
-    } catch (e) {}
+    if (typeof localStorage !== 'undefined') {
+      try {
+        localStorage.removeItem(key);
+      } catch (_) {}
+    }
   },
 
   /**
    * Cleans all expired entries under the RepoPulse prefix
    */
   cleanExpired() {
+    if (typeof localStorage === 'undefined') return;
     try {
       const now = Date.now();
       for (let i = localStorage.length - 1; i >= 0; i--) {
@@ -128,19 +139,20 @@ export const Cache = {
               if (record && record.timestamp && record.ttl && (now - record.timestamp > record.ttl)) {
                 localStorage.removeItem(key);
               }
-            } catch (err) {
+            } catch (_) {
               localStorage.removeItem(key);
             }
           }
         }
       }
-    } catch (e) {}
+    } catch (_) {}
   },
 
   /**
    * Evicts the oldest N items in localStorage
    */
   evictOldest(count = 5) {
+    if (typeof localStorage === 'undefined') return;
     try {
       const items = [];
       for (let i = 0; i < localStorage.length; i++) {
@@ -149,20 +161,22 @@ export const Cache = {
           try {
             const parsed = JSON.parse(localStorage.getItem(key) || '{}');
             items.push({ key, timestamp: parsed.timestamp || 0 });
-          } catch (e) {
+          } catch (_) {
             items.push({ key, timestamp: 0 });
           }
         }
       }
       items.sort((a, b) => a.timestamp - b.timestamp);
       items.slice(0, count).forEach(item => localStorage.removeItem(item.key));
-    } catch (e) {}
+    } catch (_) {}
   },
 
   /**
    * Clears all cached repository data
    */
   clearAll() {
+    this.mem.clear();
+    if (typeof localStorage === 'undefined') return;
     try {
       for (let i = localStorage.length - 1; i >= 0; i--) {
         const key = localStorage.key(i);
@@ -170,6 +184,6 @@ export const Cache = {
           localStorage.removeItem(key);
         }
       }
-    } catch (e) {}
+    } catch (_) {}
   }
 };
