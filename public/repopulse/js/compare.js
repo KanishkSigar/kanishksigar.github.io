@@ -12,6 +12,11 @@ export const Compare = {
     return document.getElementById('compare-results');
   },
 
+  normalizeInput(raw) {
+    if (!raw || typeof raw !== 'string') return '';
+    return raw.trim().replace(/^https?:\/\/github\.com\//i, '').replace(/\/+$/, '');
+  },
+
   renderRow(row) {
     const isNum = typeof row.a === 'number' && typeof row.b === 'number';
     const winA = row.cmp === 'high' && isNum && row.a > row.b;
@@ -38,15 +43,27 @@ export const Compare = {
     const el = this.element;
     if (!el) return;
 
-    const parsedA = parseRepoInput(inputA);
-    const parsedB = parseRepoInput(inputB);
+    const cleanA = this.normalizeInput(inputA);
+    const cleanB = this.normalizeInput(inputB);
+
+    if (!cleanA || !cleanB) {
+      el.innerHTML = '<div class="compare-error card" style="text-align:center; padding:var(--space-6);">Please enter two repository names or URLs to compare.</div>';
+      return;
+    }
+
+    const parsedA = parseRepoInput(cleanA);
+    const parsedB = parseRepoInput(cleanB);
 
     if (!parsedA.isValid) {
-      el.innerHTML = `<div class="compare-error">Invalid first repository: ${parsedA.error}</div>`;
+      el.innerHTML = `<div class="compare-error card" style="text-align:center; padding:var(--space-6);">Invalid first repository: ${parsedA.error}</div>`;
       return;
     }
     if (!parsedB.isValid) {
-      el.innerHTML = `<div class="compare-error">Invalid second repository: ${parsedB.error}</div>`;
+      el.innerHTML = `<div class="compare-error card" style="text-align:center; padding:var(--space-6);">Invalid second repository: ${parsedB.error}</div>`;
+      return;
+    }
+    if (parsedA.fullName.toLowerCase() === parsedB.fullName.toLowerCase()) {
+      el.innerHTML = '<div class="compare-error card" style="text-align:center; padding:var(--space-6);">Please choose two different repositories to compare.</div>';
       return;
     }
 

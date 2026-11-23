@@ -75,22 +75,23 @@ export const Exporter = {
   },
 
   /**
-   * Generates a clean Markdown summary for the repository and copies it to clipboard
+   * Generates a clean Markdown report string for any repository
    */
-  async copyMarkdownReport(repo, stats = {}, languages = {}, contributors = [], stack = []) {
-    const langs = Object.entries(languages)
+  generateMarkdownSummary(repo = {}, stats = {}, languages = {}, contributors = [], stack = [], appUrl = '') {
+    const langs = Object.entries(languages || {})
       .slice(0, 5)
       .map(([name, bytes]) => `${name} (${formatBytes(bytes)})`)
       .join(', ') || 'N/A';
 
-    const topContribs = contributors.slice(0, 3)
-      .map((c, i) => `${i + 1}. [${c.login}](${c.html_url}) (${c.contributions.toLocaleString()} commits)`)
+    const topContribs = (contributors || []).slice(0, 3)
+      .map((c, i) => `${i + 1}. [${c.login}](${c.html_url}) (${(c.contributions || 0).toLocaleString()} commits)`)
       .join('\n');
 
-    const stackItems = stack.map(s => s.name).join(', ') || 'Standard';
+    const stackItems = (stack || []).map(s => s.name).join(', ') || 'Standard';
+    const origin = appUrl || (typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}?repo=${encodeURIComponent(repo.full_name || '')}` : `https://kanishksigar.me/repopulse/?repo=${encodeURIComponent(repo.full_name || '')}`);
 
-    const markdown = [
-      `# RepoPulse: [${repo.full_name}](${repo.html_url})`,
+    return [
+      `# RepoPulse: [${repo.full_name || repo.name || 'Repository'}](${repo.html_url || '#'})`,
       ``,
       `> ${repo.description || 'No description provided.'}`,
       ``,
@@ -116,37 +117,36 @@ export const Exporter = {
       topContribs || 'N/A',
       ``,
       `---`,
-      `*Generated with [RepoPulse](${window.location.origin}${window.location.pathname}?repo=${encodeURIComponent(repo.full_name)})*`
+      `*Generated with [RepoPulse](${origin})*`
     ].join('\n');
+  },
+
+  /**
+   * Generates a clean Markdown summary for the repository and copies it to clipboard
+   */
+  async copyMarkdownReport(repo, stats = {}, languages = {}, contributors = [], stack = []) {
+    const markdown = this.generateMarkdownSummary(repo, stats, languages, contributors, stack);
 
     try {
-      await navigator.clipboard.writeText(markdown);
-      return true;
-    } catch (e) {
-      console.warn('Clipboard write failed:', e);
-      return false;
-    }
-  }
-      ``,
-      `### 👥 Top Contributors`,
-      topContribs || 'N/A',
-      ``,
-      `---`,
-      `*Generated with [RepoPulse](https://github.com/KanishkSigar/repopulse) — GitHub Repository Intelligence*`
-    ].join('\n');
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(markdown);
+        return true;
+      }
+    } catch (_) {}
 
-    try {
-      await navigator.clipboard.writeText(markdown);
-      return true;
-    } catch (err) {
-      console.warn('Clipboard write failed, falling back:', err);
-      const ta = document.createElement('textarea');
-      ta.value = markdown;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      return true;
+    if (typeof document !== 'undefined') {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = markdown;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        return true;
+      } catch (_) {}
     }
+    return false;
   }
 };

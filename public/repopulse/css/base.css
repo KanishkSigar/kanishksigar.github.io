@@ -66,8 +66,9 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
 }
 
-code, pre, kbd {
+code, pre, kbd, .vital-item__value, .cval, .contributor-commits, .contributor-share-pct, .pill-value {
   font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1;
 }
 
 [hidden] {
@@ -98,4 +99,4 @@ button {
 
 :root { accent-color: var(--accent); }
 img { display: block; max-width: 100%; }
-:focus-visible { outline: 1px solid var(--accent); outline-offset: 1px; border-radius: 4px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }

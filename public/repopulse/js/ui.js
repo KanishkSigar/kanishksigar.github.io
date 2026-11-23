@@ -39,7 +39,7 @@ export const UI = {
     if (exportBtn) exportBtn.hidden = true;
   },
 
-  showLoading(repoName = 'repository') {
+  showLoading() {
     this.showDashboard();
     const els = this.elements;
     if (!els.mainContent) return;
@@ -47,42 +47,36 @@ export const UI = {
     els.mainContent.innerHTML = `
       <div class="repo-loading">
         <div class="repo-header card">
-          <div style="display:flex; gap:14px; align-items:center;">
-            <div class="skeleton-pulse" style="width:40px; height:40px; border-radius:6px;"></div>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="skeleton-pulse" style="width:36px; height:36px; border-radius:6px; flex-shrink:0;"></div>
             <div style="flex:1;">
-              <div class="skeleton-pulse" style="width:200px; height:18px; margin-bottom:8px;"></div>
-              <div class="skeleton-pulse" style="width:340px; height:12px;"></div>
+              <div class="skeleton-pulse" style="width:180px; height:16px; margin-bottom:8px;"></div>
+              <div class="skeleton-pulse" style="width:320px; height:12px;"></div>
             </div>
           </div>
         </div>
 
         <div class="vitals-strip" style="margin-top:var(--space-4);">
           ${Array(7).fill(`
-            <div class="vital-item" style="padding:14px 16px;">
-              <div class="skeleton-pulse" style="width:60px; height:20px; margin-bottom:6px;"></div>
-              <div class="skeleton-pulse" style="width:40px; height:10px;"></div>
+            <div class="vital-item">
+              <div class="skeleton-pulse" style="width:48px; height:18px; margin:0 auto 4px;"></div>
+              <div class="skeleton-pulse" style="width:32px; height:10px; margin:0 auto;"></div>
             </div>
           `).join('')}
         </div>
 
         <div class="analytics-bento-grid">
-          <div class="card bento-card" style="height:320px;">
+          <div class="card bento-card" style="height:300px;">
             <div class="skeleton-pulse" style="width:120px; height:16px; margin-bottom:16px;"></div>
-            <div class="skeleton-pulse" style="width:100%; height:230px;"></div>
+            <div class="skeleton-pulse" style="width:100%; height:210px;"></div>
           </div>
-          <div class="card bento-card" style="height:320px;">
+          <div class="card bento-card" style="height:300px;">
             <div class="skeleton-pulse" style="width:140px; height:16px; margin-bottom:16px;"></div>
-            <div class="skeleton-pulse" style="width:100%; height:230px;"></div>
+            <div class="skeleton-pulse" style="width:100%; height:210px;"></div>
           </div>
-        </div>
-
-        <div class="card bento-card" style="height:260px; margin-top:var(--space-4);">
-          <div class="skeleton-pulse" style="width:180px; height:16px; margin-bottom:16px;"></div>
-          <div class="skeleton-pulse" style="width:100%; height:180px;"></div>
         </div>
       </div>
     `;
-    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
   },
 
   showError(message, isRateLimit = false) {
@@ -90,28 +84,25 @@ export const UI = {
     const els = this.elements;
     if (!els.mainContent) return;
 
+    const safeMessage = this.escapeHtml(message);
+    const title = isRateLimit ? 'API Rate Limit Reached' : 'Unable to Analyze Repository';
+
     els.mainContent.innerHTML = `
-      <div class="card error-card" style="padding:var(--space-8); text-align:center; max-width:540px; margin:40px auto;">
-        <h2 style="font-size:1.15rem; margin-bottom:8px; color:var(--text-primary);">
-          ${isRateLimit ? 'API Rate Limit Reached' : 'Unable to Analyze Repository'}
-        </h2>
-        <p style="color:var(--text-secondary); font-size:0.85rem; line-height:1.5; margin-bottom:20px;">
-          ${message}
-        </p>
+      <div class="card error-card" style="padding:var(--space-8); text-align:center; max-width:520px; margin:48px auto;">
+        <h2 style="font-size:1.1rem; font-weight:600; margin-bottom:8px; color:var(--text-primary);">${title}</h2>
+        <p style="color:var(--text-secondary); font-size:0.85rem; line-height:1.5; margin-bottom:20px;">${safeMessage}</p>
         <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="location.reload()">
-            Retry
-          </button>
-          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('pat-toggle').click()">
-            Token
-          </button>
-          <a href="." class="btn btn-ghost btn-sm">
-            Search
-          </a>
+          <button class="btn btn-primary btn-sm" id="error-retry-btn">Retry</button>
+          <button class="btn btn-secondary btn-sm" id="error-token-btn">Configure Token</button>
+          <a href="." class="btn btn-ghost btn-sm">Return Home</a>
         </div>
       </div>
     `;
-    if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
+
+    els.mainContent.querySelector('#error-retry-btn')?.addEventListener('click', () => location.reload());
+    els.mainContent.querySelector('#error-token-btn')?.addEventListener('click', () => {
+      document.getElementById('pat-toggle')?.click();
+    });
   },
 
   /**

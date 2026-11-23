@@ -18,6 +18,24 @@ function formatApiError(response, rateLimit) {
   return new Error(`GitHub API error (${status}): ${response.statusText || 'Request failed'}`);
 }
 
+/**
+ * Extracts rate limit details from headers safely
+ */
+export function parseRateLimitHeaders(headers, fallback = { limit: 60, remaining: 60, resetTime: null }) {
+  if (!headers) return fallback;
+  const getHeader = (key) => typeof headers.get === 'function' ? headers.get(key) : headers[key];
+
+  const limit = getHeader('x-ratelimit-limit');
+  const remaining = getHeader('x-ratelimit-remaining');
+  const reset = getHeader('x-ratelimit-reset');
+
+  return {
+    limit: limit != null && !isNaN(Number(limit)) ? Number(limit) : fallback.limit,
+    remaining: remaining != null && !isNaN(Number(remaining)) ? Number(remaining) : fallback.remaining,
+    resetTime: reset != null && !isNaN(Number(reset)) ? new Date(Number(reset) * 1000) : fallback.resetTime
+  };
+}
+
 export const API = {
   REST_BASE: 'https://api.github.com',
   GRAPHQL_BASE: 'https://api.github.com/graphql',
@@ -27,6 +45,29 @@ export const API = {
     limit: 60,
     remaining: 60,
     resetTime: null
+  },
+
+  _activeController: null,
+
+  /**
+   * Aborts any pending in-flight network requests
+   */
+  abortPending() {
+    if (this._activeController) {
+      try {
+        this._activeController.abort();
+      } catch (_) {}
+      this._activeController = null;
+    }
+  },
+
+  /**
+   * Renews the active AbortController for fresh repository search
+   */
+  renewController() {
+    this.abortPending();
+    this._activeController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    return this._activeController?.signal;
   },
 
   /**
@@ -57,13 +98,7 @@ export const API = {
    */
   updateRateLimits(response) {
     if (!response?.headers) return;
-    const limit = response.headers.get('x-ratelimit-limit');
-    const remaining = response.headers.get('x-ratelimit-remaining');
-    const reset = response.headers.get('x-ratelimit-reset');
-
-    if (limit) this.rateLimit.limit = Number(limit);
-    if (remaining) this.rateLimit.remaining = Number(remaining);
-    if (reset) this.rateLimit.resetTime = new Date(Number(reset) * 1000);
+    this.rateLimit = parseRateLimitHeaders(response.headers, this.rateLimit);
   },
 
   /**
@@ -76,7 +111,7 @@ export const API = {
   /**
    * Core REST fetch with caching, backoff retries, and rate limit error handling
    */
-  async fetchRest(endpoint, params = {}, ttl = Cache.DEFAULT_TTL, retries = 2) {
+  async fetchRest(endpoint, params = {}, ttl = Cache.DEFAULT_TTL, retries = 2, signal = null) {
     const cacheKey = Cache.getKey(endpoint, params);
     const cached = Cache.get(cacheKey);
     if (cached) return cached;
@@ -84,14 +119,18 @@ export const API = {
     const qs = new URLSearchParams(params).toString();
     const ghPath = endpoint + (qs ? `?${qs}` : '');
     const url = `${this.REST_BASE}${ghPath}`;
+    const activeSignal = signal || this._activeController?.signal;
 
     let response;
     try {
-      response = await fetch(url, { headers: this.getHeaders() });
+      response = await fetch(url, { headers: this.getHeaders(), signal: activeSignal });
     } catch (networkErr) {
+      if (networkErr.name === 'AbortError') {
+        throw networkErr;
+      }
       if (retries > 0) {
         await new Promise(r => setTimeout(r, 600));
-        return this.fetchRest(endpoint, params, ttl, retries - 1);
+        return this.fetchRest(endpoint, params, ttl, retries - 1, signal);
       }
       throw new Error('Network error connecting to GitHub. Please check your internet connection.');
     }

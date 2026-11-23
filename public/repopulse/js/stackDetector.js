@@ -27,6 +27,8 @@ const ECOSYSTEM_RULES = [
   // Backend Frameworks
   { name: 'Node.js', category: 'Runtime', icon: 'server', match: ['nodejs', 'node', 'express', 'nestjs', 'fastify'] },
   { name: 'Express', category: 'Backend', icon: 'server', match: ['express', 'expressjs'] },
+  { name: 'Hono', category: 'Backend', icon: 'zap', match: ['hono', 'honojs'] },
+  { name: 'Elysia', category: 'Backend', icon: 'zap', match: ['elysia', 'elysiajs'] },
   { name: 'NestJS', category: 'Backend', icon: 'box', match: ['nestjs'] },
   { name: 'FastAPI', category: 'Backend', icon: 'zap', match: ['fastapi'] },
   { name: 'Django', category: 'Backend', icon: 'server', match: ['django'] },
@@ -38,12 +40,16 @@ const ECOSYSTEM_RULES = [
 
   // Tooling & Build
   { name: 'Vite', category: 'Build Tool', icon: 'zap', match: ['vite', 'vitejs'] },
+  { name: 'Biome', category: 'Tooling', icon: 'check-circle-2', match: ['biome', 'biomejs'] },
+  { name: 'Turbopack', category: 'Build Tool', icon: 'zap', match: ['turbopack'] },
   { name: 'Webpack', category: 'Build Tool', icon: 'package', match: ['webpack'] },
   { name: 'Turborepo', category: 'Monorepo', icon: 'layers', match: ['turborepo', 'turbo'] },
   { name: 'Cargo', category: 'Package Manager', icon: 'box', match: ['cargo', 'crates'] },
   { name: 'Bun', category: 'Runtime', icon: 'coffee', match: ['bun', 'bunjs'] },
   { name: 'Deno', category: 'Runtime', icon: 'shield', match: ['deno', 'denojs'] },
   { name: 'pnpm', category: 'Package Manager', icon: 'package', match: ['pnpm'] },
+  { name: 'TanStack', category: 'State / Query', icon: 'layers', match: ['tanstack', 'react-query', 'tanstack-query'] },
+  { name: 'Zod', category: 'Validation', icon: 'shield', match: ['zod'] },
 
   // DevOps & Cloud
   { name: 'Docker', category: 'DevOps', icon: 'container', match: ['docker', 'dockerfile', 'containers'] },
@@ -83,29 +89,22 @@ export function detectTechStack(repo, languages = {}) {
   const langKeys = Object.keys(languages || {}).map(l => l.toLowerCase());
 
   // Check language-based baseline tech
-  if (langKeys.includes('typescript')) {
-    detected.push({ name: 'TypeScript', category: 'Language', icon: 'code-2' });
-    seen.add('typescript');
-  } else if (langKeys.includes('javascript')) {
-    detected.push({ name: 'JavaScript', category: 'Language', icon: 'code-2' });
-    seen.add('javascript');
-  }
+  const BASELINE_LANGS = [
+    { key: 'typescript', name: 'TypeScript', icon: 'code-2' },
+    { key: 'javascript', name: 'JavaScript', icon: 'code-2' },
+    { key: 'python', name: 'Python', icon: 'code-2' },
+    { key: 'rust', name: 'Rust', icon: 'cpu' },
+    { key: 'go', name: 'Go', icon: 'box' },
+    { key: 'c++', name: 'C / C++', icon: 'cpu', aliases: ['c'] }
+  ];
 
-  if (langKeys.includes('python')) {
-    detected.push({ name: 'Python', category: 'Language', icon: 'code-2' });
-    seen.add('python');
-  }
-  if (langKeys.includes('rust')) {
-    detected.push({ name: 'Rust', category: 'Language', icon: 'cpu' });
-    seen.add('rust');
-  }
-  if (langKeys.includes('go')) {
-    detected.push({ name: 'Go', category: 'Language', icon: 'box' });
-    seen.add('go');
-  }
-  if (langKeys.includes('c++') || langKeys.includes('c')) {
-    detected.push({ name: 'C / C++', category: 'Language', icon: 'cpu' });
-    seen.add('c/c++');
+  for (const lang of BASELINE_LANGS) {
+    if (lang.key === 'javascript' && seen.has('typescript')) continue;
+    const matched = langKeys.includes(lang.key) || (lang.aliases && lang.aliases.some(a => langKeys.includes(a)));
+    if (matched) {
+      detected.push({ name: lang.name, category: 'Language', icon: lang.icon });
+      seen.add(lang.key);
+    }
   }
 
   // Check ecosystem rules against topics and description
