@@ -1,6 +1,25 @@
 ---
 import Mark from './Mark.astro';
 import { FAVICON_TECH, TEAL } from '../consts';
+const projects = [
+  { name: 'LexMap', type: 'Live app', image: 'lexmap', alt: 'LexMap with a legal reasoning graph and judgment input side by side', detail: 'I built a browser-based judgment explorer that links claims and conclusions to their source passages.', action: 'Explore a judgment', url: '/lexmap/' },
+  { name: 'CharterDesk', type: 'Local demo', image: 'charterdesk', alt: 'CharterDesk showing the changed terms between two fixture offers', detail: 'I built a shared workspace for maritime fixture offers, counters, and recap PDFs during my Integrated Maritime Exchange internship.', action: 'Run the Docker demo', url: 'https://github.com/KanishkSigar/CharterDesk#local-docker-demo' },
+  { name: 'SHADE', type: 'Research site', image: 'shade', alt: 'ROC curves for classifiers evaluated on held-out attack families', detail: 'I evaluated how intrusion detectors generalize to unseen attack families and published the results and reproduction steps.', action: 'Explore the results', url: '/shade/' },
+];
+const projectIndex = [
+  ['CaseHarbor', 'Live app', 'Role-based legal case management', 'https://caseharbor.onrender.com/'],
+  ['LiveLy', 'Download', 'A typed language and bytecode VM written in C++', 'https://github.com/KanishkSigar/Lively/releases/latest'],
+  ['ArgonVault', 'Browser demo', 'Client-side file encryption and decryption', '/argonvault/'],
+  ['AuraPulse', 'Live app', 'Apple Health imports and training trends', '/aurapulse/'],
+  ['GitPulse', 'Live app', 'GitHub profile reports and comparison', '/gitpulse/'],
+  ['RepoPulse', 'Live app', 'Repository activity and maintainer metrics', '/repopulse/'],
+  ['SHADE-IDS', 'Source', 'Streamlit dashboard and recorded-flow replay', 'https://github.com/KanishkSigar/shade-ids'],
+  ['Liberty Drive', 'Source', 'Browser driving game built with Three.js', 'https://github.com/KanishkSigar/liberty-drive'],
+  ['Arc Track', 'Source', 'Daily habit tracker and journal', 'https://github.com/KanishkSigar/arc-track'],
+  ['PagePilot', 'Source', 'Browser extension for reading and video controls', 'https://github.com/KanishkSigar/pagepilot'],
+  ['ThreatLens', 'Source', 'SwiftUI phishing detection client and API', 'https://github.com/KanishkSigar/threatlens'],
+  ['PowerGuard IoT', 'Source', 'Energy monitoring and anomaly detection', 'https://github.com/KanishkSigar/powerguard-iot'],
+];
 ---
 
 <!DOCTYPE html>
@@ -181,279 +200,35 @@ import { FAVICON_TECH, TEAL } from '../consts';
   </section>
 
   <!-- ===== WORKS ===== -->
-  <section id="works" class="works-section">
+  <section id="works" class="works-section" aria-labelledby="works-title">
     <div class="section-header-row">
-      <div>
-        <div class="section-tag">Selected Works</div>
-        <h2 class="section-heading">Things I've<br/>Been Building</h2>
+      <h2 class="section-heading" id="works-title">Selected work</h2>
+      <a class="btn-outline" href="#project-index">Browse all projects ↓</a>
+    </div>
+    <div class="case-study-list">
+      {projects.map((project) => (
+        <article class="case-study" data-project={project.image}>
+          <div class="case-study-copy">
+            <p class="project-kind">{project.type}</p>
+            <h3>{project.name}</h3>
+            <p>{project.detail}</p>
+            <a class="case-study-action" href={project.url}>{project.action} <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="case-study-image">
+            <img src={`/projects/${project.image}.webp`} alt={project.alt} width="1200" height="750" loading="lazy" decoding="async" />
+          </div>
+        </article>
+      ))}
+    </div>
+    <div class="project-index" id="project-index">
+      <div class="section-header-row">
+        <h3>Project index</h3>
+        <a href="https://github.com/KanishkSigar?tab=repositories">All GitHub repositories ↗</a>
       </div>
-      <a href="https://github.com/KanishkSigar?tab=repositories" target="_blank" rel="noopener" class="btn-outline">All Projects →</a>
-    </div>
-    <div class="works-grid">
-
-      <article class="project-card project-card--light" id="project-1">
-        <div class="project-card-inner">
-          <div class="project-meta">
-            <span class="project-num project-num--dark">01</span>
-            <span class="project-tag project-tag--dark">PyTorch · SHAP · Explainable AI</span>
-          </div>
-          <div>
-            <h3 class="project-title project-title--dark">SHADE</h3>
-            <p class="project-desc project-desc--dark">An explainable hybrid intrusion detection system. Evaluates zero-day generalization via a leave-one-family-out protocol on UNSW-NB15 and CIC-IDS2017 using a label-free PyTorch autoencoder and supervised baselines, with SHAP attributions explaining every alert.</p>
-          </div>
-          <div class="project-visual shap-visual">
-            <div class="shap-mockup">
-              <div class="shap-header">
-                <span class="shap-title">SHAP Feature Attribution · Anomaly Alert</span>
-                <span class="shap-badge">Loss: 0.042 (High)</span>
-              </div>
-              <div class="shap-bars">
-                <div class="shap-row">
-                  <span class="shap-feat">sttl</span>
-                  <div class="shap-bar-track"><div class="shap-bar-fill" style="width:85%"></div></div>
-                  <span class="shap-val">+0.48</span>
-                </div>
-                <div class="shap-row">
-                  <span class="shap-feat">ct_dst_src_ltm</span>
-                  <div class="shap-bar-track"><div class="shap-bar-fill" style="width:68%"></div></div>
-                  <span class="shap-val">+0.36</span>
-                </div>
-                <div class="shap-row">
-                  <span class="shap-feat">sbytes</span>
-                  <div class="shap-bar-track"><div class="shap-bar-fill shap-bar-alt" style="width:52%"></div></div>
-                  <span class="shap-val">+0.22</span>
-                </div>
-                <div class="shap-row">
-                  <span class="shap-feat">dur</span>
-                  <div class="shap-bar-track"><div class="shap-bar-fill shap-bar-mint" style="width:34%"></div></div>
-                  <span class="shap-val">-0.14</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="project-footer">
-            <a href="https://kanishksigar.github.io/shade/" target="_blank" rel="noopener" class="project-link project-link--light">Research site →</a>
-            <a href="https://github.com/KanishkSigar/shade-ids" target="_blank" rel="noopener" class="project-link project-link--light">Dashboard source →</a>
-            <a href="https://github.com/KanishkSigar/shade" target="_blank" rel="noopener" class="project-link project-link--light">View on GitHub →</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card project-card--dark" id="project-2">
-        <div class="project-card-inner">
-          <div class="project-meta">
-            <span class="project-num">02</span>
-            <span class="project-tag">C++ · Compilers · Virtual Machine</span>
-          </div>
-          <div>
-            <h3 class="project-title">Lively</h3>
-            <p class="project-desc">A statically typed procedural language built from scratch — lexer, recursive-descent parser, three-address code (TAC) intermediate representation, bytecode compiler, and a stack-based virtual machine.</p>
-          </div>
-          <div class="project-visual lively-visual">
-            <div class="code-block">
-              <div class="code-line"><span class="kw">fn</span> <span class="fn">fib</span>(n: <span class="ty">int</span>) -&gt; <span class="ty">int</span> &#123;</div>
-              <div class="code-line">&nbsp;&nbsp;<span class="kw">if</span> n &lt; 2 &#123; <span class="kw">return</span> n; &#125;</div>
-              <div class="code-line">&nbsp;&nbsp;<span class="kw">return</span> <span class="fn">fib</span>(n-1) + <span class="fn">fib</span>(n-2);</div>
-              <div class="code-line">&#125;</div>
-              <div class="code-line"><span class="cm">// → TAC IR → bytecode generator → stack VM</span></div>
-            </div>
-          </div>
-          <div class="project-footer">
-            <a href="https://github.com/KanishkSigar/Lively/releases/latest" target="_blank" rel="noopener" class="project-link">Latest release →</a>
-            <a href="https://github.com/KanishkSigar/Lively" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card project-card--dark" id="project-3">
-        <div class="project-card-inner">
-          <div class="project-meta">
-            <span class="project-num">03</span>
-            <span class="project-tag">FastAPI · Next.js · AWS · Cryptography</span>
-          </div>
-          <div>
-            <h3 class="project-title">ArgonVault</h3>
-            <p class="project-desc">A zero-knowledge encrypted file vault. Argon2id derives keys in the browser; AES-256-GCM encrypts files before they leave; ciphertext goes to S3 via presigned URLs. The server cannot read your files, filenames, or password.</p>
-          </div>
-          <div class="project-visual code-visual">
-            <div class="terminal-mockup">
-              <div class="terminal-bar">
-                <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
-                <span class="terminal-title">argonvault - bash</span>
-              </div>
-              <div class="terminal-body">
-                <div class="term-line"><span class="term-prompt">$</span> argonvault auth derive</div>
-                <div class="term-line term-ok">→ argon2id(64MiB, 3, 1) ✓</div>
-                <div class="term-line"><span class="term-prompt">$</span> argonvault encrypt ./file.pdf</div>
-                <div class="term-line term-ok">→ AES-256-GCM ✓ PUT → s3://… 200</div>
-              </div>
-            </div>
-          </div>
-          <div class="project-footer">
-            <a href="https://kanishksigar.me/argonvault/" target="_blank" rel="noopener" class="project-link">Encryption demo →</a>
-            <a href="https://github.com/KanishkSigar/argonvault" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card project-card--light" id="project-4">
-        <div class="project-card-inner">
-          <div class="project-meta">
-            <span class="project-num project-num--dark">04</span>
-            <span class="project-tag project-tag--dark">React 18 · Vite · HTML5 Canvas · Apple Health</span>
-          </div>
-          <div>
-            <h3 class="project-title project-title--dark">AuraPulse</h3>
-            <p class="project-desc project-desc--dark">A privacy-first health and biometrics platform for Apple Watch users. Parses native Apple Health XML/JSON exports in the browser to compute clinical sports science telemetry — real-time cardiac waveforms, HRV spectral power, and circadian rhythm models.</p>
-          </div>
-          <div class="project-visual ecg-visual">
-            <div class="ecg-mockup">
-              <div class="ecg-header">
-                <span class="ecg-status"><span class="ecg-pulse-dot"></span> Telemetry Active</span>
-                <div class="ecg-badges">
-                  <span class="ecg-pill">HRV 68ms</span>
-                  <span class="ecg-pill ecg-pill--mint">Zone 2</span>
-                </div>
-              </div>
-              <svg class="ecg-line" viewBox="0 0 300 70" preserveAspectRatio="none">
-                <path d="M0,35 L40,35 L50,35 L55,20 L60,50 L65,10 L72,60 L78,35 L90,35 L120,35 L125,25 L130,45 L135,15 L142,58 L148,35 L160,35 L190,35 L195,22 L200,48 L205,12 L212,62 L218,35 L230,35 L260,35 L265,24 L270,46 L275,14 L282,59 L288,35 L300,35" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              <div class="ecg-footer">
-                <span class="ecg-stat"><strong>74</strong> BPM</span>
-                <span class="ecg-stat"><strong>98%</strong> SpO2</span>
-                <span class="ecg-stat"><strong>4.2</strong> SRI</span>
-              </div>
-            </div>
-          </div>
-          <div class="project-footer">
-            <a href="https://kanishksigar.me/aurapulse/" target="_blank" rel="noopener" class="project-link project-link--light">Open app →</a>
-            <a href="https://github.com/KanishkSigar/AuraPulse" target="_blank" rel="noopener" class="project-link project-link--light">View on GitHub →</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card project-card--light" id="project-5">
-        <div class="project-card-inner">
-          <div class="project-meta">
-            <span class="project-num project-num--dark">05</span>
-            <span class="project-tag project-tag--dark">TypeScript · React · LegalTech</span>
-          </div>
-          <div>
-            <h3 class="project-title project-title--dark">LexMap</h3>
-            <p class="project-desc project-desc--dark">Paste a court judgment or open a text-based PDF to explore claims, reasoning, and conclusions in your browser. Lex chat is optional.</p>
-          </div>
-          <div class="project-visual graph-visual">
-            <div class="graph-mockup">
-              <span class="node node-a">Facts</span>
-              <span class="node node-b">Issue</span>
-              <span class="node node-c">Rule</span>
-              <span class="node node-d">Holding</span>
-              <svg class="graph-lines" viewBox="0 0 200 120" preserveAspectRatio="none">
-                <line x1="30" y1="30" x2="100" y2="30" />
-                <line x1="100" y1="30" x2="100" y2="90" />
-                <line x1="100" y1="90" x2="170" y2="90" />
-                <line x1="30" y1="30" x2="170" y2="90" />
-              </svg>
-            </div>
-          </div>
-          <div class="project-footer">
-            <a href="https://kanishksigar.me/lexmap/" target="_blank" rel="noopener" class="project-link project-link--light">Open Explorer →</a>
-            <a href="https://github.com/KanishkSigar/lexmap" target="_blank" rel="noopener" class="project-link project-link--light">View on GitHub →</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="project-card project-card--dark" id="project-6">
-        <div class="project-card-inner">
-          <div class="project-meta">
-            <span class="project-num">06</span>
-            <span class="project-tag">PHP · MySQL · Maritime Tech</span>
-          </div>
-          <div>
-            <h3 class="project-title">CharterDesk</h3>
-            <p class="project-desc">A structured charter-party negotiation and document-generation tool for maritime fixture deals, built during my internship at Integrated Maritime Exchange. Parties negotiate ~38 fixture terms in versioned offers, lock agreed clauses, and export finished recap PDFs.</p>
-          </div>
-          <div class="project-visual chat-visual">
-            <div class="chat-mockup">
-              <div class="chat-header">
-                <span class="chat-avatar">⚓</span>
-                <div>
-                  <div class="chat-name">Fixture · MV Aurora</div>
-                  <div class="chat-status"><span class="chat-dot"></span> Negotiating</div>
-                </div>
-              </div>
-              <div class="chat-msg chat-msg--user">Owner: Freight USD 14.50/mt - firm offer</div>
-              <div class="chat-msg chat-msg--bot">Charterer: Counter 13.75/mt, laycan 12-18 Jun</div>
-              <div class="chat-input">Draft rider clause…</div>
-            </div>
-          </div>
-          <div class="project-footer">
-            <a href="https://github.com/KanishkSigar/CharterDesk" target="_blank" rel="noopener" class="project-link">View on GitHub →</a>
-          </div>
-        </div>
-      </article>
-
-    </div>
-
-    <div class="also-built">
-      <h3 class="also-heading">Also built &amp; explored</h3>
-      <ul class="also-list">
-        <li class="also-item">
-          <a href="https://kanishksigar.me/gitpulse" target="_blank" rel="noopener">
-            <span class="also-name">gitpulse</span>
-            <span class="also-desc">Client-side GitHub analytics dashboard with contribution heatmap, language stats &amp; C++ caching proxy.</span>
-            <span class="also-arrow">→</span>
-          </a>
-        </li>
-        <li class="also-item">
-          <a href="https://kanishksigar.me/repopulse" target="_blank" rel="noopener">
-            <span class="also-name">repopulse</span>
-            <span class="also-desc">Repository intelligence visualizer analyzing commit velocity, tech stacks, and maintainer bus factor.</span>
-            <span class="also-arrow">→</span>
-          </a>
-        </li>
-        <li class="also-item">
-          <a href="https://caseharbor.onrender.com" target="_blank" rel="noopener">
-            <span class="also-name">caseharbor</span>
-            <span class="also-desc">Role-based legal case management system with query-scoped permissions and PostgreSQL backend.</span>
-            <span class="also-arrow">→</span>
-          </a>
-        </li>
-        <li class="also-item">
-          <a href="https://github.com/KanishkSigar/liberty-drive" target="_blank" rel="noopener">
-            <span class="also-name">liberty-drive-3d</span>
-            <span class="also-desc">GTA III-inspired 3D driving engine built with Three.js, custom vehicle shaders, day/night cycles, and physics.</span>
-            <span class="also-arrow">→</span>
-          </a>
-        </li>
-        <li class="also-item">
-          <a href="https://github.com/KanishkSigar/arc-track" target="_blank" rel="noopener">
-            <span class="also-name">arc-track</span>
-            <span class="also-desc">Minimal daily habit tracker &amp; reflection journal with SHA-256 PIN privacy and GitHub Gist cloud synchronization.</span>
-            <span class="also-arrow">→</span>
-          </a>
-        </li>
-        <li class="also-item">
-          <a href="https://github.com/KanishkSigar/pagepilot" target="_blank" rel="noopener">
-            <span class="also-name">pagepilot</span>
-            <span class="also-desc">Chrome extension that auto-scrolls, speeds up videos, and clicks through Next/Continue to put long courses on autopilot.</span>
-            <span class="also-arrow">→</span>
-          </a>
-        </li>
-        <li class="also-item">
-          <a href="https://github.com/KanishkSigar/threatlens" target="_blank" rel="noopener">
-            <span class="also-name">threatlens</span>
-            <span class="also-desc">AI-powered phishing detection — SwiftUI iOS application with a Python FastAPI inference backend.</span>
-            <span class="also-arrow">→</span>
-          </a>
-        </li>
-        <li class="also-item">
-          <a href="https://github.com/KanishkSigar/powerguard-iot" target="_blank" rel="noopener">
-            <span class="also-name">powerguard-iot</span>
-            <span class="also-desc">Smart energy meter IoT project with real-time telemetry and edge anomaly detection.</span>
-            <span class="also-arrow">→</span>
-          </a>
-        </li>
+      <ul>
+        {projectIndex.map(([name, type, summary, link]) => (
+          <li><a href={link}><strong>{name}</strong><span>{summary}</span><span class="project-kind">{type} <span aria-hidden="true">↗</span></span></a></li>
+        ))}
       </ul>
     </div>
   </section>
