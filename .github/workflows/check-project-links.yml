@@ -1,0 +1,34 @@
+name: Check public project links
+
+on:
+  schedule:
+    - cron: '30 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check portfolio and project responses
+        shell: bash
+        run: |
+          failed=0
+          for url in \
+            https://kanishksigar.me/tech/ \
+            https://kanishksigar.me/profile.pdf \
+            https://kanishksigar.me/shade/ \
+            https://kanishksigar.me/argonvault/ \
+            https://kanishksigar.me/aurapulse/ \
+            https://kanishksigar.me/lexmap/ \
+            https://kanishksigar.me/gitpulse/ \
+            https://kanishksigar.me/repopulse/ \
+            https://caseharbor.onrender.com/; do
+            if ! curl --fail --silent --show-error --location --retry 2 --max-time 65 --output /dev/null "$url"; then
+              echo "::error::Failed public URL $url"
+              failed=1
+            fi
+          done
+          exit "$failed"
