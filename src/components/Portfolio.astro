@@ -23,10 +23,10 @@ const projectIndex = [
 ];
 const experience = [
   { id: 'ime', title: 'Full Stack Developer Intern', org: 'Integrated Maritime Exchange', date: 'Oct–Nov 2025', detail: 'Developed backend and API features for internal tools, including CharterDesk’s maritime negotiation workflow.' },
-  { id: 'tbi', title: 'Operations Intern', org: 'TBI GEU', date: 'Jul 2025–Present', detail: 'Coordinate innovation and entrepreneurship programs, lead student teams, and manage event logistics.' },
+  { id: 'tbi', title: 'Operations Intern', org: 'TBI GEU', date: 'Jul 2025–Sep 2026', detail: 'Coordinated innovation and entrepreneurship programs, led student teams, and managed event logistics.' },
 ];
 const community = [
-  { title: 'Events Lead', org: 'IEEE Student Branch, GEHU', date: 'Aug 2025–Present', detail: 'Plan technical workshops and campus events and coordinate volunteers.' },
+  { title: 'Events Lead', org: 'IEEE Student Branch, GEHU', date: 'Aug 2025–Oct 2026', detail: 'Planned technical workshops and campus events and coordinated volunteers.' },
   { title: 'Content Cell Head', org: 'NSS GEHU', date: 'Jul 2025–May 2026', detail: 'Led documentation and communications for campus drives and outreach.' },
 ];
 const credentials = [
@@ -58,7 +58,7 @@ const getCategory = (type: string) => type === 'Source' ? 'source' : type === 'D
   <meta name="description" content="Portfolio of Kanishk Sigar - Computer Science student and full-stack developer building useful software in Dehradun, India." />
   <link rel="canonical" href="https://kanishksigar.me/tech" />
   <meta name="author" content="Kanishk Sigar" />
-  <meta name="theme-color" content="#111614" />
+  <meta name="theme-color" content="#fafbf6" />
 
   <link rel="icon" href={FAVICON_TECH} />
   <link rel="apple-touch-icon" href={FAVICON_TECH} />
@@ -67,7 +67,7 @@ const getCategory = (type: string) => type === 'Source' ? 'source' : type === 'D
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Kanishk Sigar" />
   <meta property="og:title" content="Kanishk Sigar - Student Developer" />
-  <meta property="og:description" content="CS undergrad and full-stack developer building full-stack apps, AI tools, and the occasional compiler. Based in Dehradun, India." />
+  <meta property="og:description" content="Computer science student and full-stack developer based in Dehradun, India." />
   <meta property="og:url" content="https://kanishksigar.me/tech" />
   <meta property="og:image" content="https://kanishksigar.me/og-image.png" />
   <meta property="og:image:width" content="1200" />
@@ -76,7 +76,7 @@ const getCategory = (type: string) => type === 'Source' ? 'source' : type === 'D
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Kanishk Sigar - Student Developer" />
-  <meta name="twitter:description" content="CS undergrad and full-stack developer building full-stack apps, AI tools, and the occasional compiler. Based in Dehradun, India." />
+  <meta name="twitter:description" content="Computer science student and full-stack developer based in Dehradun, India." />
   <meta name="twitter:image" content="https://kanishksigar.me/og-image.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -102,7 +102,7 @@ const getCategory = (type: string) => type === 'Source' ? 'source' : type === 'D
       <div class="hero-copy">
         <p class="eyebrow location">Dehradun, India</p>
         <h1 id="name">Kanishk<br />Sigar<span>.</span></h1>
-        <p class="hero-summary">Computer science student building web applications, developer tools, and a bytecode compiler.</p>
+        <p class="hero-summary">Computer science student building web applications and tools for developers.</p>
         <div class="hero-actions">
           <a class="button button-accent" href="#works">Explore my work <span aria-hidden="true">↓</span></a>
           <a class="quiet-link" href="https://github.com/KanishkSigar">GitHub <span aria-hidden="true">↗</span></a>
@@ -120,8 +120,8 @@ const getCategory = (type: string) => type === 'Source' ? 'source' : type === 'D
         <a class="quiet-link" href="#project-index">Project index <span aria-hidden="true">↓</span></a>
       </div>
       <div class="project-grid">
-        {projects.map((project, index) => (
-          <article class:list={['project', { 'project-featured': index === 0 }]}>
+        {projects.map(project => (
+          <article class="project">
             <div class="project-media">
               <img src={`/projects/${project.image}.webp`} alt={project.alt} width="1200" height="750" loading="lazy" decoding="async" />
             </div>
@@ -160,7 +160,7 @@ const getCategory = (type: string) => type === 'Source' ? 'source' : type === 'D
       <section class="shell background" id="about" aria-labelledby="about-title">
         <div>
           <h2 id="about-title">About</h2>
-          <p>I’m finishing a B.Tech in Computer Science at Graphic Era Hill University, Dehradun (2023–2027). My recent work spans web software, compilers, and security research.</p>
+          <p>I’m finishing a B.Tech in Computer Science at Graphic Era Hill University, Dehradun (2023–2027). My recent work spans web software and security research.</p>
           <a class="quiet-link" href="/life/">Writing and life <span aria-hidden="true">↗</span></a>
         </div>
         <dl class="toolkit">
