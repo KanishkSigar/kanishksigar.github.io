@@ -1,61 +1,41 @@
 ---
 import Life from '../../layouts/Life.astro';
 import { getCollection } from 'astro:content';
-import { unread } from '../../data/shelf';
 
 const latest = (await getCollection('writing', ({ data }) => !data.draft))
   .sort((a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0))
   .slice(0, 5);
-const reading = unread.filter(book => book.reading);
 ---
 
 <Life title="Kanishk Sigar | Life" description="Notes, essays, marginalia, and a bookshelf.">
-  <section class="life-intro">
-    <div>
-      <h1>Writing &amp; books.</h1>
-      <p class="life-deck">notes, essays, and what books leave behind.</p>
-      <p class="life-intro-copy">
-        mostly the same few writers. i don't have an unusual library, i just spend
-        a long time in it. some of it has nothing to do with books at all.
-      </p>
-      <div class="life-actions">
-        <a class="life-button" href="/life/writing/">Browse writing</a>
-        <a class="life-text-link" href="/life/shelf/">Explore the shelf</a>
-      </div>
-    </div>
-    {reading.length > 0 && (
-      <aside class="reading-card" aria-labelledby="reading-now">
-        <h2 id="reading-now" class="life-label">Reading now</h2>
-        <ul>
-          {reading.map(book => (
-            <li>
-              <cite>{book.title}</cite>
-              <p class="reading-author">{book.author}</p>
-              {book.note && <p class="reading-note">{book.note}</p>}
-            </li>
-          ))}
-        </ul>
-        <a class="life-text-link" href="/life/shelf/#reading">On the shelf</a>
-      </aside>
-    )}
-  </section>
+  <header class="life-intro">
+    <h1>Writing &amp; books.</h1>
+    <p class="life-deck">notes, essays, and what books leave behind.</p>
+  </header>
 
   {latest.length > 0 && (
     <section class="life-section" aria-labelledby="recent-title">
-      <div class="life-section-head">
-        <h2 id="recent-title">Recent writing</h2>
-        <a class="life-text-link" href="/life/writing/">Full archive</a>
-      </div>
+      <h2 id="recent-title">Recent writing</h2>
       <ul class="life-entries">
         {latest.map(piece => (
           <li>
             <a href={`/life/writing/${piece.id}/`}>
-              <span><strong>{piece.data.title}</strong>{piece.data.excerpt && <span class="entry-excerpt">{piece.data.excerpt}</span>}</span>
               <span class="life-label entry-kind">{piece.data.form}</span>
+              <strong>{piece.data.title}</strong>
+              {piece.data.excerpt && <span class="entry-excerpt">{piece.data.excerpt}</span>}
             </a>
           </li>
         ))}
       </ul>
+      <a class="life-text-link journal-archive" href="/life/writing/">Full writing archive</a>
     </section>
   )}
+  <section class="journal-shelf" aria-labelledby="journal-shelf-title">
+    <h2 id="journal-shelf-title">The shelf</h2>
+    <p>
+      mostly the same few writers. i don't have an unusual library, i just spend
+      a long time in it. some of it has nothing to do with books at all.
+    </p>
+    <a class="life-text-link" href="/life/shelf/">Browse the shelf</a>
+  </section>
 </Life>

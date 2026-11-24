@@ -6,7 +6,6 @@
   --rule: #d8cfc0;
   --accent: #784236;
   --accent-wash: #f0e5da;
-  --shelf-wash: #e8eadc;
   --sans: system-ui, sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -31,7 +30,7 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 
 .life-sr, .life-skip:not(:focus) { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; white-space: nowrap; }
 .life-skip:focus { position: fixed; z-index: 1; top: 8px; left: 8px; padding: 8px 12px; background: var(--paper); }
-.life-shell { width: min(1040px, calc(100% - 72px)); margin-inline: auto; }
+.life-shell { width: min(46rem, calc(100% - 72px)); margin-inline: auto; }
 .life-masthead, .life-footer {
   display: flex;
   flex-wrap: wrap;
@@ -39,7 +38,7 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
   justify-content: space-between;
   gap: 10px 24px;
 }
-.life-masthead { min-height: 74px; border-bottom: 1px solid var(--rule); }
+.life-masthead { flex-direction: column; justify-content: center; gap: 11px; padding-block: 20px; border-bottom: 1px solid var(--rule); }
 .life-signature { display: inline-flex; align-items: center; gap: 10px; font-size: 1.05rem; }
 .life-signature svg { color: var(--accent); }
 .life-masthead nav, .life-footer nav { display: flex; flex-wrap: wrap; gap: 9px clamp(12px, 3vw, 27px); }
@@ -49,26 +48,16 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 .life-footer { border-top: 1px solid var(--rule); padding-block: 18px 32px; color: var(--ink-soft); }
 .life-main { flex: 1; padding-block: clamp(36px, 7vw, 92px) clamp(52px, 8vw, 100px); }
 
-.life-intro { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); align-items: end; gap: clamp(24px, 5vw, 70px); }
-.life-intro h1 { max-width: 10ch; }
 .life-deck { margin: 17px 0 0; font-size: clamp(1.18rem, 2.6vw, 1.65rem); color: var(--accent); }
-.life-intro-copy { margin: 13px 0 0; max-width: 50ch; color: var(--ink-soft); }
-.life-actions, .shelf-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 21px; margin-top: 21px; }
-.life-button, .life-text-link { font: 650 .85rem/1.4 var(--sans); }
-.life-button { padding: 10px 14px; background: var(--accent-wash); color: #60382d; text-decoration: none; border: 1px solid #d8bcae; }
-.life-button:hover { background: #e9d5c8; }
+.shelf-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 21px; margin-top: 21px; }
+.life-text-link { font: 650 .85rem/1.4 var(--sans); }
 .life-text-link { color: var(--accent); }
 
-.reading-card { background: var(--shelf-wash); padding: clamp(19px, 3vw, 33px); border: 1px solid #d0d5bf; border-left: 4px solid #787f59; }
 .life-label { font: 650 .72rem/1.3 var(--sans); letter-spacing: .09em; text-transform: uppercase; color: var(--accent); }
-.reading-card ul { list-style: none; margin: 17px 0; padding: 0; }
-.reading-card li + li { margin-top: 16px; }
-.reading-card cite { display: block; font-size: clamp(1.8rem, 3.5vw, 2.5rem); line-height: 1.1; }
 .reading-author { margin: 4px 0 0; font: 550 .84rem/1.45 var(--sans); color: var(--ink-soft); }
 .reading-note { margin: 12px 0 0; font-size: 1.02rem; font-style: italic; color: var(--ink-soft); }
 
 .life-section { margin-top: clamp(42px, 8vw, 91px); }
-.life-section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 9px 18px; margin-bottom: 18px; }
 .life-entries { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
 .life-entries li { border-bottom: 1px solid var(--rule); }
 .life-entries a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 16px; align-items: baseline; padding: 15px 7px; text-decoration: none; }
@@ -83,21 +72,27 @@ a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 
 .shelf-section + .shelf-section { margin-top: 44px; }
 .shelf-section h2 { margin-bottom: 13px; }
-.shelf-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; gap: 0 26px; }
-.shelf-grid li { border-top: 1px solid var(--rule); padding: 15px 0; }
-.shelf-grid h3 { font-size: 1.35rem; line-height: 1.17; }
-#reading .shelf-grid li { background: var(--shelf-wash); border: 1px solid #d0d5bf; padding: 18px; }
+.shelf-list { margin: 0; padding: 0; list-style: none; }
+.shelf-list li { border-top: 1px solid var(--rule); padding: 15px 0; }
+.shelf-list h3 { font-size: 1.35rem; line-height: 1.17; }
 .shelf-more { margin: 12px 0 0; font-size: .97rem; font-style: italic; color: var(--ink-soft); }
 
 .life-reading { max-width: 42rem; }
 .life-reading h1 { font-size: clamp(2.65rem, 7vw, 5rem); letter-spacing: -.055em; }
 @media (max-width: 680px) {
   .life-shell { width: calc(100% - 36px); }
-  .life-intro, .shelf-grid { grid-template-columns: minmax(0, 1fr); }
-  .life-intro h1 { max-width: none; }
-  .life-masthead { padding-block: 12px; }
+  .life-masthead { padding-block: 16px; }
 }
 @media (max-width: 400px) {
-  .life-masthead { align-items: flex-start; flex-direction: column; }
   .life-entries a { grid-template-columns: minmax(0, 1fr); gap: 5px; }
 }
+
+.life-intro { text-align: center; }
+.life-intro h1 { font-size: clamp(2.95rem, 8vw, 5.5rem); }
+.life-intro .life-deck { margin-top: 8px; }
+.life-section > h2 { margin-bottom: 13px; }
+.life-section .life-entries a { grid-template-columns: minmax(0, 1fr); gap: 5px; padding-block: 17px; }
+.life-section .entry-excerpt { margin-top: 1px; }
+.journal-archive { display: inline-block; margin-top: 14px; }
+.journal-shelf { margin-top: clamp(38px, 7vw, 68px); padding-top: 22px; border-top: 1px solid var(--rule); }
+.journal-shelf p { max-width: 55ch; margin: 10px 0 12px; color: var(--ink-soft); }

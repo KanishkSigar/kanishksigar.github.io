@@ -3,9 +3,8 @@ import Life from '../../layouts/Life.astro';
 import { read, unread, readMore, unreadMore } from '../../data/shelf';
 
 const groups = [
-  { id: 'reading', title: 'Reading now', books: unread.filter(book => book.reading) },
   { id: 'read', title: 'Read', books: read, more: readMore },
-  { id: 'unread', title: 'To read', books: unread.filter(book => !book.reading), more: unreadMore },
+  { id: 'unread', title: 'To read', books: unread, more: unreadMore },
 ].filter(group => group.books.length > 0);
 ---
 
@@ -21,7 +20,7 @@ const groups = [
   {groups.map(group => (
     <section class="shelf-section" id={group.id} aria-labelledby={`${group.id}-title`}>
       <h2 id={`${group.id}-title`}>{group.title}</h2>
-      <ul class="shelf-grid">
+      <ul class="shelf-list">
         {group.books.map(book => (
           <li>
             <h3>{book.title}</h3>
