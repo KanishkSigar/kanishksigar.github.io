@@ -1,105 +1,61 @@
 ---
 import Life from '../../layouts/Life.astro';
 import { getCollection } from 'astro:content';
+import { unread } from '../../data/shelf';
 
 const latest = (await getCollection('writing', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+  .sort((a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0))
+  .slice(0, 5);
+const reading = unread.filter(book => book.reading);
 ---
 
-<Life title="Kanishk Sigar Life" description="Writing, books, and the things that are not projects.">
-
-  <p>notes, essays, and what books leave behind.</p>
-
-  <p>
-    mostly the same few writers. i don't have an unusual library, i just spend
-    a long time in it. some of it has nothing to do with books at all.
-  </p>
-
-  <nav class="rooms">
-    <a href="/life/writing" class="room">
-      <span class="room-name">writing</span>
-      <span class="room-note">notes, essays, marginalia</span>
-    </a>
-    <a href="/life/shelf" class="room">
-      <span class="room-name">the shelf</span>
-      <span class="room-note">what i've read, and what i haven't</span>
-    </a>
-  </nav>
+<Life title="Kanishk Sigar | Life" description="Notes, essays, marginalia, and a bookshelf.">
+  <section class="life-intro">
+    <div>
+      <h1>Writing &amp; books.</h1>
+      <p class="life-deck">notes, essays, and what books leave behind.</p>
+      <p class="life-intro-copy">
+        mostly the same few writers. i don't have an unusual library, i just spend
+        a long time in it. some of it has nothing to do with books at all.
+      </p>
+      <div class="life-actions">
+        <a class="life-button" href="/life/writing/">Browse writing</a>
+        <a class="life-text-link" href="/life/shelf/">Explore the shelf</a>
+      </div>
+    </div>
+    {reading.length > 0 && (
+      <aside class="reading-card" aria-labelledby="reading-now">
+        <h2 id="reading-now" class="life-label">Reading now</h2>
+        <ul>
+          {reading.map(book => (
+            <li>
+              <cite>{book.title}</cite>
+              <p class="reading-author">{book.author}</p>
+              {book.note && <p class="reading-note">{book.note}</p>}
+            </li>
+          ))}
+        </ul>
+        <a class="life-text-link" href="/life/shelf/#reading">On the shelf</a>
+      </aside>
+    )}
+  </section>
 
   {latest.length > 0 && (
-    <div class="latest">
-      <span class="latest-label">latest</span>
-      <ul>
-        {latest.map((p) => (
-          <li><a href={`/life/writing/${p.id}`}>{p.data.title}</a></li>
+    <section class="life-section" aria-labelledby="recent-title">
+      <div class="life-section-head">
+        <h2 id="recent-title">Recent writing</h2>
+        <a class="life-text-link" href="/life/writing/">Full archive</a>
+      </div>
+      <ul class="life-entries">
+        {latest.map(piece => (
+          <li>
+            <a href={`/life/writing/${piece.id}/`}>
+              <span><strong>{piece.data.title}</strong>{piece.data.excerpt && <span class="entry-excerpt">{piece.data.excerpt}</span>}</span>
+              <span class="life-label entry-kind">{piece.data.form}</span>
+            </a>
+          </li>
         ))}
       </ul>
-    </div>
+    </section>
   )}
-
 </Life>
-
-<style>
-  .rooms {
-    margin-top: 52px;
-    padding-top: 32px;
-    border-top: 1px solid var(--rule);
-    display: flex;
-    flex-direction: column;
-  }
-
-  .room {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 20px;
-    padding: 18px 2px;
-    border-bottom: 1px solid var(--rule);
-    text-decoration: none;
-    color: var(--ink);
-    transition: padding-left .22s ease;
-  }
-  .room:first-child { border-top: none; }
-  .room:hover { padding-left: 10px; }
-
-  .room-name { font-size: 21px; }
-  .room:hover .room-name { color: var(--accent); }
-
-  .room-note {
-    font-size: 14px;
-    color: var(--ink-faint);
-    text-align: right;
-  }
-
-  .latest { margin-top: 46px; }
-
-  .latest-label {
-    font-size: 11.5px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-  }
-
-  .latest ul {
-    list-style: none;
-    margin: 14px 0 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .latest a {
-    font-size: 18px;
-    color: var(--ink);
-    text-decoration-color: var(--rule);
-    text-underline-offset: 3px;
-  }
-  .latest a:hover { text-decoration-color: var(--accent); }
-
-  @media (max-width: 560px) {
-    .room { flex-direction: column; align-items: flex-start; gap: 4px; }
-    .room-note { text-align: left; }
-  }
-</style>

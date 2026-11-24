@@ -1,113 +1,36 @@
 ---
 import Life from '../../layouts/Life.astro';
 import { read, unread, readMore, unreadMore } from '../../data/shelf';
+
+const groups = [
+  { id: 'reading', title: 'Reading now', books: unread.filter(book => book.reading) },
+  { id: 'read', title: 'Read', books: read, more: readMore },
+  { id: 'unread', title: 'To read', books: unread.filter(book => !book.reading), more: unreadMore },
+].filter(group => group.books.length > 0);
 ---
 
-<Life title="Kanishk Sigar Shelf" description="What I've read, and what I haven't.">
+<Life title="Kanishk Sigar | The Shelf" description="What I've read, and what I haven't.">
+  <header class="life-page-head">
+    <h1>The shelf.</h1>
+    <p class="life-deck">the list outgrows the shelf.</p>
+    <nav class="shelf-nav" aria-label="Shelf sections">
+      {groups.map(group => <a class="life-text-link" href={`#${group.id}`}>{group.title}</a>)}
+    </nav>
+  </header>
 
-  <p>the shelf.</p>
-
-  <p class="shelf-lead">the list outgrows the shelf.</p>
-
-  <section class="shelf">
-    <h2>read</h2>
-    <ul>
-      {read.map((b) => (
-        <li>
-          <span class="b-title">{b.title}</span>
-          <span class="b-author">{b.author}</span>
-          {b.note && <span class="b-note">{b.note}</span>}
-        </li>
-      ))}
-    </ul>
-    <p class="shelf-more">{readMore}</p>
-  </section>
-
-  <section class="shelf">
-    <h2>unread</h2>
-    {unread.length === 0 ? (
-      <p class="pending">still compiling. it only gets longer.</p>
-    ) : (
-      <ul>
-        {unread.map((b) => (
+  {groups.map(group => (
+    <section class="shelf-section" id={group.id} aria-labelledby={`${group.id}-title`}>
+      <h2 id={`${group.id}-title`}>{group.title}</h2>
+      <ul class="shelf-grid">
+        {group.books.map(book => (
           <li>
-            <span class="b-title">{b.title}{b.reading && <span class="b-status">reading now</span>}</span>
-            <span class="b-author">{b.author}</span>
-            {b.note && <span class="b-note">{b.note}</span>}
+            <h3>{book.title}</h3>
+            <p class="reading-author">{book.author}</p>
+            {book.note && <p class="reading-note">{book.note}</p>}
           </li>
         ))}
       </ul>
-    )}
-    {unread.length > 0 && <p class="shelf-more">{unreadMore}</p>}
-  </section>
-
-  <a href="/life" class="back">← life</a>
-
+      {group.more && <p class="shelf-more">{group.more}</p>}
+    </section>
+  ))}
 </Life>
-
-<style>
-  .shelf-lead { color: var(--ink-soft); margin-top: -0.8em; }
-
-  .shelf { margin-top: 44px; }
-
-  .shelf h2 {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    margin: 0 0 6px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .shelf ul { list-style: none; margin: 0; padding: 0; }
-
-  .shelf li {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 18px 0;
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .b-title { font-size: 20px; }
-
-  .b-status {
-    margin-left: 10px;
-    font-size: 11px;
-    font-style: italic;
-    letter-spacing: 0.04em;
-    color: var(--accent);
-    vertical-align: middle;
-  }
-  .b-author { font-size: 15px; color: var(--ink-soft); }
-  .b-note {
-    margin-top: 6px;
-    font-size: 15px;
-    font-style: italic;
-    color: var(--ink-faint);
-    line-height: 1.5;
-  }
-
-  .pending {
-    margin-top: 18px;
-    font-style: italic;
-    color: var(--ink-faint);
-  }
-
-  .shelf-more {
-    margin: 16px 0 0;
-    font-style: italic;
-    color: var(--ink-faint);
-  }
-
-  .back {
-    display: inline-block;
-    margin-top: 52px;
-    font-size: 15px;
-    color: var(--ink-faint);
-    text-decoration: none;
-  }
-  .back:hover { color: var(--accent); }
-</style>

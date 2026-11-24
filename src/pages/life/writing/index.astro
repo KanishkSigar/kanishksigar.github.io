@@ -4,66 +4,51 @@ import Life from '../../../layouts/Life.astro';
 
 const pieces = (await getCollection('writing', ({ data }) => !data.draft))
   .sort((a, b) => (b.data.date?.valueOf() ?? 0) - (a.data.date?.valueOf() ?? 0));
+const forms = ['essay', 'note', 'marginalia', 'poem'].filter(form => pieces.some(piece => piece.data.form === form));
+const labels: Record<string, string> = { essay: 'Essays', note: 'Notes', marginalia: 'Marginalia', poem: 'Poems' };
 ---
 
-<Life title="Kanishk Sigar Writing" description="Notes, essays, and marginalia.">
-
-  <p>writing.</p>
-
-  <ul class="index">
-    {pieces.map((p) => (
-      <li>
-        <a href={`/life/writing/${p.id}`}>
-          <span class="i-title">{p.data.title}</span>
-          <span class="i-form">{p.data.form}</span>
+<Life title="Kanishk Sigar | Writing" description="Notes, essays, and marginalia.">
+  <header class="life-page-head">
+    <h1>Writing.</h1>
+    <p class="life-deck">Notes, essays, and marginalia.</p>
+  </header>
+  <div class="life-filters" aria-label="Filter writing by form" role="group" hidden>
+    <button type="button" data-form="all" aria-pressed="true">All writing</button>
+    {forms.map(form => <button type="button" data-form={form} aria-pressed="false">{labels[form]}</button>)}
+  </div>
+  <p class="life-sr" id="writing-count" role="status"></p>
+  <ul class="life-entries" id="writing-list">
+    {pieces.map(piece => (
+      <li data-piece-form={piece.data.form}>
+        <a href={`/life/writing/${piece.id}/`}>
+          <span><strong>{piece.data.title}</strong>{piece.data.excerpt && <span class="entry-excerpt">{piece.data.excerpt}</span>}</span>
+          <span class="life-label entry-kind">{piece.data.form}</span>
         </a>
       </li>
     ))}
   </ul>
-
-  <a href="/life" class="back">← life</a>
-
 </Life>
 
-<style>
-  .index {
-    list-style: none;
-    margin: 40px 0 0;
-    padding: 0;
+<script>
+  const filters = document.querySelector<HTMLElement>('.life-filters');
+  const rows = document.querySelectorAll<HTMLElement>('#writing-list [data-piece-form]');
+  const status = document.querySelector('#writing-count');
+
+  if (filters && status && rows.length) {
+    filters.hidden = false;
+    filters.addEventListener('click', event => {
+      if (!(event.target instanceof HTMLButtonElement)) return;
+      const form = event.target.dataset.form;
+      filters.querySelectorAll('button').forEach(button => {
+        button.setAttribute('aria-pressed', String(button === event.target));
+      });
+      let count = 0;
+      rows.forEach(row => {
+        row.hidden = form !== 'all' && row.dataset.pieceForm !== form;
+        if (!row.hidden) count++;
+      });
+      status.textContent = `${count} ${count === 1 ? 'piece' : 'pieces'} shown.`;
+    });
   }
-
-  .index li { border-top: 1px solid var(--rule); }
-  .index li:last-child { border-bottom: 1px solid var(--rule); }
-
-  .index a {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 20px;
-    padding: 18px 2px;
-    text-decoration: none;
-    color: var(--ink);
-    transition: padding-left .22s ease;
-  }
-  .index a:hover { padding-left: 10px; }
-
-  .i-title { font-size: 21px; }
-  .index a:hover .i-title { color: var(--accent); }
-
-  .i-form {
-    flex-shrink: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 11px;
-    color: var(--ink-faint);
-  }
-
-  .back {
-    display: inline-block;
-    margin-top: 52px;
-    font-size: 15px;
-    color: var(--ink-faint);
-    text-decoration: none;
-  }
-  .back:hover { color: var(--accent); }
-</style>
+</script>
